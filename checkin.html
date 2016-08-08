@@ -7,7 +7,7 @@
 
 		<title></title>
 	</head>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -19,9 +19,9 @@
 			var token = $('#token').val();
 			if (token.length != 32) {
 				searchedToken = '';
-				$('#result').fadeOut(100);				
+				$('#result').fadeOut(100);
 				$('#status').hide();
-				
+
 				if (token.length > 32) {
 					$('#status').show();
 					$('#lb_status_msg').text('Token too long');
@@ -42,7 +42,7 @@
 						success: function (json) {
 							console.log("Response:");
 							console.log(json);
-							
+
 							setTimeout(function() {
 								$('#lb_user_id').text(json.user_id);
 								$('#lb_oid').text(json._id.$oid);
@@ -63,9 +63,9 @@
 										$('#btn_' + scenario.id).val('Used!');
 										$('#btn_' + scenario.id).addClass('disabled');
 									}
-								}				
+								}
 								$('#result').fadeIn(400);
-								
+
 								$('#status').hide();
 								$('#lb_status_msg').text('');
 							}, 500);
@@ -84,8 +84,8 @@
 				}
 			}
 		}
-		
-		
+
+
 		function used(scenarioID) {
 			var token = $('#token').val();
 			$('#startModal').modal('show');
@@ -98,7 +98,7 @@
 				success: function (json) {
 					console.log("Response:");
 					console.log(json);
-	
+
 //	                $('#startModal').modal('hide');
 				},
 		        error: function(request, status, errorThrown) {
@@ -108,23 +108,23 @@
 			}).always(function() {
 		  	});
 		}
-		
-	
-				
+
+
+
 	</script>
 	<style>
 		body {
 			padding-top: 50px;
 		}
-		body::-webkit-scrollbar { 
-			display: none; 
+		body::-webkit-scrollbar {
+			display: none;
 		}
 		.starter-template {
 			padding-top: 40px;
 			padding-bottom: 10px;
 			padding-left: 15px;
 			padding-right: 15px;
-			
+
 			text-align: center;
 		}
 		.modal-header {
@@ -134,7 +134,7 @@
 		.modal-footer {
 			border-top: 0px;
 		}
-		
+
 		#search input[type="search"] {
 			top: 50%;
 			width: 100%;
@@ -169,7 +169,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -195,7 +195,7 @@
 			<div class="starter-template">
 				<h1>Bootstrap starter template</h1>
 				<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-				
+
 				<div id="search">
 					<p><input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/></p>
 				</div>
@@ -214,7 +214,7 @@
 					<!-- day1checkin start -->
 					<div class="item">
 						<div class="ui middle aligned small image">
-							<img src="/day1checkin.png">
+							<img src="day1checkin.png">
 						</div>
 						<div class="middle aligned content">
 							<div class="header">
@@ -235,7 +235,7 @@
 					<!-- kit start -->
 					<div class="item">
 						<div class="ui middle aligned small image">
-							<img src="/kit.png">
+							<img src="kit.png">
 						</div>
 						<div class="middle aligned content">
 							<div class="header">
@@ -256,7 +256,7 @@
 					<!-- day1lunch start -->
 					<div class="item">
 						<div class="ui middle aligned small image">
-							<img src="/lunch.png">
+							<img src="lunch.png">
 						</div>
 						<div class="middle aligned content">
 							<div class="header">
@@ -277,7 +277,7 @@
 					<!-- day2checkin start -->
 					<div class="item">
 						<div class="ui middle aligned small image">
-							<img src="/day2checkin.png">
+							<img src="day2checkin.png">
 						</div>
 						<div class="middle aligned content">
 							<div class="header">
@@ -298,7 +298,7 @@
 					<!-- day2lunch start -->
 					<div class="item">
 						<div class="ui middle aligned small image">
-							<img src="/lunch.png">
+							<img src="lunch.png">
 						</div>
 						<div class="middle aligned content">
 							<div class="header">
@@ -317,7 +317,7 @@
 					</div>
 					<!-- day2lunch end -->
 				</div>
-			</div>	
+			</div>
 		</div><!-- /.container -->
 	</body>
 </html>
