@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title></title>
+	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script>
+	
+		var dashboardData;
+		function update() {
+//			$('#startModal').modal('show');
+			
+			$.ajax({
+				url: 'https://coscup.cprteam.org/dashboard',
+				type: 'GET',
+				dataType: "JSON",
+				success: function (json) {
+					console.log("Response:");
+					console.log(json);
+					dashboardData = json;
+					
+					draw_day1checkinChart();
+					draw_kitChart();
+					draw_day1lunchChart();
+					
+					draw_day2checkinChart();
+					draw_day2lunchChart();
+				},
+				error: function(e){
+					console.log("ERROR:");
+					console.log(e);
+				}
+			}).always(function() {
+//				$('#startModal').modal('hide');
+			});
+		}
+		
+		
+		var day1checkinChart;
+		function draw_day1checkinChart() {
+			if (!$.isEmptyObject(day1checkinChart)) {
+				day1checkinChart.series[0].setData([
+					{
+						name: 'Used',
+						y: dashboardData.day1checkin_used,
+						sliced: true,
+						selected: true
+					},
+					['Unused', (dashboardData.total - dashboardData.day1checkin_used)]
+			    ], true);
+			}
+			else {
+				day1checkinChart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'day1checkin_chart',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'day1checkin'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: false,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: [
+							{
+								name: 'Used',
+								y: dashboardData.day1checkin_used,
+								sliced: true,
+								selected: true
+							},
+							['Unused', (dashboardData.total - dashboardData.day1checkin_used)]
+						]
+					}]
+				});
+			}
+		}
+		
+		
+		var kitChart;
+		function draw_kitChart() {
+			if (!$.isEmptyObject(kitChart)) {
+				kitChart.series[0].setData([
+					{
+						name: 'Used',
+						y: dashboardData.kit_used,
+						sliced: true,
+						selected: true
+					},
+					['Unused', (dashboardData.total - dashboardData.kit_used)]
+			    ], true);
+			}
+			else {
+				kitChart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'kit_chart',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'kit'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: false,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: [
+							{
+								name: 'Used',
+								y: dashboardData.kit_used,
+								sliced: true,
+								selected: true
+							},
+							['Unused', (dashboardData.total - dashboardData.kit_used)]
+						]
+					}]
+				});
+			}
+		}
+		
+		var day1lunchChart;
+		function draw_day1lunchChart() {
+			if (!$.isEmptyObject(day1lunchChart)) {
+				day1lunchChart.series[0].setData([
+					{
+						name: 'Used',
+						y: dashboardData.day1lunch_used,
+						sliced: true,
+						selected: true
+					},
+					['Unused', (dashboardData.total - dashboardData.day1lunch_used)]
+			    ], true);
+			}
+			else {
+				day1lunchChart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'day1lunch_chart',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'day1lunch'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: false,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: [
+							{
+								name: 'Used',
+								y: dashboardData.day1lunch_used,
+								sliced: true,
+								selected: true
+							},
+							['Unused', (dashboardData.total - dashboardData.day1lunch_used)]
+						]
+					}]
+				});
+			}
+		}
+		
+		
+		var day2checkinChart;
+		function draw_day2checkinChart() {
+			if (!$.isEmptyObject(day2checkinChart)) {
+				day2checkinChart.series[0].setData([
+					{
+						name: 'Used',
+						y: dashboardData.day2checkin_used,
+						sliced: true,
+						selected: true
+					},
+					['Unused', (dashboardData.total - dashboardData.day2checkin_used)]
+			    ], true);
+			}
+			else {
+				day2checkinChart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'day2checkin_chart',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'day2checkin'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: false,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: [
+							{
+								name: 'Used',
+								y: dashboardData.day2checkin_used,
+								sliced: true,
+								selected: true
+							},
+							['Unused', (dashboardData.total - dashboardData.day2checkin_used)]
+						]
+					}]
+				});
+			}
+		}
+		
+		
+		var day2lunchChart;
+		function draw_day2lunchChart() {
+			if (!$.isEmptyObject(day2lunchChart)) {
+				day2lunchChart.series[0].setData([
+					{
+						name: 'Used',
+						y: dashboardData.day2lunch_used,
+						sliced: true,
+						selected: true
+					},
+					['Unused', (dashboardData.total - dashboardData.day2lunch_used)]
+			    ], true);
+			}
+			else {
+				day2lunchChart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'day2lunch_chart',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'day2lunch'
+					},
+					tooltip: {
+						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: false,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: false
+							},
+							showInLegend: true
+						}
+					},
+					series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: [
+							{
+								name: 'Used',
+								y: dashboardData.day2lunch_used,
+								sliced: true,
+								selected: true
+							},
+							['Unused', (dashboardData.total - dashboardData.day2lunch_used)]
+						]
+					}]
+				});
+			}
+		}
+		
+					
+		$(document).ready(function () {
+			update();
+		});
+			
+		setInterval(function () {
+			update();
+		}, 5000);
+		
+	</script>
+	<style>
+		body {
+			padding-top: 50px;
+		}
+		.starter-template {
+			padding: 40px 15px;
+			text-align: center;
+		}
+		.modal-header {
+			border-bottom: 0px;
+		}
+
+		.modal-footer {
+			border-top: 0px;
+		}
+	</style>
+
+	<body>
+		<!-- Modal -->
+		<div id="startModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">Push...</h2>
+					</div>
+					<div class="modal-body">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Project name</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#contact">Contact</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="starter-template">
+				<h1>Bootstrap starter template</h1>
+				<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+				<p>Auto update every 5 sec.</p>
+				<p><button type="button" onclick="update();">Update!</button></p>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="starter-template">
+					<h1>Day1</h1>
+					<div id="day1checkin_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
+					<div id="kit_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
+					<div id="day1lunch_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
+				</div>
+			</div>
+			<div class="row">
+				<hr>
+				<div class="starter-template">
+					<h1>Day2</h1>
+					<div id="day2checkin_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
+					<div id="day2lunch_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
+				</div>
+			</div>
+		</div><!-- /.container -->
+	</body>
+</html>
