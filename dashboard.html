@@ -7,17 +7,17 @@
 
 		<title></title>
 	</head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="//code.highcharts.com/highcharts.js"></script>
 	<script>
-	
+
 		var dashboardData;
 		function update() {
 //			$('#startModal').modal('show');
-			
+
 			$.ajax({
 				url: 'https://coscup.cprteam.org/dashboard',
 				type: 'GET',
@@ -26,11 +26,11 @@
 					console.log("Response:");
 					console.log(json);
 					dashboardData = json;
-					
+
 					draw_day1checkinChart();
 					draw_kitChart();
 					draw_day1lunchChart();
-					
+
 					draw_day2checkinChart();
 					draw_day2lunchChart();
 				},
@@ -42,11 +42,11 @@
 //				$('#startModal').modal('hide');
 			});
 		}
-		
+
 		Highcharts.setOptions({
 			 colors: ['#3D983C', '#CCCCCC']
 			});
-			
+
 		var day1checkinChart;
 		function draw_day1checkinChart() {
 			if (!$.isEmptyObject(day1checkinChart)) {
@@ -104,8 +104,8 @@
 				});
 			}
 		}
-		
-		
+
+
 		var kitChart;
 		function draw_kitChart() {
 			if (!$.isEmptyObject(kitChart)) {
@@ -163,7 +163,7 @@
 				});
 			}
 		}
-		
+
 		var day1lunchChart;
 		function draw_day1lunchChart() {
 			if (!$.isEmptyObject(day1lunchChart)) {
@@ -221,8 +221,8 @@
 				});
 			}
 		}
-		
-		
+
+
 		var day2checkinChart;
 		function draw_day2checkinChart() {
 			if (!$.isEmptyObject(day2checkinChart)) {
@@ -280,8 +280,8 @@
 				});
 			}
 		}
-		
-		
+
+
 		var day2lunchChart;
 		function draw_day2lunchChart() {
 			if (!$.isEmptyObject(day2lunchChart)) {
@@ -339,16 +339,16 @@
 				});
 			}
 		}
-		
-					
+
+
 		$(document).ready(function () {
 			update();
 		});
-			
+
 		setInterval(function () {
 			update();
 		}, 5000);
-		
+
 	</script>
 	<style>
 		body {
@@ -384,7 +384,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">

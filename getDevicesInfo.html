@@ -7,21 +7,21 @@
 
 		<title></title>
 	</head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="//code.highcharts.com/highcharts.js"></script>
 	<script>
 		function getTotalCount() {
 			$('#startModal').modal('show');
-				
-			var message = { 
+
+			var message = {
 				app_id: "aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d",
 				limit: 0,
 				offset: 0
 			};
-			
+
 			$.ajax({
 				url: 'https://onesignal.com/api/v1/players',
 				beforeSend: function (request) {
@@ -33,7 +33,7 @@
 				success: function (json) {
 					console.log("Response:");
 					console.log(json);
-					
+
 					console.log("TotalCount:" + json.total_count);
 					return json.total_count;
 				},
@@ -46,15 +46,15 @@
 				$('#startModal').modal('hide');
 			});
 		}
-		
+
 		var total_count = 0;
 		var allDevices = [];
 		var allDeviceTypes = [];
-		
+
 		function getDevices() {
 			$('#startModal').modal('show');
 			var theDevices = [];
-			var message = { 
+			var message = {
 				app_id: "aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d",
 				limit: 0,
 				offset: 0
@@ -75,10 +75,10 @@
 					if (total_count > 0) {
 						var run_time = 0;
 						message.limit = 300;
-						
+
 						for (; message.offset < total_count; message.offset += message.limit) {
 							console.log("i:" + message.offset / message.limit + " offset:" + message.offset);
-							
+
 							$.ajax({
 								url: 'https://onesignal.com/api/v1/players',
 								beforeSend: function (request) {
@@ -105,10 +105,10 @@
 									console.log(theDevices);
 									allDevices = theDevices;
 									allDeviceTypes = getAllDeviceTypes();
-									//player.device_type, 
+									//player.device_type,
 									//0 = iOS, 1 = Android, 2 = Amazon, 3 = WindowsPhone(MPNS), 4 = ChromeApp, 5 = ChromeWebsite, 6 = WindowsPhone(WNS), 7 = Safari, 8 = Firefox, 9 = Mac OS X
 									//player.device_model,
-									//player.device_os	
+									//player.device_os
 //									var availablePlayer = $.grep(availablePlayers, function(e){ return e.ccip_token == player.tags.token; });
 									draw_deviceTypeChart();
 									draw_iOSModelChart();
@@ -126,9 +126,9 @@
 //				$('#startModal').modal('hide');
 			});
 		}
-		
+
 		var typeList = ['iOS', 'Android', 'Amazon', 'WindowsPhone(MPNS)', 'ChromeApp', 'ChromeWebsite', 'WindowsPhone(WNS)', 'Safari', 'Firefox', 'Mac OS X'];
-		
+
 		function getAllDeviceTypes() {
 			var deviceTypes = [];
 
@@ -138,10 +138,10 @@
 					deviceTypes.push(findDeviceFromType(i));
 				}
 			}
-			
+
 			return deviceTypes;
 		}
-		
+
 		function findDeviceFromType(type) {
 			var devices = $.grep(allDevices, function(e){ return e.device_type == type; });
 			var modelArray = [];
@@ -156,7 +156,7 @@
 						"count": $.grep(allDevices, function(e){ return e.device_model == modelName; }).length
 					})
 				}
-				
+
 				var osList = $.unique($.map(allDevices, function(e){ return e.device_os; })).sort();
 				for (var i = 0; i < osList.length; i++) {
 					var osName = osList[i];
@@ -173,8 +173,8 @@
 				"os_list" : osArray
 			}
 		}
-		
-		
+
+
 		var deviceTypeChart;
 		function draw_deviceTypeChart() {
 			var seriesData = [];
@@ -184,7 +184,7 @@
 				data["y"] = allDeviceTypes[i].count;
 				seriesData.push(data);
 			}
-			
+
 			if (!$.isEmptyObject(deviceTypeChart)) {
 				deviceTypeChart.series[0].setData(seriesData, true);
 			}
@@ -224,12 +224,12 @@
 				});
 			}
 		}
-		
-		
+
+
 		var iOSModelChart;
 		function draw_iOSModelChart() {
 			var seriesData = [];
-			
+
 			var iOSList = $.grep(allDeviceTypes, function(e){ return e.platform_name == "iOS"; });
 			if (iOSList.length == 1) {
 				for (var i = 0; i < iOSList[0].model_list.length; i++) {
@@ -239,7 +239,7 @@
 					seriesData.push(data);
 				}
 			}
-			
+
 			if (!$.isEmptyObject(iOSModelChart)) {
 				iOSModelChart.series[0].setData(seriesData, true);
 			}
@@ -279,8 +279,8 @@
 				});
 			}
 		}
-		
-				
+
+
 		$(document).ready(function () {
 			getDevices();
 		});
@@ -318,7 +318,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
