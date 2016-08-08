@@ -43,7 +43,10 @@
 			});
 		}
 		
-		
+		Highcharts.setOptions({
+			 colors: ['#3D983C', '#CCCCCC']
+			});
+			
 		var day1checkinChart;
 		function draw_day1checkinChart() {
 			if (!$.isEmptyObject(day1checkinChart)) {
@@ -66,7 +69,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day1checkin'
+						text: 'day1checkin<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -76,7 +79,11 @@
 							allowPointSelect: false,
 							cursor: 'pointer',
 							dataLabels: {
-								enabled: false
+								enabled: true,
+								formatter: function() {
+									return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+								},
+								distance: -50
 							},
 							showInLegend: true
 						}
@@ -121,7 +128,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'kit'
+						text: 'kit<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -131,7 +138,11 @@
 							allowPointSelect: false,
 							cursor: 'pointer',
 							dataLabels: {
-								enabled: false
+								enabled: true,
+								formatter: function() {
+									return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+								},
+								distance: -50
 							},
 							showInLegend: true
 						}
@@ -175,7 +186,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day1lunch'
+						text: 'day1lunch<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -185,7 +196,11 @@
 							allowPointSelect: false,
 							cursor: 'pointer',
 							dataLabels: {
-								enabled: false
+								enabled: true,
+								formatter: function() {
+									return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+								},
+								distance: -50
 							},
 							showInLegend: true
 						}
@@ -230,7 +245,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day2checkin'
+						text: 'day2checkin<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -240,7 +255,11 @@
 							allowPointSelect: false,
 							cursor: 'pointer',
 							dataLabels: {
-								enabled: false
+								enabled: true,
+								formatter: function() {
+									return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+								},
+								distance: -50
 							},
 							showInLegend: true
 						}
@@ -285,7 +304,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day2lunch'
+						text: 'day2lunch<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -295,7 +314,11 @@
 							allowPointSelect: false,
 							cursor: 'pointer',
 							dataLabels: {
-								enabled: false
+								enabled: true,
+								formatter: function() {
+									return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+								},
+								distance: -50
 							},
 							showInLegend: true
 						}
@@ -394,6 +417,7 @@
 			<div class="row">
 				<div class="starter-template">
 					<h1>Day1</h1>
+					<br/>
 					<div id="day1checkin_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
 					<div id="kit_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
 					<div id="day1lunch_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
@@ -403,6 +427,7 @@
 				<hr>
 				<div class="starter-template">
 					<h1>Day2</h1>
+					<br/>
 					<div id="day2checkin_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
 					<div id="day2lunch_chart" class="col-sm-4" style="min-width:200px;height:400px"></div>
 				</div>
