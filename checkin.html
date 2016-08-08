@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title></title>
+	</head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
+	<script>
+		var searchedToken = '';
+		function searchToken(ignoreAlert = false) {
+			var token = $('#token').val();
+			if (token.length != 32) {
+				searchedToken = '';
+				$('#result').fadeOut(100);
+				userList.clear();
+				
+				$('#status').hide();
+				
+				if (token.length > 32) {
+					$('#status').show();
+					$('#lb_status_msg').text('Token too long');
+				}
+//				if (!ignoreAlert && token.length != 0) {
+//					alert("長度不對");
+//				}
+			}
+			else {
+				if (searchedToken != token) {
+					searchedToken = token;
+					$('#result').fadeOut(100);
+					userList.clear();
+					
+//					$('#startModal').modal('show');
+					$('#status').show();
+					$('#lb_status_msg').text('Searching...');
+
+					$.ajax({
+						url: 'https://coscup.cprteam.org/status',
+						type: 'GET',
+						dataType: "JSON",
+						data: { 'token': token },
+						success: function (json) {
+							console.log("Response:");
+							console.log(json);
+							
+							setTimeout(function() {
+								//your code to be executed after 1 second	
+								$('#lb_user_id').text(json.user_id);
+								$('#lb_oid').text(json._id.$oid);
+
+								for (var i = 0; i < json.scenarios.length; i++) {
+									var scenario = json.scenarios[i];
+									userList.add({
+										order: scenario.order,
+										id: scenario.id,
+										attr: scenario.attr,
+										countdown: scenario.countdown,
+										available_time: scenario.available_time,
+										used: scenario.used,
+										expire_time: scenario.expire_time
+									});	
+								}				
+								$('#result').fadeIn(400);
+								
+								$('#startModal').modal('hide');
+								$('#status').hide();
+								$('#lb_status_msg').text('');
+							}, 500);
+						},
+						error: function(request, status, errorThrown) {
+							console.log("ERROR:");
+							console.log(request.responseText);
+							setTimeout(function() {
+
+								$('#startModal').modal('hide');
+								$('#status').show();
+								$('#lb_status_msg').text(request.responseJSON.message);
+							}, 500);
+						}
+					}).always(function() {
+					});
+				}
+			}
+		}
+		
+		var scenariosList;
+
+		$(document).ready ( function(){
+			var options = {
+				valueNames: [ 'order', 'id', 'attr', 'countdown', 'available_time','used', 'expire_time' ],
+				item: '<li class="list-group-item"><h3 class="id"></h3><p>order: <lable class="order"></lable></p><p>available_time: <lable class="available_time"></lable></p><p>used: <lable class="used"></lable></p><p>expire_time: <lable class="expire_time"></lable></p></li>'
+			};
+			var values = [];
+			userList = new List('scenarios', options, values);
+		})	
+		
+	</script>
+	<style>
+		body {
+			padding-top: 50px;
+			
+		}
+		body::-webkit-scrollbar { 
+			display: none; 
+		}
+		.starter-template {
+			padding: 40px 15px;
+			text-align: center;
+		}
+		.modal-header {
+			border-bottom: 0px;
+		}
+
+		.modal-footer {
+			border-top: 0px;
+		}
+		
+		#search input[type="search"] {
+			top: 50%;
+			width: 100%;
+/*			color: rgb(255, 255, 255);*/
+/*			background: rgba(0, 0, 0, 0);*/
+			font-size: 58px;
+/*			font-weight: 300;*/
+			text-align: center;
+			border: 0px;
+			margin: 0px auto;
+/*			margin-top: -51px;*/
+			padding-left: 25px;
+			padding-right: 25px;
+			outline: none;
+		}
+	</style>
+
+	<body>
+		<!-- Modal -->
+		<div id="startModal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title">Push...</h2>
+					</div>
+					<div class="modal-body">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Project name</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#contact">Contact</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
+
+		<div class="container">
+
+			<div class="starter-template">
+				<h1>Bootstrap starter template</h1>
+				<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+				<div id="search">
+					<p><input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/></p>
+<!-- 					<p><button type="button" class="btn btn-primary" onclick="searchToken();">Search</button></p> -->
+				</div>
+				<hr>
+				<div id="status" style="display:none;">
+					<p style="font-size: 60px; font-style: italic; color: gray;"><label id="lb_status_msg">YES</label></p>
+				</div>
+				<div id="result" style="display:none;">
+					<p style="font-size: 24px;">User ID : <label id="lb_user_id"></label></p>
+					<p>$oid : <label id="lb_oid"></label></p>
+					<hr>
+					<div id="scenarios">
+						<ul class="list list-group"></ul>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.container -->
+	</body>
+</html>
