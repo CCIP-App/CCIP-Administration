@@ -13,6 +13,9 @@
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script> -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+	<script src="/lib/html5-qrcode.min.js"></script>
+	<script src="/lib/jsqrcode-combined.min.js"></script>
+	
 	<script>
 		//$('#startModal').modal('show');
 		//$('#startModal').modal('hide');
@@ -181,6 +184,33 @@
 				}
 			});
 		}
+		
+		function qrStart() {
+			$('#qrcode_area').show();
+			$('#qrcode_reader').html5_qrcode(function(data){
+					// do something when code is read
+					$('#token').val(data);
+					searchToken();
+					qrStop();
+				},
+				function(error){
+					//show read errors 
+				}, function(videoError){
+					//the video stream could be opened
+				}
+			);
+		}
+		
+		function qrStop() {
+			$('#qrcode_reader').html5_qrcode_stop();
+			$('#qrcode_reader').empty();
+			$('#qrcode_area').hide();
+		}		
+		
+		$(document).ready(function () {
+			
+		});
+		
 
 	</script>
 	<style>
@@ -266,9 +296,13 @@
 				<h1>人工報到</h1>
 				<p class="lead">請在下方輸入會眾的 Token 並查詢結果</p>
 				<br>
+				<div id="qrcode_area" class="row" style="margin-bottom: 30px; max-height: 400px; display:none;">
+					<div class="col-sm-3"></div>				
+					<div id="qrcode_reader" class="ui segment col-sm-6" style="height: 400px;"></div>
+				</div>
 				<div id="search" class="fluid ui transparent input" style="font-size: 50px;">
 					<div id="icon_search" class="ui left icon input">
-						<i class="search icon"></i>
+						<i class="qrcode link icon" onclick="qrStart();"></i>
 					</div>
 					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/>			
 					<div id="icon_remove" class="ui right icon input" style="display:none;">
@@ -279,139 +313,141 @@
 				<div id="status" style="display:none;">
 					<p style="font-size: 60px; font-style: italic; color: gray;"><label id="lb_status_msg">YES</label></p>
 				</div>
-			</div>
-			<div class="col-sm-1"></div>
-			<div id="result" class="ui segment col-sm-10" style="margin-bottom: 60px; display:none;">
-				<p class="ui left floated header" style="font-size: 36px;"><label id="lb_user_id"></label></p>
-				<div class="ui clearing divider"></div>
-				<p>$oid : <label id="lb_oid"></label></p>
-				<div class="ui clearing divider"></div>
-				<div class="ui divided items">
-					<!-- day1checkin start -->
-					<div class="item">
-						<div class="ui middle aligned small image">
-							<img src="day1checkin.png">
-						</div>
-						<div class="middle aligned content">
-							<div class="header">
-								day1checkin
+				<div id="result" class="row">
+					<div class="col-sm-1"></div>
+					<div class="ui segment col-sm-10" style="margin-bottom: 60px; display:none;">
+						<p class="ui left floated header" style="font-size: 36px;"><label id="lb_user_id"></label></p>
+						<div class="ui clearing divider"></div>
+						<p>$oid : <label id="lb_oid"></label></p>
+						<div class="ui clearing divider"></div>
+						<div class="ui divided items">
+							<!-- day1checkin start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="day1checkin.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										day1checkin
+									</div>
+									<div class="meta">
+										<span class="cinema">Union Square 14</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_day1checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1checkin');" value="Checkin!"></button>
+										<button id="btn_chk_day1checkin_try" class="ui right floated button" onclick="used('day1checkin');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
 							</div>
-							<div class="meta">
-								<span class="cinema">Union Square 14</span>
+							<!-- day1checkin end -->
+							<!-- kit start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="kit.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										kit
+									</div>
+									<div class="meta">
+										<span class="cinema">Union Square 14</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_kit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('kit');" value="Action!"></button>
+										<button id="btn_chk_kit_try" class="ui right floated button" onclick="used('kit');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
 							</div>
-							<div class="description">
-								<p>asdasd</p>
+							<!-- kit end -->
+							<!-- day1lunch start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="lunch.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										day1lunch
+									</div>
+									<div class="meta">
+										<span class="cinema">Union Square 14</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_day1lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1lunch');" value="Action!"></button>
+										<button id="btn_chk_day1lunch_try" class="ui right floated button" onclick="used('day1lunch');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
 							</div>
-							<div class="extra">
-								<button id="btn_chk_day1checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1checkin');" value="Checkin!"></button>
-								<button id="btn_chk_day1checkin_try" class="ui right floated button" onclick="used('day1checkin');" style="display:none;">
-									<i class="repeat icon"></i>
-									Retry
-								</button>
+							<!-- day1lunch end -->
+							<!-- day2checkin start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="day2checkin.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										day2checkin
+									</div>
+									<div class="meta">
+										<span class="cinema">Union Square 14</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_day2checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2checkin');" value="Checkin!"></button>
+										<button id="btn_chk_day2checkin_try" class="ui right floated button" onclick="used('day2checkin');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
 							</div>
+							<!-- day2checkin end -->
+							<!-- day2lunch start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="lunch.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										day2lunch
+									</div>
+									<div class="meta">
+										<span class="cinema">Union Square 14</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_day2lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2lunch');" value="Action!"></button>
+										<button id="btn_chk_day2lunch_try" class="ui right floated button" onclick="used('day2lunch');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
+							</div>
+							<!-- day2lunch end -->
 						</div>
 					</div>
-					<!-- day1checkin end -->
-					<!-- kit start -->
-					<div class="item">
-						<div class="ui middle aligned small image">
-							<img src="kit.png">
-						</div>
-						<div class="middle aligned content">
-							<div class="header">
-								kit
-							</div>
-							<div class="meta">
-								<span class="cinema">Union Square 14</span>
-							</div>
-							<div class="description">
-								<p>asdasd</p>
-							</div>
-							<div class="extra">
-								<button id="btn_chk_kit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('kit');" value="Action!"></button>
-								<button id="btn_chk_kit_try" class="ui right floated button" onclick="used('kit');" style="display:none;">
-									<i class="repeat icon"></i>
-									Retry
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- kit end -->
-					<!-- day1lunch start -->
-					<div class="item">
-						<div class="ui middle aligned small image">
-							<img src="lunch.png">
-						</div>
-						<div class="middle aligned content">
-							<div class="header">
-								day1lunch
-							</div>
-							<div class="meta">
-								<span class="cinema">Union Square 14</span>
-							</div>
-							<div class="description">
-								<p>asdasd</p>
-							</div>
-							<div class="extra">
-								<button id="btn_chk_day1lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1lunch');" value="Action!"></button>
-								<button id="btn_chk_day1lunch_try" class="ui right floated button" onclick="used('day1lunch');" style="display:none;">
-									<i class="repeat icon"></i>
-									Retry
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- day1lunch end -->
-					<!-- day2checkin start -->
-					<div class="item">
-						<div class="ui middle aligned small image">
-							<img src="day2checkin.png">
-						</div>
-						<div class="middle aligned content">
-							<div class="header">
-								day2checkin
-							</div>
-							<div class="meta">
-								<span class="cinema">Union Square 14</span>
-							</div>
-							<div class="description">
-								<p>asdasd</p>
-							</div>
-							<div class="extra">
-								<button id="btn_chk_day2checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2checkin');" value="Checkin!"></button>
-								<button id="btn_chk_day2checkin_try" class="ui right floated button" onclick="used('day2checkin');" style="display:none;">
-									<i class="repeat icon"></i>
-									Retry
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- day2checkin end -->
-					<!-- day2lunch start -->
-					<div class="item">
-						<div class="ui middle aligned small image">
-							<img src="lunch.png">
-						</div>
-						<div class="middle aligned content">
-							<div class="header">
-								day2lunch
-							</div>
-							<div class="meta">
-								<span class="cinema">Union Square 14</span>
-							</div>
-							<div class="description">
-								<p>asdasd</p>
-							</div>
-							<div class="extra">
-								<button id="btn_chk_day2lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2lunch');" value="Action!"></button>
-								<button id="btn_chk_day2lunch_try" class="ui right floated button" onclick="used('day2lunch');" style="display:none;">
-									<i class="repeat icon"></i>
-									Retry
-								</button>
-							</div>
-						</div>
-					</div>
-					<!-- day2lunch end -->
 				</div>
 			</div>
 		</div><!-- /.container -->
