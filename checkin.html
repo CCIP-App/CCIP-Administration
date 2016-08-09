@@ -184,25 +184,42 @@
 				}
 			});
 		}
+		
+		function qrDecode() {
+			var file = document.getElementById("capture").files[0];
+			if (file) {
+				var blob_url = window.URL.createObjectURL(file);
+				var result = qrcode.decode(blob_url);
+				if (result) {
+					$('#token').val(result);
+					searchToken();
+				}
+			}
+		}
 
 		function qrStart() {
-			if ($('#qrcode_reader:empty').length == 1) {
-				$('#qrcode_area').show();
-				$('#qrcode_reader').html5_qrcode(function(data){
-						// do something when code is read
-						$('#token').val(data);
-						searchToken();
-						qrStop();
-					},
-					function(error){
-						//show read errors 
-					}, function(videoError){
-						//the video stream could be opened
-					}
-				);
+			if (isMobile.iOS()) {
+				$("#capture").click();
 			}
 			else {
-				qrStop();
+				if ($('#qrcode_reader:empty').length == 1) {
+					$('#qrcode_area').show();
+					$('#qrcode_reader').html5_qrcode(function(data){
+							// do something when code is read
+							$('#token').val(data);
+							searchToken();
+							qrStop();
+						},
+						function(error){
+							//show read errors 
+						}, function(videoError){
+							//the video stream could be opened
+						}
+					);
+				}
+				else {
+					qrStop();
+				}
 			}
 		}
 
@@ -211,11 +228,19 @@
 			$('#qrcode_reader').empty();
 			$('#qrcode_area').hide();
 		}
+		
+		var isMobile = {
+			iOS: function() {
+				return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+			},
+			Android: function() {
+				return navigator.userAgent.match(/Android/i) ? true : false;
+			},
+		};
 
 		$(document).ready(function () {
 
 		});
-
 
 	</script>
 	<style>
@@ -308,6 +333,7 @@
 				<div id="search" class="fluid ui transparent input" style="font-size: 50px;">
 					<div id="icon_search" class="ui left icon input">
 						<i class="qrcode link icon" onclick="qrStart();"></i>
+						<input type="file" accept="image/*" capture="camera" id="capture" style="display:none;" ondrag="">
 					</div>
 					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken();"/>
 					<div id="icon_remove" class="ui right icon input" style="display:none;">
