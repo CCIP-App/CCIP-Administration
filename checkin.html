@@ -189,11 +189,9 @@
 			var file = document.getElementById("capture").files[0];
 			if (file) {
 				var blob_url = window.URL.createObjectURL(file);
-				var result = qrcode.decode(blob_url);
-				if (result) {
-					$('#token').val(result);
-					searchToken();
-				}
+				qrcode.decode(blob_url);
+				$('#token').val(qrcode.result);
+				searchToken();
 			}
 		}
 
@@ -204,18 +202,18 @@
 			else {
 				if ($('#qrcode_reader:empty').length == 1) {
 					$('#qrcode_area').show();
-					$('#qrcode_reader').html5_qrcode(function(data){
-							// do something when code is read
-							$('#token').val(data);
-							searchToken();
-							qrStop();
-						},
-						function(error){
-							//show read errors 
-						}, function(videoError){
-							//the video stream could be opened
-						}
-					);
+					
+					$('#qrcode_reader').html5_qrcode(
+					function(data){
+						// do something when code is read
+						$('#token').val(data);
+						searchToken();
+						qrStop();
+					}, function(error){
+						//show read errors 
+					}, function(videoError){
+						//the video stream could be opened
+					});
 				}
 				else {
 					qrStop();
