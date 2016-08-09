@@ -18,7 +18,20 @@
 	<script>
 		//$('#startModal').modal('show');
 		//$('#startModal').modal('hide');
-
+		
+		const parameters = location.search.split('?').pop().split('&').map(p => {
+		    var ps = p.split('=');
+		    var o = {};
+			o[ps.shift()] = ps.join('=');
+		    return o;
+		}).reduce((a, b) => {
+		    var o = a;
+		    for(var k in b) {
+		        o[k] = b[k];
+		    }
+		    return o;
+		});
+		
 		var searchedToken = '';
 		function searchToken() {
 			var token = $('#token').val();
@@ -276,6 +289,12 @@
 
 		$(document).ready(function () {
 			$("#header").load("header.html");
+			
+			var token = parameters.token;
+			if (token) {
+				$('#token').val(parameters.token);
+				searchToken();
+			}
 		});
 
 	</script>
