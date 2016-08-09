@@ -14,6 +14,9 @@
 <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script> -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
 	<script>
+		//$('#startModal').modal('show');
+		//$('#startModal').modal('hide');
+
 		var searchedToken = '';
 		function searchToken(ignoreAlert = false) {
 			var token = $('#token').val();
@@ -25,9 +28,7 @@
 			}
 			
 			if (token.length != 32) {
-				searchedToken = '';
-				$('#result').fadeOut(100);
-				$('#status').hide();
+				clearAll();
 
 				if (token.length > 32) {
 					$('#status').show();
@@ -59,20 +60,22 @@
 								for (var i = 0; i < json.scenarios.length; i++) {
 									var scenario = json.scenarios[i];
 									var used = scenario.used;
+									var btn = $('#btn_chk_' + scenario.id);
 									if (used == null) {
-										$('#btn_' + scenario.id).removeClass('disabled');
-										$('#btn_' + scenario.id).addClass('teal');
+										btn.removeClass('disabled');
+										changeBtnColorClass($('#btn_chk_' + scenario.id), 'teal');
+										
 										if (scenario.id.indexOf('checkin') !== -1) {
-											$('#btn_' + scenario.id).val('Checkin!');
+											btn.text('Checkin!').button("refresh");
 										}
 										else {
-											$('#btn_' + scenario.id).val('Action!');
+											btn.text('Action!').button("refresh");
 										}
 									}
 									else {
-										$('#btn_' + scenario.id).val('Used!');
-										$('#btn_' + scenario.id).removeClass('teal');
-										$('#btn_' + scenario.id).addClass('disabled');
+										btn.text('Used!').button("refresh");
+										changeBtnColorClass(btn, '');
+										btn.addClass('disabled');
 									}
 								}
 								$('#result').fadeIn(400);
@@ -101,7 +104,11 @@
 
 		function used(scenarioID) {
 			var token = $('#token').val();
-			$('#startModal').modal('show');
+
+			var thisBtn = $('#btn_chk_' + scenarioID);
+			var thisTryBtn = $('#btn_chk_' + scenarioID + '_try');
+			thisBtn.addClass('loading');
+			thisBtn.addClass('disabled');
 
 		  	$.ajax({
 				url: 'https://coscup.cprteam.org/use/' + scenarioID,
@@ -109,21 +116,43 @@
 				dataType: "JSON",
 				data: { 'token': token },
 				success: function (json) {
-					console.log("Response:");
-					console.log(json);
-
-//	                $('#startModal').modal('hide');
+					setTimeout(function() {
+						console.log("Response:");
+						console.log(json);
+												
+						thisBtn.text('Succeed!').button("refresh");
+						changeBtnColorClass(thisBtn, 'positive');
+						
+						thisTryBtn.hide();
+						thisBtn.removeClass('loading');
+					}, 1000);
 				},
 		        error: function(request, status, errorThrown) {
-					console.log("ERROR:");
-					console.log(request.responseText);
+					setTimeout(function() {
+						console.log("ERROR:");
+						console.log(request.responseText);
+
+						thisBtn.text(request.responseJSON.message + '!').button("refresh");
+						changeBtnColorClass(thisBtn, 'negative');
+						
+						thisTryBtn.show();
+						
+						thisBtn.removeClass('loading');
+					}, 1000);
 				}
 			}).always(function() {
 		  	});
 		}
+		
+		function changeBtnColorClass(thisBtn, type) {
+			thisBtn.removeClass('teal');
+			thisBtn.removeClass('positive');
+			thisBtn.removeClass('negative');
+			
+			thisBtn.addClass(type);
+		}
 
 		function clearAll() {
-			$('#token').val('');
 			searchedToken = '';
 			$('#icon_remove').hide();
 			
@@ -133,6 +162,24 @@
 
 			$('#lb_user_id').text('');
 			$('#lb_oid').text('');
+			
+			var allButtons = $( ":button" );
+			for (var i = 0; i < allButtons.length; i++) {
+				allButtons[i].id
+			}
+			
+			$('button[id^="btn_chk"]').filter(
+			function(){
+				var btn = $('#' + this.id);
+				if (this.id.match(/^btn_chk_([a-z0-9]*)$/)) {
+					btn.addClass('disabled')
+					btn.text('Action!').button("refresh");
+					changeBtnColorClass(btn, '');
+				}
+				else if (this.id.match(/^btn_chk_([a-z0-9]*)_try$/)) {
+					btn.hide();
+				}
+			});
 		}
 
 	</script>
@@ -182,7 +229,7 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<h2 class="modal-title">Push...</h2>
+						<h2 class="modal-title">Action...</h2>
 					</div>
 					<div class="modal-body">
 						<div class="progress">
@@ -225,7 +272,7 @@
 					</div>
 					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/>			
 					<div id="icon_remove" class="ui right icon input" style="display:none;">
-						<i class="remove link icon" onclick="clearAll();"></i>
+						<i class="remove link icon" onclick="clearAll(); $('#token').val('');"></i>
 					</div>
 				</div>
 				<hr>
@@ -256,7 +303,11 @@
 								<p>asdasd</p>
 							</div>
 							<div class="extra">
-								<input id="btn_day1checkin" type="button" class="ui right floated button" style="width: 100px;" onclick="used('day1checkin');" value="Checkin!"></input>
+								<button id="btn_chk_day1checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1checkin');" value="Checkin!"></button>
+								<button id="btn_chk_day1checkin_try" class="ui right floated button" onclick="used('day1checkin');" style="display:none;">
+									<i class="repeat icon"></i>
+									Retry
+								</button>
 							</div>
 						</div>
 					</div>
@@ -277,7 +328,11 @@
 								<p>asdasd</p>
 							</div>
 							<div class="extra">
-								<input id="btn_kit" type="button" class="ui right floated button" style="width: 100px;" onclick="used('kit');" value="Action!"></input>
+								<button id="btn_chk_kit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('kit');" value="Action!"></button>
+								<button id="btn_chk_kit_try" class="ui right floated button" onclick="used('kit');" style="display:none;">
+									<i class="repeat icon"></i>
+									Retry
+								</button>
 							</div>
 						</div>
 					</div>
@@ -298,7 +353,11 @@
 								<p>asdasd</p>
 							</div>
 							<div class="extra">
-								<input id="btn_day1lunch" type="button" class="ui right floated button" style="width: 100px;" onclick="used('day1lunch');" value="Action!"></input>
+								<button id="btn_chk_day1lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1lunch');" value="Action!"></button>
+								<button id="btn_chk_day1lunch_try" class="ui right floated button" onclick="used('day1lunch');" style="display:none;">
+									<i class="repeat icon"></i>
+									Retry
+								</button>
 							</div>
 						</div>
 					</div>
@@ -319,7 +378,11 @@
 								<p>asdasd</p>
 							</div>
 							<div class="extra">
-								<input id="btn_day2checkin" type="button" class="ui right floated button" style="width: 100px;" onclick="used('day2checkin');" value="Checkin!"></input>
+								<button id="btn_chk_day2checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2checkin');" value="Checkin!"></button>
+								<button id="btn_chk_day2checkin_try" class="ui right floated button" onclick="used('day2checkin');" style="display:none;">
+									<i class="repeat icon"></i>
+									Retry
+								</button>
 							</div>
 						</div>
 					</div>
@@ -340,7 +403,11 @@
 								<p>asdasd</p>
 							</div>
 							<div class="extra">
-								<input id="btn_day2lunch" type="button" class="ui right floated button" style="width: 100px;" onclick="used('day2lunch');" value="Action!"></input>
+								<button id="btn_chk_day2lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2lunch');" value="Action!"></button>
+								<button id="btn_chk_day2lunch_try" class="ui right floated button" onclick="used('day2lunch');" style="display:none;">
+									<i class="repeat icon"></i>
+									Retry
+								</button>
 							</div>
 						</div>
 					</div>
