@@ -331,7 +331,7 @@
 				<div id="search" class="fluid ui transparent input" style="font-size: 50px;">
 					<div id="icon_search" class="ui left icon input">
 						<i class="qrcode link icon" onclick="qrStart();"></i>
-						<input type="file" accept="image/*" capture="camera" id="capture" style="display:none;" ondrag="">
+						<input type="file" accept="image/*" capture="camera" id="capture" style="display:none;" onchange="qrDecode()">
 					</div>
 					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken();"/>
 					<div id="icon_remove" class="ui right icon input" style="display:none;">
