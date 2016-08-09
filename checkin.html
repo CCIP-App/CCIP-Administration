@@ -21,7 +21,7 @@
 		//$('#startModal').modal('hide');
 
 		var searchedToken = '';
-		function searchToken(ignoreAlert = false) {
+		function searchToken() {
 			var token = $('#token').val();
 			if (token.length != 0) {
 				$('#icon_remove').show();
@@ -309,7 +309,7 @@
 					<div id="icon_search" class="ui left icon input">
 						<i class="qrcode link icon" onclick="qrStart();"></i>
 					</div>
-					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/>
+					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken();"/>
 					<div id="icon_remove" class="ui right icon input" style="display:none;">
 						<i class="remove link icon" onclick="clearAll(); $('#token').val('');"></i>
 					</div>
