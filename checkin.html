@@ -17,6 +17,13 @@
 		var searchedToken = '';
 		function searchToken(ignoreAlert = false) {
 			var token = $('#token').val();
+			if (token.length != 0) {
+				$('#icon_remove').show();
+			}
+			else {
+				$('#icon_remove').hide();
+			}
+			
 			if (token.length != 32) {
 				searchedToken = '';
 				$('#result').fadeOut(100);
@@ -31,6 +38,8 @@
 				if (searchedToken != token) {
 					searchedToken = token;
 					$('#result').fadeOut(100);
+					
+					$('#icon_search').addClass('loading');
 					$('#status').show();
 					$('#lb_status_msg').text('Searching...');
 
@@ -52,6 +61,7 @@
 									var used = scenario.used;
 									if (used == null) {
 										$('#btn_' + scenario.id).removeClass('disabled');
+										$('#btn_' + scenario.id).addClass('teal');
 										if (scenario.id.indexOf('checkin') !== -1) {
 											$('#btn_' + scenario.id).val('Checkin!');
 										}
@@ -61,11 +71,13 @@
 									}
 									else {
 										$('#btn_' + scenario.id).val('Used!');
+										$('#btn_' + scenario.id).removeClass('teal');
 										$('#btn_' + scenario.id).addClass('disabled');
 									}
 								}
 								$('#result').fadeIn(400);
-
+								
+								$('#icon_search').removeClass('loading');
 								$('#status').hide();
 								$('#lb_status_msg').text('');
 							}, 500);
@@ -74,7 +86,8 @@
 							console.log("ERROR:");
 							console.log(request.responseText);
 							setTimeout(function() {
-
+								
+								$('#icon_search').removeClass('loading');
 								$('#status').show();
 								$('#lb_status_msg').text(request.responseJSON.message);
 							}, 500);
@@ -109,7 +122,18 @@
 		  	});
 		}
 
+		function clearAll() {
+			$('#token').val('');
+			searchedToken = '';
+			$('#icon_remove').hide();
+			
+			$('#result').fadeOut(100);
+			$('#status').hide();
+			$('#lb_status_msg').text('');
 
+			$('#lb_user_id').text('');
+			$('#lb_oid').text('');
+		}
 
 	</script>
 	<style>
@@ -134,13 +158,12 @@
 		.modal-footer {
 			border-top: 0px;
 		}
-
+		
 		#search input[type="search"] {
 			top: 50%;
 			width: 100%;
 /*			color: rgb(255, 255, 255);*/
 /*			background: rgba(0, 0, 0, 0);*/
-			font-size: 58px;
 /*			font-weight: 300;*/
 			text-align: center;
 			border: 0px;
@@ -193,11 +216,17 @@
 
 		<div class="container">
 			<div class="starter-template">
-				<h1>Bootstrap starter template</h1>
-				<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-
-				<div id="search">
-					<p><input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/></p>
+				<h1>人工報到</h1>
+				<p class="lead">請在下方輸入會眾的 Token 並查詢結果</p>
+				<br>
+				<div id="search" class="fluid ui transparent input" style="font-size: 50px;">
+					<div id="icon_search" class="ui left icon input">
+						<i class="search icon"></i>
+					</div>
+					<input type="search" id="token" value="" placeholder="type Token here" spellcheck="false" onkeyup="searchToken(true);"/>			
+					<div id="icon_remove" class="ui right icon input" style="display:none;">
+						<i class="remove link icon" onclick="clearAll();"></i>
+					</div>
 				</div>
 				<hr>
 				<div id="status" style="display:none;">
