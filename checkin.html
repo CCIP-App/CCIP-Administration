@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
 	<script src="lib/html5-qrcode.min.js"></script>
 	<script src="lib/jsqrcode-combined.min.js"></script>
-
+	<script src="//cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js"></script>
+	
 	<script>
 		//$('#startModal').modal('show');
 		//$('#startModal').modal('hide');
@@ -187,13 +188,49 @@
 
 		function qrDecode() {
 			var file = document.getElementById("capture").files[0];
-			if (file) {
+			if (file) {				
+				$('#status').show();
+				$('#lb_status_msg').text('QR Decoding...');
+				
 				var blob_url = window.URL.createObjectURL(file);
-				qrcode.callback = qrDecode_callBack;
-				qrcode.decode(blob_url);
+				
+				var reader = new FileReader();
+				reader.onload = function (readerEvent) {
+					var image = new Image();
+					image.onload = function (imageEvent) {
+
+						// Resize the image
+						var canvas = document.createElement('canvas'),
+							max_size = 250,// TODO : pull max size from a site config
+							width = image.width,
+							height = image.height;
+						if (width > height) {
+							if (width > max_size) {
+								height *= max_size / width;
+								width = max_size;
+							}
+						} else {
+							if (height > max_size) {
+								width *= max_size / height;
+								height = max_size;
+							}
+						}
+						canvas.width = width;
+						canvas.height = height;
+						canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+						var dataUrl = canvas.toDataURL('image/jpeg');
+						
+						qrcode.callback = qrDecode_callBack;
+						qrcode.decode(dataUrl);
+					}
+					image.src = readerEvent.target.result;
+				}
+				reader.readAsDataURL(file);
 			}
 		}
 		var qrDecode_callBack = function(result) {
+			$('#status').hide();
+			$('#lb_status_msg').text('');
 			$('#token').val(result);
 			searchToken();
 		}
