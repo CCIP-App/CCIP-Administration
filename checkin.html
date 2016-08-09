@@ -189,12 +189,15 @@
 			var file = document.getElementById("capture").files[0];
 			if (file) {
 				var blob_url = window.URL.createObjectURL(file);
+				qrcode.callback = qrDecode_callBack;
 				qrcode.decode(blob_url);
-				$('#token').val(qrcode.result);
-				searchToken();
 			}
 		}
-
+		var qrDecode_callBack = function(result) {
+			$('#token').val(result);
+			searchToken();
+		}
+		
 		function qrStart() {
 			if (isMobile.iOS()) {
 				$("#capture").click();
