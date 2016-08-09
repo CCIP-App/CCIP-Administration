@@ -186,19 +186,24 @@
 		}
 
 		function qrStart() {
-			$('#qrcode_area').show();
-			$('#qrcode_reader').html5_qrcode(function(data){
-					// do something when code is read
-					$('#token').val(data);
-					searchToken();
-					qrStop();
-				},
-				function(error){
-					//show read errors
-				}, function(videoError){
-					//the video stream could be opened
-				}
-			);
+			if ($('#qrcode_reader:empty').length == 1) {
+				$('#qrcode_area').show();
+				$('#qrcode_reader').html5_qrcode(function(data){
+						// do something when code is read
+						$('#token').val(data);
+						searchToken();
+						qrStop();
+					},
+					function(error){
+						//show read errors 
+					}, function(videoError){
+						//the video stream could be opened
+					}
+				);
+			}
+			else {
+				qrStop();
+			}
 		}
 
 		function qrStop() {
