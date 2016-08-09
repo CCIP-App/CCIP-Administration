@@ -52,12 +52,12 @@
 			if (!$.isEmptyObject(day1checkinChart)) {
 				day1checkinChart.series[0].setData([
 					{
-						name: 'Used',
+						name: '已報到',
 						y: dashboardData.day1checkin_used,
 						sliced: true,
 						selected: true
 					},
-					['Unused', (dashboardData.total - dashboardData.day1checkin_used)]
+					['未報到', (dashboardData.total - dashboardData.day1checkin_used)]
 			    ], true);
 			}
 			else {
@@ -69,7 +69,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day1checkin<br/>total:' + dashboardData.total
+						text: '報到人數<br/>共 ' + dashboardData.total + ' 人'
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -90,15 +90,15 @@
 					},
 					series: [{
 						type: 'pie',
-						name: 'Browser share',
+						name: 'Percentage：',
 						data: [
 							{
-								name: 'Used',
+								name: '已報到',
 								y: dashboardData.day1checkin_used,
 								sliced: true,
 								selected: true
 							},
-							['Unused', (dashboardData.total - dashboardData.day1checkin_used)]
+							['未報到', (dashboardData.total - dashboardData.day1checkin_used)]
 						]
 					}]
 				});
@@ -111,12 +111,12 @@
 			if (!$.isEmptyObject(kitChart)) {
 				kitChart.series[0].setData([
 					{
-						name: 'Used',
+						name: '已領取',
 						y: dashboardData.kit_used,
 						sliced: true,
 						selected: true
 					},
-					['Unused', (dashboardData.total - dashboardData.kit_used)]
+					['未領取', (dashboardData.total - dashboardData.kit_used)]
 			    ], true);
 			}
 			else {
@@ -128,7 +128,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'kit<br/>total:' + dashboardData.total
+						text: '迎賓袋<br/>共 ' + dashboardData.total + ' 人已領取'
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -149,15 +149,15 @@
 					},
 					series: [{
 						type: 'pie',
-						name: 'Browser share',
+						name: 'Percentage：',
 						data: [
 							{
-								name: 'Used',
+								name: '已領取',
 								y: dashboardData.kit_used,
 								sliced: true,
 								selected: true
 							},
-							['Unused', (dashboardData.total - dashboardData.kit_used)]
+							['未領取', (dashboardData.total - dashboardData.kit_used)]
 						]
 					}]
 				});
@@ -169,12 +169,12 @@
 			if (!$.isEmptyObject(day1lunchChart)) {
 				day1lunchChart.series[0].setData([
 					{
-						name: 'Used',
+						name: '已領取',
 						y: dashboardData.day1lunch_used,
 						sliced: true,
 						selected: true
 					},
-					['Unused', (dashboardData.total - dashboardData.day1lunch_used)]
+					['未領取', (dashboardData.total - dashboardData.day1lunch_used)]
 			    ], true);
 			}
 			else {
@@ -186,7 +186,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day1lunch<br/>total:' + dashboardData.total
+						text: '午餐<br/>共 ' + dashboardData.total + ' 人已領取'
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -207,15 +207,15 @@
 					},
 					series: [{
 						type: 'pie',
-						name: 'Browser share',
+						name: 'Percentage：',
 						data: [
 							{
-								name: 'Used',
+								name: '已領取',
 								y: dashboardData.day1lunch_used,
 								sliced: true,
 								selected: true
 							},
-							['Unused', (dashboardData.total - dashboardData.day1lunch_used)]
+							['未領取', (dashboardData.total - dashboardData.day1lunch_used)]
 						]
 					}]
 				});
@@ -228,12 +228,12 @@
 			if (!$.isEmptyObject(day2checkinChart)) {
 				day2checkinChart.series[0].setData([
 					{
-						name: 'Used',
+						name: '已報到',
 						y: dashboardData.day2checkin_used,
 						sliced: true,
 						selected: true
 					},
-					['Unused', (dashboardData.total - dashboardData.day2checkin_used)]
+					['未報到', (dashboardData.total - dashboardData.day2checkin_used)]
 			    ], true);
 			}
 			else {
@@ -245,7 +245,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day2checkin<br/>total:' + dashboardData.total
+						text: '報到人數<br/>共 ' + dashboardData.total + ' 人'
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -266,15 +266,15 @@
 					},
 					series: [{
 						type: 'pie',
-						name: 'Browser share',
+						name: 'Percentage：',
 						data: [
 							{
-								name: 'Used',
+								name: '已報到',
 								y: dashboardData.day2checkin_used,
 								sliced: true,
 								selected: true
 							},
-							['Unused', (dashboardData.total - dashboardData.day2checkin_used)]
+							['未報到', (dashboardData.total - dashboardData.day2checkin_used)]
 						]
 					}]
 				});
@@ -287,12 +287,12 @@
 			if (!$.isEmptyObject(day2lunchChart)) {
 				day2lunchChart.series[0].setData([
 					{
-						name: 'Used',
+						name: '已領取',
 						y: dashboardData.day2lunch_used,
 						sliced: true,
 						selected: true
 					},
-					['Unused', (dashboardData.total - dashboardData.day2lunch_used)]
+					['未領取', (dashboardData.total - dashboardData.day2lunch_used)]
 			    ], true);
 			}
 			else {
@@ -304,7 +304,7 @@
 						plotShadow: false
 					},
 					title: {
-						text: 'day2lunch<br/>total:' + dashboardData.total
+						text: '午餐<br/>total:' + dashboardData.total
 					},
 					tooltip: {
 						pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -325,15 +325,15 @@
 					},
 					series: [{
 						type: 'pie',
-						name: 'Browser share',
+						name: 'Percentage：',
 						data: [
 							{
-								name: 'Used',
+								name: '已領取',
 								y: dashboardData.day2lunch_used,
 								sliced: true,
 								selected: true
 							},
-							['Unused', (dashboardData.total - dashboardData.day2lunch_used)]
+							['未領取', (dashboardData.total - dashboardData.day2lunch_used)]
 						]
 					}]
 				});
@@ -386,8 +386,6 @@
 		<div id="header"></div>
 		<div class="container">
 			<div class="starter-template">
-				<h1>Bootstrap starter template</h1>
-				<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
 				<p>Auto update every 30 sec.</p>
 				<p><button type="button" onclick="update();">Update!</button></p>
 			</div>
