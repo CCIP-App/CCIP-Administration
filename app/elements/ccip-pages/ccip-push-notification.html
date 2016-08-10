@@ -11,9 +11,27 @@
       :host {
         display: block;
       }
+      paper-button {
+        background-color: var(--paper-light-blue-500);
+        color: white;
+      }
     </style>
 
     <h1 class="page-title" tabindex="-1">Push Notification</h1>
+    <div class="container-fluid">
+      <div class="dashboard-box">
+        <h3>發送推播訊息</h3>
+        <form is="iron-form">
+          <div class="form-group">
+            <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
+          </div>
+          <div class="form-group">
+            <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
+          </div>
+          <paper-button raised on-click="send">Send!</paper-button>
+        </form>
+      </div>
+    </div>
   </template>
 
   <script>
@@ -24,6 +42,52 @@
         is: 'ccip-push-notification',
 
         properties: {
+          content_zhHant: {
+            type: String,
+            notify: true
+          },
+          content_en: {
+            type: String,
+            notify: true
+          }
+        },
+
+        send: function() {
+          var contents = {};
+          if (this.content_zhHant.length > 0) {
+            contents['zh-Hant'] = this.content_zhHant;
+          }
+          if (this.content_en.length > 0) {
+            contents['en'] = this.content_en;
+          }
+          var message = {
+            app_id: 'aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d',
+            contents: contents,
+            included_segments: ["All"]
+          };
+          if (!$.isEmptyObject(contents)) {
+            $.ajax({
+              url: oneSignalUrl.notifications,
+              beforeSend: beforeSend,
+              type: 'post',
+              dataType: "json",
+              data: message,
+              success: json => {
+                console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+              },
+              error: e => {
+                console.log('Error: ', e);
+                alert(e.responseJSON.errors);
+              }
+            });
+          }
+        },
+
+        attached: function() {},
+
+        ready: function() {
+          this.content_zhHant = '';
+          this.content_en = '';
         }
       });
     })();
