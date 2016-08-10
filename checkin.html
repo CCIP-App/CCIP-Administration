@@ -128,12 +128,15 @@
 
 		function updateALL(json){
 			$('#lb_user_id').text(json.user_id);
+
 			for (var i = 0; i < json.scenarios.length; i++) {
 				var scenario = json.scenarios[i];
 				var used = scenario.used;
 				var disabled_txt = scenario.disabled;
+				var diet = json.scenarios[2].attr.diet;
 				var btn = $('#btn_chk_' + scenario.id);
 				var desc = $('#lb_description_' + scenario.id);
+				var diet_desc = $('#lb_meta_day1lunch, #lb_meta_day2lunch');
 
 				if (used == null && disabled_txt == null) {
 					btn.removeClass('disabled');
@@ -155,6 +158,10 @@
 					if(disabled_txt != null)
 						desc.text('無法使用原因：' + disabled_txt);
 				}
+				if(diet == 'meat')
+					diet_desc.text('葷食')
+				else
+					diet_desc.text('素食');
 			}
 		}
 
@@ -389,7 +396,7 @@
 										Day1 報到
 									</div>
 									<div class="meta">
-										<span class="cinema">Union Square 14</span>
+										<span class="cinema"><label></label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_day1checkin"></label></p>
@@ -414,7 +421,7 @@
 										迎賓袋
 									</div>
 									<div class="meta">
-										<span class="cinema">Union Square 14</span>
+										<span class="cinema"><label></label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_kit"></label></p>
@@ -439,7 +446,7 @@
 										獨家紀念品
 									</div>
 									<div class="meta">
-										<span class="cinema">僅限個人贊助方案</span>
+										<span class="cinema"><label>僅限個人贊助方案</label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_vipkit"></label></p>
@@ -464,7 +471,7 @@
 										Day1 午餐
 									</div>
 									<div class="meta">
-										<span class="cinema">Union Square 14</span>
+										<span class="cinema"><label id="lb_meta_day1lunch"></label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_day1lunch"></label></p>
@@ -489,7 +496,7 @@
 										Day2 報到
 									</div>
 									<div class="meta">
-										<span class="cinema">Union Square 14</span>
+										<span class="cinema"><label></label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_day2checkin"></label></p>
@@ -514,7 +521,7 @@
 										Day2 午餐
 									</div>
 									<div class="meta">
-										<span class="cinema">Union Square 14</span>
+										<span class="cinema"><label id="lb_meta_day2lunch"></label></span>
 									</div>
 									<div class="description">
 										<p><label id="lb_description_day2lunch"></label></p>
