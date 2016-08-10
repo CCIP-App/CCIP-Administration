@@ -19,7 +19,7 @@
         <h3>Day1</h3>
         <div x-title="報到狀態\n共 %total% 名會眾" x-used-text="已報到" x-unused-text="未報到" id="day1checkin_used" class="col-sm-4 chart-box"></div>
         <div x-title="迎賓袋\n" x-used-text="已領取" x-unused-text="未領取" id="kit_used" class="col-sm-4 chart-box"></div>
-        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day1lunch_used" class="col-sm-4 chart-box"></div>
+        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day1lunch" class="col-sm-4 chart-box"></div>
       </div>
     </div>
     <hr>
@@ -27,7 +27,7 @@
       <div class="dashboard-box">
         <h3>Day2</h3>
         <div x-title="報到狀態\n共 %total% 名會眾" x-used-text="已報到" x-unused-text="未報到" id="day2checkin_used" class="col-sm-4 chart-box"></div>
-        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day2lunch_used" class="col-sm-4 chart-box"></div>
+        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day2lunch" class="col-sm-4 chart-box"></div>
       </div>
     </div>
     <hr>
@@ -59,8 +59,36 @@
             var title = n.getAttribute('x-title').replace(/\\n/g, '<br />').replace(/%total%/g, newStatus.total);
             var usedText = n.getAttribute('x-used-text');
             var unusedText = n.getAttribute('x-unused-text');
-            if (!!this.charts[k]) {
-              this.charts[k].series[0].setData([
+            var data = [];
+            if (k.match(/lunch/i) != null && !!newStatus[k]) {
+              data = [
+                {
+                  name: `${dietMapping.meat} ${usedText}`,
+                  y: newStatus[k].meat_used,
+                  sliced: true,
+                  selected: true
+                },
+                {
+                  name: `${dietMapping.meat} ${unusedText}`,
+                  y: newStatus[k].meat - newStatus[k].meat_used,
+                  sliced: true,
+                  selected: true
+                },
+                {
+                  name: `${dietMapping.vegetarian} ${usedText}`,
+                  y: newStatus[k].vegetarian_used,
+                  sliced: true,
+                  selected: true
+                },
+                {
+                  name: `${dietMapping.vegetarian} ${usedText}`,
+                  y: newStatus[k].vegetarian - newStatus[k].vegetarian_used,
+                  sliced: true,
+                  selected: true
+                }
+              ];
+            } else {
+              data = [
                 {
                   name: usedText,
                   y: newStatus[k],
@@ -68,7 +96,10 @@
                   selected: true
                 },
                 [unusedText, ((newStatus.total || 0) - newStatus[k])]
-              ], true);
+              ];
+            }
+            if (!!this.charts[k]) {
+              this.charts[k].series[0].setData(data, true);
               this.charts[k].setTitle({ text: title });
             } else {
               this.charts[k] = new Highcharts.Chart({
@@ -102,15 +133,7 @@
                 series: [{
                   type: 'pie',
                   name: 'Percentage',
-                  data: [
-                    {
-                      name: usedText,
-                      y: newStatus[k],
-                      sliced: true,
-                      selected: true
-                    },
-                    [unusedText, ((newStatus.total || 0) - newStatus[k])]
-                  ]
+                  data: data
                 }]
               });
             }
