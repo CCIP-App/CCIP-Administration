@@ -44,8 +44,11 @@
 		}
 
 		Highcharts.setOptions({
-			 colors: ['#3D983C', '#CCCCCC']
-			});
+			colors: ['#3D983C', '#CCCCCC'],
+			credits: {
+				enabled: false
+			}
+		});
 
 		var day1checkinChart;
 		function draw_day1checkinChart() {
@@ -58,9 +61,8 @@
 						selected: true
 					},
 					['未報到', (dashboardData.total - dashboardData.day1checkin_used)]
-			    ], true);
-			}
-			else {
+				], true);
+			} else {
 				day1checkinChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'day1checkin_chart',
@@ -117,9 +119,8 @@
 						selected: true
 					},
 					['未領取', (dashboardData.total - dashboardData.kit_used)]
-			    ], true);
-			}
-			else {
+				], true);
+			} else {
 				kitChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'kit_chart',
@@ -175,9 +176,8 @@
 						selected: true
 					},
 					['未領取', (dashboardData.total - dashboardData.day1lunch_used)]
-			    ], true);
-			}
-			else {
+				], true);
+			} else {
 				day1lunchChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'day1lunch_chart',
@@ -234,9 +234,8 @@
 						selected: true
 					},
 					['未報到', (dashboardData.total - dashboardData.day2checkin_used)]
-			    ], true);
-			}
-			else {
+				], true);
+			} else {
 				day2checkinChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'day2checkin_chart',
@@ -293,9 +292,8 @@
 						selected: true
 					},
 					['未領取', (dashboardData.total - dashboardData.day2lunch_used)]
-			    ], true);
-			}
-			else {
+				], true);
+			} else {
 				day2lunchChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'day2lunch_chart',

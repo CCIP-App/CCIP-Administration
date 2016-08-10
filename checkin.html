@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script> -->
+	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>-->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
 	<script src="lib/html5-qrcode.min.js"></script>
 	<script src="lib/jsqrcode-combined.min.js"></script>
@@ -20,16 +20,16 @@
 		//$('#startModal').modal('hide');
 
 		const parameters = location.search.split('?').pop().split('&').map(p => {
-		    var ps = p.split('=');
-		    var o = {};
+			var ps = p.split('=');
+			var o = {};
 			o[ps.shift()] = ps.join('=');
-		    return o;
+			return o;
 		}).reduce((a, b) => {
-		    var o = a;
-		    for(var k in b) {
-		        o[k] = b[k];
-		    }
-		    return o;
+			var o = a;
+			for(var k in b) {
+				o[k] = b[k];
+			}
+			return o;
 		});
 
 		var searchedToken = '';
@@ -128,7 +128,7 @@
 			thisBtn.addClass('loading');
 			thisBtn.addClass('disabled');
 
-		  	$.ajax({
+			$.ajax({
 				url: 'https://coscup.cprteam.org/use/' + scenarioID,
 				type: 'GET',
 				dataType: "JSON",
@@ -146,7 +146,7 @@
 						thisDesc.text('使用時間：' + new Date (1000 * json.scenarioID.used));
 					}, 1000);
 				},
-		        error: function(request, status, errorThrown) {
+				error: function(request, status, errorThrown) {
 					setTimeout(function() {
 						console.log("ERROR:");
 						console.log(request.responseText);
@@ -160,7 +160,7 @@
 					}, 1000);
 				}
 			}).always(function() {
-		  	});
+			});
 		}
 
 		function changeBtnColorClass(thisBtn, type) {
@@ -273,8 +273,7 @@
 						$('#qrcode_reader').empty();
 						$('#qrcode_area').hide();
 					});
-				}
-				else {
+				} else {
 					qrStop();
 				}
 			}

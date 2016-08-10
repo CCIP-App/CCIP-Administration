@@ -167,10 +167,10 @@
 				}
 			}
 			return {
-				"platform_name" : typeList[type],
-				"count" : devices.length,
-				"model_list" : modelArray,
-				"os_list" : osArray
+				platform_name: typeList[type],
+				count: devices.length,
+				model_list: modelArray,
+				os_list: osArray
 			}
 		}
 
@@ -187,8 +187,7 @@
 
 			if (!$.isEmptyObject(deviceTypeChart)) {
 				deviceTypeChart.series[0].setData(seriesData, true);
-			}
-			else {
+			} else {
 				deviceTypeChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'deviceType_chart',
@@ -220,7 +219,10 @@
 						type: 'pie',
 						name: 'Browser share',
 						data: seriesData
-					}]
+					}],
+					credits: {
+						enabled: false
+					}
 				});
 			}
 		}
@@ -242,8 +244,7 @@
 
 			if (!$.isEmptyObject(iOSModelChart)) {
 				iOSModelChart.series[0].setData(seriesData, true);
-			}
-			else {
+			} else {
 				iOSModelChart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'iOSModel_chart',
@@ -275,7 +276,10 @@
 						type: 'pie',
 						name: 'Browser share',
 						data: seriesData
-					}]
+					}],
+					credits: {
+						enabled: false
+					}
 				});
 			}
 		}

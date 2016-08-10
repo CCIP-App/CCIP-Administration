@@ -4,7 +4,6 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
 		<title></title>
 	</head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -20,9 +19,9 @@
 			if ($('#content-en').val().length > 0) {
 				contents['en'] = $('#content-en').val();
 			}
-      if ($('#content-uri').val().length > 0) {
-        contents['uri'] = $('#content-uri').val();
-      }
+			if ($('#content-uri').val().length > 0) {
+				contents['uri'] = $('#content-uri').val();
+			}
 
 			if ($.isEmptyObject(contents)) {
 				// no contents
@@ -32,7 +31,7 @@
 
 				var message = {
 					msg_zh: contents['zh-Hant'],
-          msg_en: contents['en'],
+					msg_en: contents['en'],
 					uri: contents['uri']
 				};
 
@@ -102,7 +101,7 @@
 				<h1>新增大會公告</h1>
 				<p>Chinese（Traditional）<br><input id="content-zh-Hant" type="text"></p>
 				<p>English<br><input id="content-en" type="text"></p>
-        <p>URI<br><input id="content-uri" type="text"></p>
+		<p>URI<br><input id="content-uri" type="text"></p>
 				<p><button type="button" onclick="sendAnnounce();">Send!</button>	</p>
 			</div>
 		</div><!-- /.container -->
