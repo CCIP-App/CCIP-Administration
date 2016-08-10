@@ -56,36 +56,7 @@
 							console.log(json);
 
 							setTimeout(function() {
-								$('#lb_user_id').text(json.user_id);
-
-								for (var i = 0; i < json.scenarios.length; i++) {
-									var scenario = json.scenarios[i];
-									var used = scenario.used;
-									var disabled_txt = scenario.disabled;
-									var btn = $('#btn_chk_' + scenario.id);
-									var desc = $('#lb_description_' + scenario.id);
-
-									if (used == null && disabled_txt == null) {
-										btn.removeClass('disabled');
-										changeBtnColorClass($('#btn_chk_' + scenario.id), 'teal');
-										desc.text('尚未使用');
-										if (scenario.id.indexOf('checkin') !== -1) {
-											btn.text('Checkin!').button("refresh");
-										}
-										else {
-											btn.text('Action!').button("refresh");
-										}
-									}
-									else {
-										btn.text('Used!').button("refresh");
-										changeBtnColorClass(btn, '');
-										btn.addClass('disabled');
-										if(used != null)
-											desc.text('使用時間：' + new Date (1000 * scenario.used));
-										if(disabled_txt != null)
-											desc.text('無法使用原因：' + disabled_txt);
-									}
-								}
+								updateALL(json);
 								$('#result').fadeIn(400);
 
 								$('#icon_search').removeClass('loading');
@@ -129,12 +100,13 @@
 						console.log("Response:");
 						console.log(json);
 
+						updateALL(json);
+
 						thisBtn.text('Succeed!').button("refresh");
 						changeBtnColorClass(thisBtn, 'positive');
 
 						thisTryBtn.hide();
 						thisBtn.removeClass('loading');
-						thisDesc.text('使用時間：' + new Date (1000 * new Date().getTime()));
 					}, 1000);
 				},
 				error: function(request, status, errorThrown) {
@@ -152,6 +124,38 @@
 				}
 			}).always(function() {
 			});
+		}
+
+		function updateALL(json){
+			$('#lb_user_id').text(json.user_id);
+			for (var i = 0; i < json.scenarios.length; i++) {
+				var scenario = json.scenarios[i];
+				var used = scenario.used;
+				var disabled_txt = scenario.disabled;
+				var btn = $('#btn_chk_' + scenario.id);
+				var desc = $('#lb_description_' + scenario.id);
+
+				if (used == null && disabled_txt == null) {
+					btn.removeClass('disabled');
+					changeBtnColorClass($('#btn_chk_' + scenario.id), 'teal');
+					desc.text('尚未使用');
+					if (scenario.id.indexOf('checkin') !== -1) {
+						btn.text('Checkin!').button("refresh");
+					}
+					else {
+						btn.text('Action!').button("refresh");
+					}
+				}
+				else {
+					btn.text('Used!').button("refresh");
+					changeBtnColorClass(btn, '');
+					btn.addClass('disabled');
+					if(used != null)
+						desc.text('使用時間：' + new Date (1000 * scenario.used));
+					if(disabled_txt != null)
+						desc.text('無法使用原因：' + disabled_txt);
+				}
+			}
 		}
 
 		function changeBtnColorClass(thisBtn, type) {
