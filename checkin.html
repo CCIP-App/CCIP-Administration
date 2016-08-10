@@ -61,10 +61,11 @@
 								for (var i = 0; i < json.scenarios.length; i++) {
 									var scenario = json.scenarios[i];
 									var used = scenario.used;
+									var disabled_txt = scenario.disabled;
 									var btn = $('#btn_chk_' + scenario.id);
 									var desc = $('#lb_description_' + scenario.id);
 
-									if (used == null) {
+									if (used == null && disabled_txt == null) {
 										btn.removeClass('disabled');
 										changeBtnColorClass($('#btn_chk_' + scenario.id), 'teal');
 										desc.text('尚未使用');
@@ -79,7 +80,10 @@
 										btn.text('Used!').button("refresh");
 										changeBtnColorClass(btn, '');
 										btn.addClass('disabled');
-										desc.text('使用時間：' + new Date (1000 * scenario.used));
+										if(used != null)
+											desc.text('使用時間：' + new Date (1000 * scenario.used));
+										if(disabled_txt != null)
+											desc.text('無法使用原因：' + disabled_txt);
 									}
 								}
 								$('#result').fadeIn(400);
