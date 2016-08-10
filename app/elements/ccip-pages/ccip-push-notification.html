@@ -22,12 +22,8 @@
       <div class="dashboard-box">
         <h3>發送推播訊息</h3>
         <form is="iron-form">
-          <div class="form-group">
-            <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
-          </div>
-          <div class="form-group">
-            <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
-          </div>
+          <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
+          <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
           <paper-button raised on-click="send">Send!</paper-button>
         </form>
       </div>
