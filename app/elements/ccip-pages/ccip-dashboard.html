@@ -41,7 +41,7 @@
     <hr>
     <div class="dashboard-box">
       <p>Auto update every 30 sec.</p>
-      <p><button type="button" onclick="update();">Update!</button></p>
+      <p><button type="button" on-click="reload">Update!</button></p>
     </div>
   </template>
 
@@ -64,7 +64,7 @@
           // console.log(newStatus, oldStatus);
           Array.from(this.querySelectorAll('.chart-box')).map(n => {
             var k = n.id;
-            var title = n.getAttribute('x-title')
+            var title = n.getAttribute('x-title').replace(/\\n/g, '<br />').replace(/%total%/g, newStatus.total);
             var usedText = n.getAttribute('x-used-text');
             var unusedText = n.getAttribute('x-unused-text');
             if (!!this.charts[k]) {
@@ -75,8 +75,9 @@
                   sliced: true,
                   selected: true
                 },
-                [unusedText, (newStatus.total - newStatus[k])]
+                [unusedText, ((newStatus.total || 0) - newStatus[k])]
               ], true);
+              this.charts[k].setTitle({ text: title });
             } else {
               this.charts[k] = new Highcharts.Chart({
                 chart: {
@@ -86,10 +87,10 @@
                   plotShadow: false
                 },
                 title: {
-                  text: title.replace(/\\n/g, '<br />').replace(/%total%/g, newStatus.total)
+                  text: title
                 },
                 tooltip: {
-                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                  pointFormat: '{series.name}: <b>{point.percentage: .1f}%</b>'
                 },
                 plotOptions: {
                   pie: {
@@ -98,7 +99,7 @@
                     dataLabels: {
                       enabled: true,
                       formatter: function() {
-                        return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+                        return this.y + ' ( ' + Math.round(this.percentage * 100) / 100 + '% )';
                       },
                       distance: -50
                     },
@@ -107,7 +108,7 @@
                 },
                 series: [{
                   type: 'pie',
-                  name: 'Percentage：',
+                  name: 'Percentage',
                   data: [
                     {
                       name: usedText,
@@ -115,7 +116,7 @@
                       sliced: true,
                       selected: true
                     },
-                    [unusedText, (newStatus.total - newStatus[k])]
+                    [unusedText, ((newStatus.total || 0) - newStatus[k])]
                   ]
                 }]
               });
@@ -123,25 +124,40 @@
           });
         },
 
-        attached: function() {
-          $.ajax({
-            url: 'https://coscup.cprteam.org/dashboard',
-            type: 'get',
-            dataType: 'json',
-            success: json => {
-              console.log(`Response: ${JSON.stringify(json, null, 2)}`);
-              this.status = json;
-              var charts = this.charts;
-              setTimeout(function() {
-                for(var k in charts) {
-                  charts[k].reflow();
-                }
-              }, 250);
-            },
-            error: e => {
-              console.log(`Error: ${e}`);
-            }
+        reload: function() {
+          var charts = this.charts;
+          new Promise((resolve, reject) => {
+            this.status = {
+              total: '--'
+            };
+            setTimeout(() => resolve(), 0);
+          }).then(() => {
+            $.ajax({
+              url: 'https://coscup.cprteam.org/dashboard',
+              type: 'get',
+              dataType: 'json',
+              success: json => {
+                console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+                this.status = json;
+                setTimeout(function() {
+                  for(var k in charts) {
+                    charts[k].reflow();
+                  }
+                }, 250);
+              },
+              error: e => {
+                console.log(`Error: ${e}`);
+              }
+            });
           });
+        },
+
+        attached: function() {
+          this.reload();
+          var self = this;
+          setInterval(function() {
+            self.reload();
+          }, 30 * 1000);
         },
 
         ready: function() {
