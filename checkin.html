@@ -14,11 +14,11 @@
 <!-- 	<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script> -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
 	<script src="lib/html5-qrcode.min.js"></script>
-	<script src="lib/jsqrcode-combined.min.js"></script>	
+	<script src="lib/jsqrcode-combined.min.js"></script>
 	<script>
 		//$('#startModal').modal('show');
 		//$('#startModal').modal('hide');
-		
+
 		const parameters = location.search.split('?').pop().split('&').map(p => {
 		    var ps = p.split('=');
 		    var o = {};
@@ -31,7 +31,7 @@
 		    }
 		    return o;
 		});
-		
+
 		var searchedToken = '';
 		function searchToken() {
 			var token = $('#token').val();
@@ -199,12 +199,12 @@
 
 		function qrDecode() {
 			var file = document.getElementById("capture").files[0];
-			if (file) {				
+			if (file) {
 				$('#status').show();
 				$('#lb_status_msg').text('QR Decoding...');
-				
+
 				var blob_url = window.URL.createObjectURL(file);
-				
+
 				var reader = new FileReader();
 				reader.onload = function (readerEvent) {
 					var image = new Image();
@@ -230,7 +230,7 @@
 						canvas.height = height;
 						canvas.getContext('2d').drawImage(image, 0, 0, width, height);
 						var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
-						
+
 						qrcode.callback = qrDecode_callBack;
 						qrcode.decode(dataUrl);
 					}
@@ -289,7 +289,7 @@
 
 		$(document).ready(function () {
 			$("#header").load("header.html");
-			
+
 			var token = parameters.token;
 			if (token) {
 				$('#token').val(parameters.token);
@@ -436,6 +436,31 @@
 								</div>
 							</div>
 							<!-- kit end -->
+							<!-- vipkit start -->
+							<div class="item">
+								<div class="ui middle aligned small image">
+									<img src="vipkit.png">
+								</div>
+								<div class="middle aligned content">
+									<div class="header">
+										獨家紀念品
+									</div>
+									<div class="meta">
+										<span class="cinema">僅限個人贊助方案</span>
+									</div>
+									<div class="description">
+										<p>asdasd</p>
+									</div>
+									<div class="extra">
+										<button id="btn_chk_vipkit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('vipkit');" value="Action!"></button>
+										<button id="btn_chk_vipkit_try" class="ui right floated button" onclick="used('vipkit');" style="display:none;">
+											<i class="repeat icon"></i>
+											Retry
+										</button>
+									</div>
+								</div>
+							</div>
+							<!-- vipkit end -->
 							<!-- day1lunch start -->
 							<div class="item">
 								<div class="ui middle aligned small image">
