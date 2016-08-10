@@ -11,6 +11,9 @@
       :host {
         display: block;
       }
+      paper-progress {
+        width: 100%;
+      }
       paper-button {
         background-color: var(--paper-light-blue-500);
         color: white;
@@ -21,6 +24,7 @@
     <div class="container-fluid">
       <div class="dashboard-box">
         <h3>新增大會公告</h3>
+        <paper-progress indeterminate hidden$="{{!sending}}"></paper-progress>
         <form is="iron-form">
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
@@ -39,6 +43,9 @@
         is: 'ccip-announcement',
 
         properties: {
+          sending: {
+            type: Boolean
+          },
           content_uri: {
             type: String,
             notify: true
@@ -54,6 +61,7 @@
         },
 
         send: function() {
+          this.sending = true;
           var contents = {};
           if (this.content_uri.length > 0) {
             contents['uri'] = this.content_uri;
@@ -78,9 +86,11 @@
             dataType: "json",
             data: message,
             success: json => {
+              this.sending = false;
               console.log(`Response: ${JSON.stringify(json, null, 2)}`);
             },
             error: e => {
+              this.sending = false;
               console.log('Error: ', e);
               alert(e.responseJSON.errors);
             }
@@ -90,6 +100,7 @@
         attached: function() {},
 
         ready: function() {
+          this.sending = false;
           this.content_uri = '';
           this.content_zhHant = '';
           this.content_en = '';
