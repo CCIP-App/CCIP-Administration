@@ -264,6 +264,10 @@
 						//show read errors
 					}, function(videoError){
 						//the video stream could be opened
+						
+						$('#status').show();
+						$('#lb_status_msg').text(videoError.name + ', ' + videoError.message);
+						$('#qrcode_area').hide();
 					});
 				}
 				else {
