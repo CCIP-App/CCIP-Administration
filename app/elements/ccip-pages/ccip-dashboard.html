@@ -11,14 +11,6 @@
       :host {
         display: block;
       }
-      .dashboard-box {
-        padding: 40px 15px;
-        text-align: center;
-      }
-      .chart-box {
-        min-width: 200px;
-        height: 400px;
-      }
     </style>
 
     <h1 class="page-title" tabindex="-1">Dashboard</h1>
@@ -80,6 +72,7 @@
               this.charts[k].setTitle({ text: title });
             } else {
               this.charts[k] = new Highcharts.Chart({
+                colors: ['#3D983C', '#CCCCCC'],
                 chart: {
                   renderTo: k,
                   plotBackgroundColor: null,
@@ -99,7 +92,7 @@
                     dataLabels: {
                       enabled: true,
                       formatter: function() {
-                        return this.y + ' ( ' + Math.round(this.percentage * 100) / 100 + '% )';
+                        return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
                       },
                       distance: -50
                     },
@@ -146,7 +139,7 @@
                 }, 250);
               },
               error: e => {
-                console.log(`Error: ${e}`);
+                console.log('Error: ', e);
               }
             });
           });

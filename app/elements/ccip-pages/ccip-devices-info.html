@@ -11,19 +11,233 @@
       :host {
         display: block;
       }
+      paper-progress {
+        width: 100%;
+      }
+      paper-progress.detail {
+        --paper-progress-active-color: var(--paper-pink-500);
+      }
     </style>
 
-    <h1 class="page-title" tabindex="-1">Devices Info</h1>
+    <h1 class="page-title" tabindex="-1">App Devices Info</h1>
+
+    <paper-progress indeterminate class="" hidden$="{{!prepareProgress}}"></paper-progress>
+    <paper-progress indeterminate class="detail" hidden$="{{!detailedProgress}}"></paper-progress>
+    <div class="row">
+      <div class="dashboard-box">
+        <div id="deviceType_chart" class="col-sm-6 col-sm-offset-3 chart-box"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="dashboard-box">
+        <div id="iOS_Device_chart" class="col-sm-6 chart-box"></div>
+        <div id="Android_Device_chart" class="col-sm-6 chart-box"></div>
+      </div>
+    </div>
+    <hr>
+    <div class="dashboard-box">
+      <p><button type="button" on-click="reload">Get Devieces!</button></p>
+    </div>
   </template>
 
   <script>
     (function() {
       'use strict';
+      const beforeSend = (request) => {
+        request.setRequestHeader("Authorization", "Basic YTkzYzMyZTktZTc2OS00NzE2LWJiNTYtOTBjM2NjYzQ0NWYw");
+      }
+      const oneSignalUrl = 'https://onesignal.com/api/v1/players';
+      const modelList = ['iOS', 'Android', 'Amazon', 'WindowsPhone(MPNS)', 'ChromeApp', 'ChromeWebsite', 'WindowsPhone(WNS)', 'Safari', 'Firefox', 'Mac OS X'];
 
       Polymer({
         is: 'ccip-devices-info',
 
         properties: {
+          prepareProgress: {
+            type: Boolean
+          },
+          detailedProgress: {
+            type: Boolean
+          },
+          total_count: {
+            type: Number
+          },
+          players: {
+            type: Array
+          },
+          models: {
+            type: Array,
+            observer: 'modelsChanged'
+          },
+          charts: {
+            type: Object
+          }
+        },
+
+        modelsChanged: function(newModels, oldModels) {
+          [
+            {
+              id: 'deviceType',
+              to: 'deviceType_chart',
+              title: `Platform<br/>total: ${this.players.length}`,
+              data: newModels.map(m => {
+                return {
+                  y: m.count,
+                  name: m.platform_name
+                };
+              })
+            }, {
+              id: 'iOS',
+              to: 'iOS_Device_chart',
+              title: `iOS Devices<br/>total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count}`,
+              data: newModels.filter(m => m.platform_name == 'iOS')[0].model_list.map(m => {
+                return {
+                  y: m.count,
+                  name: m.model
+                };
+              })
+            }, {
+              id: 'Android',
+              to: 'Android_Device_chart',
+              title: `Adnroid Devices<br/>total: ${newModels.filter(m => m.platform_name == 'Android')[0].count}`,
+              data: newModels.filter(m => m.platform_name == 'Android')[0].model_list.map(m => {
+                return {
+                  y: m.count,
+                  name: m.model
+                };
+              })
+            }
+          ].map(k => {
+            if (!!this.charts[k.id]) {
+              this.charts[k.id].series[0].setData(k.data, true);
+            } else {
+              this.charts[k.id] = new Highcharts.Chart({
+                chart: {
+                  renderTo: k.to,
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: k.title
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.percentage: .1f}%</b>'
+                },
+                plotOptions: {
+                  pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function() {
+                        return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                      },
+                      distance: -50
+                    },
+                    showInLegend: true
+                  }
+                },
+                series: [{
+                  type: 'pie',
+                  name: 'Browser share',
+                  data: k.data
+                }]
+              });
+            }
+          });
+          this.prepareProgress = false;
+          this.detailedProgress = false;
+        },
+
+        reload: function() {
+          let message = {
+            app_id: "a429ff30-5c0e-4584-a32f-b866ba88c947",
+            limit: 0,
+            offset: 0
+          };
+          this.prepareProgress = true;
+          this.detailedProgress = false;
+          $.ajax({
+            url: oneSignalUrl,
+            beforeSend: beforeSend,
+            type: 'get',
+            dataType: "json",
+            data: message,
+            success: json => {
+              // console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+              this.total_count = json.total_count;
+              if (this.total_count > 0) {
+                var run_time = 0;
+                message.limit = 300;
+                this.prepareProgress = false;
+                this.detailedProgress = true;
+
+                for (; message.offset < this.total_count; message.offset += message.limit) {
+                  // console.log(`i: ${message.offset / message.limit} offset: ${message.offset}`);
+
+                  $.ajax({
+                    url: oneSignalUrl,
+                    beforeSend: beforeSend,
+                    type: 'get',
+                    dataType: "json",
+                    data: message,
+                    success: json => {
+                      console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+                      ++run_time;
+                      this.players = this.players.concat(json.players);
+                    },
+                    error: e => {
+                      console.log(`Error: ${e}`);
+                      alert(e.responseJSON.errors);
+                    }
+                  }).always(() => {
+                    if (run_time * message.limit >= this.total_count) {
+                      // console.log(this.players);
+                      this.models = modelList.map((m, i) => {
+                        var devices = this.players.filter(p => p.device_type == i);
+                        if (devices.length > 0) {
+                          var os = devices.map(p => p.device_os).filter((e, p, a) => a.indexOf(e) == p).sort();
+                          var model = devices.map(p => p.device_model).filter((e, p, a) => a.indexOf(e) == p).sort();
+                          return {
+                            platform_name : modelList[i],
+                            count : devices.length,
+                            model_list : model.map(m => {
+                              return {
+                                model: m,
+                                count: devices.filter(d => d.device_model == m).length
+                              };
+                            }),
+                            os_list : os.map(o => {
+                              return {
+                                os: o,
+                                count: devices.filter(d => d.device_os == o).length
+                              };
+                            })
+                          };
+                        }
+                      }).filter(m => m);
+                    }
+                  });
+                }
+              }
+            },
+            error: e => {
+              console.log('Error: ', e);
+              alert(e.responseJSON.errors);
+            }
+          });
+        },
+
+        attached: function() {
+          this.reload();
+        },
+
+        ready: function() {
+          this.prepareProgress = false;
+          this.detailedProgress = false;
+          this.players = [];
+          this.charts = {};
         }
       });
     })();
