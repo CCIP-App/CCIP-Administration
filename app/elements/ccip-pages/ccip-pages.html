@@ -2,14 +2,10 @@
 @license
 
 -->
-<link rel="import" href="ccip-dashboard.html">
-<link rel="import" href="ccip-check-in.html">
-<link rel="import" href="ccip-devices-info.html">
-<link rel="import" href="ccip-announcement.html">
-<link rel="import" href="ccip-push-notification.html">
-
 <style>
   @import url(../../bower_components/bootstrap/dist/css/bootstrap.min.css);
+  @import url(../../bower_components/semantic/dist/semantic.min.css);
+  
   .dashboard-box {
     padding: 40px 15px;
     text-align: center;
@@ -23,9 +19,10 @@
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="../../bower_components/highcharts/highcharts.js"></script>
+<script src="../../bower_components/moment/min/moment-with-locales.min.js"></script>
 <script>
   (function() {
-    const parameters = location.search.split('?').pop().split('&').map(p => {
+    const parameters = location.hash.split('?').pop().split('&').map(p => {
       var ps = p.split('=');
       var o = {};
       o[ps.shift()] = ps.join('=');
@@ -50,6 +47,8 @@
       request.setRequestHeader("Authorization", "Basic YTkzYzMyZTktZTc2OS00NzE2LWJiNTYtOTBjM2NjYzQ0NWYw");
     }
     const oneSignalUrl = {
+      get debugToken() { return 'aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d'; },
+      get releaseToken() { return 'a429ff30-5c0e-4584-a32f-b866ba88c947'; },
       get base() { return 'https://onesignal.com/api'; },
       get players() { return `${this.base}/v1/players`; },
       get notification() { return `${this.base}/v1/notifications`; }
@@ -69,3 +68,9 @@
     });
   })();
 </script>
+
+<link rel="import" href="ccip-dashboard.html">
+<link rel="import" href="ccip-check-in.html">
+<link rel="import" href="ccip-devices-info.html">
+<link rel="import" href="ccip-announcement.html">
+<link rel="import" href="ccip-push-notification.html">
