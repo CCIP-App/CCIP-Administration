@@ -1,0 +1,153 @@
+<!--
+@license
+
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="ccip-dashboard">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .dashboard-box {
+        padding: 40px 15px;
+        text-align: center;
+      }
+      .chart-box {
+        min-width: 200px;
+        height: 400px;
+      }
+    </style>
+
+    <h1 class="page-title" tabindex="-1">Dashboard</h1>
+    <div class="row">
+      <div class="dashboard-box">
+        <h3>Day1</h3>
+        <div x-title="報到狀態\n共 %total% 名會眾" x-used-text="已報到" x-unused-text="未報到" id="day1checkin_used" class="col-sm-4 chart-box"></div>
+        <div x-title="迎賓袋\n" x-used-text="已領取" x-unused-text="未領取" id="kit_used" class="col-sm-4 chart-box"></div>
+        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day1lunch_used" class="col-sm-4 chart-box"></div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="dashboard-box">
+        <h3>Day2</h3>
+        <div x-title="報到狀態\n共 %total% 名會眾" x-used-text="已報到" x-unused-text="未報到" id="day2checkin_used" class="col-sm-4 chart-box"></div>
+        <div x-title="午餐\n" x-used-text="已領取" x-unused-text="未領取" id="day2lunch_used" class="col-sm-4 chart-box"></div>
+      </div>
+    </div>
+    <hr>
+    <div class="dashboard-box">
+      <p>Auto update every 30 sec.</p>
+      <p><button type="button" onclick="update();">Update!</button></p>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ccip-dashboard',
+
+        properties: {
+          status: {
+            type: Object,
+            observer: 'statusChanged'
+          },
+          charts: Object
+        },
+
+        statusChanged: function(newStatus, oldStatus) {
+          // console.log(newStatus, oldStatus);
+          Array.from(this.querySelectorAll('.chart-box')).map(n => {
+            var k = n.id;
+            var title = n.getAttribute('x-title')
+            var usedText = n.getAttribute('x-used-text');
+            var unusedText = n.getAttribute('x-unused-text');
+            if (!!this.charts[k]) {
+              this.charts[k].series[0].setData([
+                {
+                  name: usedText,
+                  y: newStatus[k],
+                  sliced: true,
+                  selected: true
+                },
+                [unusedText, (newStatus.total - newStatus[k])]
+              ], true);
+            } else {
+              this.charts[k] = new Highcharts.Chart({
+                chart: {
+                  renderTo: k,
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: title.replace(/\\n/g, '<br />').replace(/%total%/g, newStatus.total)
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                  pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function() {
+                        return this.y + ' ( ' + Math.round(this.percentage*100)/100 + '% )';
+                      },
+                      distance: -50
+                    },
+                    showInLegend: true
+                  }
+                },
+                series: [{
+                  type: 'pie',
+                  name: 'Percentage：',
+                  data: [
+                    {
+                      name: usedText,
+                      y: newStatus[k],
+                      sliced: true,
+                      selected: true
+                    },
+                    [unusedText, (newStatus.total - newStatus[k])]
+                  ]
+                }]
+              });
+            }
+          });
+        },
+
+        attached: function() {
+          $.ajax({
+            url: 'https://coscup.cprteam.org/dashboard',
+            type: 'get',
+            dataType: 'json',
+            success: json => {
+              console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+              this.status = json;
+              var charts = this.charts;
+              setTimeout(function() {
+                for(var k in charts) {
+                  charts[k].reflow();
+                }
+              }, 250);
+            },
+            error: e => {
+              console.log(`Error: ${e}`);
+            }
+          });
+        },
+
+        ready: function() {
+          this.charts = {};
+        }
+      });
+    })();
+  </script>
+</dom-module>

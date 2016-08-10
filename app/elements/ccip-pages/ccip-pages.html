@@ -1,0 +1,52 @@
+<!--
+@license
+
+-->
+<link rel="import" href="ccip-dashboard.html">
+<link rel="import" href="ccip-check-in.html">
+<link rel="import" href="ccip-devices-info.html">
+<link rel="import" href="ccip-announcement.html">
+<link rel="import" href="ccip-push-notification.html">
+
+<style>
+  @import url(../../bower_components/bootstrap/dist/css/bootstrap.min.css);
+</style>
+
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../../bower_components/highcharts/highcharts.js"></script>
+<script>
+  (function() {
+    const parameters = location.search.split('?').pop().split('&').map(p => {
+      var ps = p.split('=');
+      var o = {};
+      o[ps.shift()] = ps.join('=');
+      return o;
+    }).reduce((a, b) => {
+      var o = a;
+      for(var k in b) {
+        o[k] = b[k];
+      }
+      return o;
+    });
+
+    const isMobile = {
+      get iOS() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+      },
+      get Android() {
+        return navigator.userAgent.match(/Android/i) ? true : false;
+      },
+    };
+
+    window.parameters = parameters;
+    window.isMobile = isMobile;
+
+    Highcharts.setOptions({
+      colors: ['#3D983C', '#CCCCCC'],
+      credits: {
+        enabled: false
+      }
+    });
+  })();
+</script>
