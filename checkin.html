@@ -143,7 +143,7 @@
 
 						thisTryBtn.hide();
 						thisBtn.removeClass('loading');
-						thisDesc.text('使用時間：' + new Date (1000 * json.scenarioID.used));
+						thisDesc.text('使用時間：' + new Date (1000 * new Date().getTime()));
 					}, 1000);
 				},
 				error: function(request, status, errorThrown) {
