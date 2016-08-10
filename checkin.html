@@ -70,7 +70,6 @@
 
 							setTimeout(function() {
 								$('#lb_user_id').text(json.user_id);
-								$('#lb_oid').text(json._id.$oid);
 
 								for (var i = 0; i < json.scenarios.length; i++) {
 									var scenario = json.scenarios[i];
@@ -122,9 +121,10 @@
 
 		function used(scenarioID) {
 			var token = $('#token').val();
-
 			var thisBtn = $('#btn_chk_' + scenarioID);
 			var thisTryBtn = $('#btn_chk_' + scenarioID + '_try');
+			var thisDesc = $('#lb_description_' + scenarioID);
+
 			thisBtn.addClass('loading');
 			thisBtn.addClass('disabled');
 
@@ -143,6 +143,7 @@
 
 						thisTryBtn.hide();
 						thisBtn.removeClass('loading');
+						thisDesc.text('使用時間：' + new Date (1000 * json.scenarioID.used));
 					}, 1000);
 				},
 		        error: function(request, status, errorThrown) {
@@ -179,7 +180,6 @@
 			$('#lb_status_msg').text('');
 
 			$('#lb_user_id').text('');
-			$('#lb_oid').text('');
 
 			var allButtons = $( ":button" );
 			for (var i = 0; i < allButtons.length; i++) {
@@ -391,8 +391,6 @@
 					<div class="ui segment col-sm-10" style="margin-bottom: 60px;">
 						<p class="ui left floated header" style="font-size: 36px;">暱稱：<label id="lb_user_id"></label></p>
 						<div class="ui left clearing divider"></div>
-						<p>$oid : <label id="lb_oid"></label></p>
-						<div class="ui clearing divider"></div>
 						<div class="ui divided items">
 							<!-- day1checkin start -->
 							<div class="item">
