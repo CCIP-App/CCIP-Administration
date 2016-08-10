@@ -11,19 +11,316 @@
       :host {
         display: block;
       }
+      #search paper-input[type="search"] {
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        border: 0px;
+        margin: 0px auto;
+        padding-left: 25px;
+        padding-right: 25px;
+        outline: none;
+      }
+      #icon_search {
+        z-index: 99;
+      }
+      #remove-token[hidden] {
+        display: none;
+      }
     </style>
+    <style is="custom-style">
+      #search paper-input[type="search"] {
+        --paper-input-container-input: {
+          font-size: 28px;
+        };
+      }
+      iron-icon {
+        --iron-icon-height: 150px;
+        --iron-icon-width: 150px;
+      }
+    </style>
+    <script src="../../bower_components/html5-qrcode/lib/html5-qrcode.min.js"></script>
+    <script src="../../bower_components/html5-qrcode/lib/jsqrcode-combined.min.js"></script>
 
     <h1 class="page-title" tabindex="-1">Check-In</h1>
+    <div class="container-fluid">
+      <div class="dashboard-box">
+        <h1>人工報到</h1>
+        <p class="lead">請在下方輸入會眾的 Token 並查詢結果</p>
+        <br>
+        <div id="qrcode_area" class="row" style="margin-bottom: 30px; max-height: 400px; display: none;">
+          <div class="col-sm-3"></div>
+          <div id="qrcode_reader" class="ui segment col-sm-6" style="height: 400px;"></div>
+        </div>
+        <div id="search" class="fluid ui transparent input" style="font-size: 50px;">
+          <div id="icon_search" class$="{{searching}} ui left icon input">
+            <i class="qrcode link icon" on-click="qrStart"></i>
+            <input type="file" accept="image/*" capture="camera" id="capture" style="display: none;" on-change="qrDecode">
+          </div>
+          <paper-input type="search" name="token" placeholder="type Token here" char-counter maxlength="32" value="{{token::input}}"></paper-input>
+          <div id="remove-token" class="ui right icon input" hidden$="{{!token}}">
+            <i class="remove link icon" on-click="clear"></i>
+          </div>
+        </div>
+        <hr>
+        <div style="font-size: 60px; font-style: italic; color: gray;">{{status}}</div>
+        <div id="result" class="row" style="text-align: left;" hidden$="{{!token}}">
+          <div class="col-sm-1"></div>
+          <div class="ui segment col-sm-10" style="margin-bottom: 60px;">
+            <p class="ui left floated header" style="font-size: 36px;">暱稱：{{user_id}}</p>
+            <div class="ui left clearing divider"></div>
+            <div class="ui divided items">
+              <template is="dom-repeat" items="{{scenarios}}">
+                <div class="item">
+                  <div class="ui middle aligned small image">
+                    <iron-icon src$="/images/icon/{{item.icon}}.png">
+                  </div>
+                  <div class="middle aligned content">
+                    <div class="header">{{item.title}}</div>
+                    <div class="meta">{{item.meta}}</div>
+                    <div class="description"><span hidden$="{{!item.disabled}}">無法使用原因：</span>{{item.description}}</div>
+                    <div class="extra">
+                      <button type="button" disabled$="{{item.disabled}}" class$="{{item.btnClass}} ui right floated button" style="min-width: 100px;" on-click="used" data-args$="{{item}}">{{item.text}}</button>
+                      <button class="ui right floated button" on-click="used" data-args$="{{item}}" style="display:none;"><i class="repeat icon"></i> Retry</button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <!-- <ccip-scenario title="Day1 報到" id="day1checkin" icon="day1checkin" text="Checkin!"></ccip-scenario>
+              <ccip-scenario title="迎賓袋" id="kit" icon="kit" text="Action!"></ccip-scenario>
+              <ccip-scenario title="獨家紀念品" meta="僅限個人贊助方案" id="vipkit" icon="vipkit" text="Action!"></ccip-scenario>
+              <ccip-scenario title="Day1 午餐" id="day1lunch" icon="lunch" text="Action!"></ccip-scenario>
+              <ccip-scenario title="Day2 報到" id="day2checkin" icon="day2checkin" text="Checkin!"></ccip-scenario>
+              <ccip-scenario title="Day2 午餐" id="day2lunch" icon="lunch" text="Action!"></ccip-scenario> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </template>
 
   <script>
     (function() {
       'use strict';
+      const scenarioMapping = {
+        day1checkin: { icon: 'day1checkin', title: 'Day1 報到', text: 'Checkin!' },
+        kit: { icon: 'kit', title: '迎賓袋', text: 'Action!' },
+        vipkit: { icon: 'vipkit', title: '獨家紀念品', text: 'Action!', meta: '僅限個人贊助方案' },
+        day1lunch: { icon: 'lunch', title: 'Day1 午餐', text: 'Action!' },
+        day2checkin: { icon: 'day2checkin', title: 'Day2 報到', text: 'Checkin!' },
+        day2lunch: { icon: 'lunch', title: 'Day2 午餐', text: 'Action!' }
+      };
+      const dietMapping = {
+        meat: '葷食',
+        vegetarian: '素食'
+      };
 
       Polymer({
         is: 'ccip-check-in',
 
         properties: {
+          token: {
+            type: String,
+            notify: true,
+            observer: 'tokenChanged'
+          },
+          data: {
+            type: Object,
+            notify: true,
+            observer: 'dataChanged'
+          },
+          status: {
+            type: String
+          },
+          searching: {
+            type: String
+          },
+          user_id: {
+            type: String
+          },
+          scenarios: {
+            type: Array
+          }
+        },
+
+        tokenChanged: function(newToken, oldToken) {
+          var self = this;
+          if (newToken.length == 0) {
+            // clean up
+            this.status = '';
+            this.searching = '';
+          } else {
+            // do search
+            if (this.token.length != 32) {
+              if (this.token.length > 32) {
+                this.status = 'Token too long';
+              } else {
+                this.statis = 'Token too short';
+              }
+            } else {
+              $('#result').fadeOut(100);
+              this.searching = 'loading';
+              this.status = 'Searching...';
+              $.ajax({
+                url: 'https://coscup.cprteam.org/status',
+                type: 'get',
+                dataType: "json",
+                data: { token: this.token },
+                success: function (json) {
+                  self.data = json;
+                },
+                error: function(request, status, errorThrown) {
+                  console.log('Error: ', request.responseText);
+                  setTimeout(function() {
+                    self.searching = '';
+                    self.status = request.responseJSON.message;
+                  }, 500);
+                }
+              });
+            }
+          }
+        },
+
+        dataChanged: function(newData, oldData) {
+          var self = this;
+          this.user_id = newData.user_id;
+          this.scenarios = newData.scenarios.map(s => {
+            var m = scenarioMapping[s.id];
+            var scenario = s;
+            scenario.title = m.title;
+            scenario.text = (!!s.used && 'Used!') || m.text;
+            scenario.icon = m.icon;
+            scenario.meta = dietMapping[s.attr.diet || ''] || m.meta;
+            scenario.description = !!s.used ? ((!!s.used && `於 ${moment(s.used * 1000).format('YYYY-MM-DD HH:mm:ss')} 已使用`) || s.disabled || '') : (s.disabled || '尚未使用');
+            scenario.disabled = (s.disabled || '').length > 0 || !!s.used;
+            scenario.btnClass = !s.used && !s.disabled ? 'teal' : '';
+            return scenario;
+          });
+          console.log(`Response: ${JSON.stringify(newData, null, 2)}`);
+          setTimeout(function() {
+            $('#result').fadeIn(400);
+            self.searching = '';
+            self.status = '';
+          }, 500);
+        },
+
+        used: function(e) {
+          var self = this;
+          var scenario = e.model;
+          scenario.set('item.btnClass', 'loading');
+          scenario.set('item.disabled', true);
+          scenario.set('item.description', `於 ${moment().format('YYYY-MM-DD HH:mm:ss')} 已使用`);
+          $.ajax({
+            url: 'https://coscup.cprteam.org/use/' + scenario.get('item.id'),
+            type: 'get',
+            dataType: 'json',
+            data: { token: this.token },
+            success: json => {
+              setTimeout(function() {
+                self.data = json;
+                scenario.set('item.text', 'Succeed!');
+                scenario.set('item.btnClass', 'positive');
+              }, 1000);
+            },
+            error: function(request, status, errorThrown) {
+              setTimeout(function() {
+                console.log('Error: ', request.responseText);
+                scenario.set('item.text', `${request.responseJSON.message}!`);
+                scenario.set('item.btnClass', 'negative');
+              }, 1000);
+            }
+          });
+        },
+
+        qrStart: function() {
+          var self = this;
+          if (isMobile.iOS || isMobile.Android) {
+            $("#capture").click();
+          } else {
+            if ($('#qrcode_reader:empty').length == 1) {
+              $('#qrcode_area').show();
+              $('#qrcode_reader').html5_qrcode(
+                function(data) {
+                  // do something when code is read
+                  self.token = data;
+                  self.qrStop();
+                }, function(error){
+                  //show read errors
+                }, function(videoError){
+                  //the video stream could be opened
+                  this.status = `${videoError.name}, ${videoError.message}`;
+                  $('#qrcode_reader').empty();
+                  $('#qrcode_area').hide();
+                }
+              );
+            } else {
+              this.qrStop();
+            }
+          }
+        },
+
+        qrStop: function() {
+          $('#qrcode_reader').html5_qrcode_stop();
+          $('#qrcode_reader').empty();
+          $('#qrcode_area').hide();
+        },
+
+        qrDecode: function() {
+          var file = document.getElementById("capture").files[0];
+          if (file) {
+            this.status = 'QR Decoding...';
+
+            var blob_url = window.URL.createObjectURL(file);
+
+            var reader = new FileReader();
+            reader.onload = function (readerEvent) {
+              var image = new Image();
+              image.onload = function (imageEvent) {
+
+                // Resize the image
+                var canvas = document.createElement('canvas'),
+                  max_size = 800,// TODO : pull max size from a site config
+                  width = image.width,
+                  height = image.height;
+                if (width > height) {
+                  if (width > max_size) {
+                    height *= max_size / width;
+                    width = max_size;
+                  }
+                } else {
+                  if (height > max_size) {
+                    width *= max_size / height;
+                    height = max_size;
+                  }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+                qrcode.callback = this.qrDecodeCallback;
+                qrcode.decode(dataUrl);
+              }
+              image.src = readerEvent.target.result;
+            }
+            reader.readAsDataURL(file);
+          }
+        },
+
+        qrDecodeCallback: function(result) {
+          this.status = '';
+          this.token = result;
+        },
+
+        clear: function() {
+          this.token = '';
+        },
+
+        attached: function() {},
+
+        ready: function() {
+          this.token = parameters.token || '';
+          this.status = '';
         }
       });
     })();
