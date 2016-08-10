@@ -76,10 +76,12 @@
 									var scenario = json.scenarios[i];
 									var used = scenario.used;
 									var btn = $('#btn_chk_' + scenario.id);
+									var desc = $('#lb_description_' + scenario.id);
+
 									if (used == null) {
 										btn.removeClass('disabled');
 										changeBtnColorClass($('#btn_chk_' + scenario.id), 'teal');
-
+										desc.text('尚未使用');
 										if (scenario.id.indexOf('checkin') !== -1) {
 											btn.text('Checkin!').button("refresh");
 										}
@@ -91,6 +93,7 @@
 										btn.text('Used!').button("refresh");
 										changeBtnColorClass(btn, '');
 										btn.addClass('disabled');
+										desc.text('使用時間：' + new Date (1000 * scenario.used));
 									}
 								}
 								$('#result').fadeIn(400);
@@ -264,7 +267,7 @@
 						//show read errors
 					}, function(videoError){
 						//the video stream could be opened
-						
+
 						$('#status').show();
 						$('#lb_status_msg').text(videoError.name + ', ' + videoError.message);
 						$('#qrcode_reader').empty();
@@ -404,7 +407,7 @@
 										<span class="cinema">Union Square 14</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_day1checkin"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_day1checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1checkin');" value="Checkin!"></button>
@@ -429,7 +432,7 @@
 										<span class="cinema">Union Square 14</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_kit"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_kit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('kit');" value="Action!"></button>
@@ -454,7 +457,7 @@
 										<span class="cinema">僅限個人贊助方案</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_vipkit"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_vipkit" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('vipkit');" value="Action!"></button>
@@ -479,7 +482,7 @@
 										<span class="cinema">Union Square 14</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_day1lunch"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_day1lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day1lunch');" value="Action!"></button>
@@ -504,7 +507,7 @@
 										<span class="cinema">Union Square 14</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_day2checkin"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_day2checkin" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2checkin');" value="Checkin!"></button>
@@ -529,7 +532,7 @@
 										<span class="cinema">Union Square 14</span>
 									</div>
 									<div class="description">
-										<p>asdasd</p>
+										<p><label id="lb_description_day2lunch"></label></p>
 									</div>
 									<div class="extra">
 										<button id="btn_chk_day2lunch" type="button" class="ui right floated button" style="min-width: 100px;" onclick="used('day2lunch');" value="Action!"></button>
