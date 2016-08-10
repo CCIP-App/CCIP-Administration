@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script>
-		function sendNotification() {
+		function sendAnnounce() {
 			var contents = {};
 			if ($('#content-zh-Hant').val().length > 0) {
 				contents['zh-Hant'] = $('#content-zh-Hant').val();
@@ -20,6 +20,9 @@
 			if ($('#content-en').val().length > 0) {
 				contents['en'] = $('#content-en').val();
 			}
+      if ($('#content-uri').val().length > 0) {
+        contents['uri'] = $('#content-uri').val();
+      }
 
 			if ($.isEmptyObject(contents)) {
 				// no contents
@@ -28,15 +31,15 @@
 				$('#startModal').modal('show');
 
 				var message = {
-					app_id: "aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d",
-					contents: contents,
-					included_segments: ["All"]
+					msg_zh: contents['zh-Hant'],
+          msg_en: contents['en'],
+					uri: contents['uri']
 				};
 
 				$.ajax({
-					url: 'https://onesignal.com/api/v1/notifications',
+					url: 'https://coscup.cprteam.org/announcement',
 					beforeSend: function (request) {
-						request.setRequestHeader("Authorization", "Basic ODdlMzEzMTktNzAxZC00ZWU1LWE1N2UtN2RhNzg4YWY3Njhk");
+						request.setRequestHeader("ccip", "alwaysconnectme");
 					},
 					type: 'POST',
 					dataType: "JSON",
@@ -96,10 +99,11 @@
 		<div id="header"></div>
 		<div class="container">
 			<div class="starter-template">
-				<h1>發送大會訊息</h1>
+				<h1>新增大會公告</h1>
 				<p>Chinese（Traditional）<br><input id="content-zh-Hant" type="text"></p>
 				<p>English<br><input id="content-en" type="text"></p>
-				<p><button type="button" onclick="sendNotification();">Send!</button>	</p>
+        <p>URI<br><input id="content-uri" type="text"></p>
+				<p><button type="button" onclick="sendAnnounce();">Send!</button>	</p>
 			</div>
 		</div><!-- /.container -->
 	</body>
