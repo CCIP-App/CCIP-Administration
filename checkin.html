@@ -4,7 +4,6 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
 		<title></title>
 	</head>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -13,24 +12,12 @@
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>-->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+	<script src="lib/header.js"></script>
 	<script src="lib/html5-qrcode.min.js"></script>
 	<script src="lib/jsqrcode-combined.min.js"></script>
 	<script>
 		//$('#startModal').modal('show');
 		//$('#startModal').modal('hide');
-
-		const parameters = location.search.split('?').pop().split('&').map(p => {
-			var ps = p.split('=');
-			var o = {};
-			o[ps.shift()] = ps.join('=');
-			return o;
-		}).reduce((a, b) => {
-			var o = a;
-			for(var k in b) {
-				o[k] = b[k];
-			}
-			return o;
-		});
 
 		var searchedToken = '';
 		function searchToken() {
@@ -250,7 +237,7 @@
 		}
 
 		function qrStart() {
-			if (isMobile.iOS() || isMobile.Android()) {
+			if (isMobile.iOS || isMobile.Android) {
 				$("#capture").click();
 			}
 			else {
@@ -285,14 +272,7 @@
 			$('#qrcode_area').hide();
 		}
 
-		var isMobile = {
-			iOS: function() {
-				return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
-			},
-			Android: function() {
-				return navigator.userAgent.match(/Android/i) ? true : false;
-			},
-		};
+
 
 		$(document).ready(function () {
 			$("#header").load("header.html");
