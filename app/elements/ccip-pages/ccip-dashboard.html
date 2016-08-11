@@ -37,7 +37,7 @@
           x-used-text="已報到" x-unused-text="未報到"></div>
         
         <div id="kit_used" class="col-sm-4 chart-box"
-          x-title$="迎賓袋\n"
+          x-title$="迎賓袋\n共 [[status.kit_used]] 名已領取"
           x-used-value$="[[status.kit_used]]"
           x-unused-value$="[[subtract(status.total, status.kit_used)]]"
           x-used-text="已領取" x-unused-text="未領取"></div>
