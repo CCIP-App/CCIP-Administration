@@ -146,7 +146,7 @@
                 url: this.$.meta.byKey('api.status'),
                 type: 'get',
                 dataType: "json",
-                data: { token: this.token },
+                data: {token: this.token, StaffQuery: "true"},
                 success: function (json) {
                   self.data = json;
                 },
