@@ -34,6 +34,24 @@
           <paper-button raised on-click="send">Send!</paper-button>
         </form>
       </div>
+      <h3>大會公告歷程</h3>
+      <iron-ajax auto verbose="true"
+        url="{{announcementUrl}}"
+        contentType="application/json"
+        handle-as="json"
+        last-response="{{announcementResponse}}"></iron-ajax>
+
+      <template is="dom-repeat" items="[[announcementResponse]]">
+        <paper-material elevation="2">
+          <div class="horizontal-section">
+            <h2>公告時間：[[dateFormat(item.datetime)]]</h2>
+            <p>中文訊息內容：[[item.msg_zh]]</p>
+            <p>英文訊息內容：[[item.msg_en]]</p>
+            <p>網址訊息內容：[[item.uri]]</p>
+          </div>
+        </paper-material>
+        <br />
+      </template>
     </div>
   </template>
 
@@ -60,6 +78,10 @@
             type: String,
             notify: true
           },
+        },
+
+        dateFormat: function(unixDate) {
+          return moment(unixDate * 1000).format('YYYY-MM-DD HH:mm:ss');
         },
 
         send: function() {
@@ -107,6 +129,7 @@
           this.content_uri = '';
           this.content_zhHant = '';
           this.content_en = '';
+          this.announcementUrl = this.$.meta.byKey('api.announcement');
         }
       });
     })();
