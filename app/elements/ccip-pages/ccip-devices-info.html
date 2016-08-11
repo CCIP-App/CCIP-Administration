@@ -31,8 +31,14 @@
     </div>
     <div class="row">
       <div class="dashboard-box">
-        <div id="iOS_Device_chart" class="col-sm-6 chart-box"></div>
-        <div id="Android_Device_chart" class="col-sm-6 chart-box"></div>
+        <div id="iOS_Device_version_chart" class="col-sm-6 chart-box"></div>
+        <div id="iOS_Device_model_chart" class="col-sm-6 chart-box"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="dashboard-box">
+        <div id="Android_Device_version_chart" class="col-sm-6 chart-box"></div>
+        <div id="Android_Device_model_chart" class="col-sm-6 chart-box"></div>
       </div>
     </div>
     <hr>
@@ -83,9 +89,19 @@
                 };
               })
             }, {
-              id: 'iOS',
-              to: 'iOS_Device_chart',
-              title: `iOS Devices<br/>total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count}`,
+              id: 'iOS_version',
+              to: 'iOS_Device_version_chart',
+              title: `iOS Devices (Version)<br/>total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count}`,
+              data: newModels.filter(m => m.platform_name == 'iOS')[0].os_list.map(m => {
+                return {
+                  y: m.count,
+                  name: m.os
+                };
+              })
+            }, {
+              id: 'iOS_model',
+              to: 'iOS_Device_model_chart',
+              title: `iOS Devices (Model)<br/>total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count}`,
               data: newModels.filter(m => m.platform_name == 'iOS')[0].model_list.map(m => {
                 return {
                   y: m.count,
@@ -93,9 +109,19 @@
                 };
               })
             }, {
-              id: 'Android',
-              to: 'Android_Device_chart',
-              title: `Adnroid Devices<br/>total: ${newModels.filter(m => m.platform_name == 'Android')[0].count}`,
+              id: 'Android_version',
+              to: 'Android_Device_version_chart',
+              title: `Adnroid Devices (Version)<br/>total: ${newModels.filter(m => m.platform_name == 'Android')[0].count}`,
+              data: newModels.filter(m => m.platform_name == 'Android')[0].os_list.map(m => {
+                return {
+                  y: m.count,
+                  name: m.os
+                };
+              })
+            }, {
+              id: 'Android_model',
+              to: 'Android_Device_model_chart',
+              title: `Adnroid Devices (Model)<br/>total: ${newModels.filter(m => m.platform_name == 'Android')[0].count}`,
               data: newModels.filter(m => m.platform_name == 'Android')[0].model_list.map(m => {
                 return {
                   y: m.count,
