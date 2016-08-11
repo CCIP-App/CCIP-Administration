@@ -114,7 +114,7 @@
             }
             if (!!this.charts[k]) {
               this.charts[k].series[0].setData(data, true);
-              this.charts[k].setTitle({ text: title });
+              this.charts[k].setTitle({ text: title.replace(/%total%/g, total) });
             } else {
               this.charts[k] = new Highcharts.Chart({
                 colors: ['#3D983C', '#CCCCCC'],
