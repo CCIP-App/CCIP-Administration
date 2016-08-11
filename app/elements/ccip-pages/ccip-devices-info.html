@@ -156,7 +156,9 @@
           this.detailedProgress = false;
           $.ajax({
             url: this.$.meta.byKey('oneSignalUrl.players'),
-            beforeSend: beforeSend,
+            beforeSend: request => {
+              request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.authToken'))}`);
+            },
             type: 'get',
             dataType: "json",
             data: message,
@@ -174,7 +176,9 @@
 
                   $.ajax({
                     url: this.$.meta.byKey('oneSignalUrl.players'),
-                    beforeSend: beforeSend,
+                    beforeSend: request => {
+                      request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.authToken'))}`);
+                    },
                     type: 'get',
                     dataType: "json",
                     data: message,

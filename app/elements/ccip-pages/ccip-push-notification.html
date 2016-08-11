@@ -74,7 +74,9 @@
           if (!$.isEmptyObject(contents)) {
             $.ajax({
               url: this.$.meta.byKey('oneSignalUrl.notifications'),
-              beforeSend: beforeSend,
+              beforeSend: request => {
+                request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.authToken'))}`);
+              },
               type: 'post',
               dataType: "json",
               data: message,
