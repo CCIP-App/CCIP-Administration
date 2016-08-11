@@ -11,11 +11,22 @@
       :host {
         display: block;
       }
+      paper-progress {
+        width: 100%;
+      }
     </style>
 
     <iron-meta id="meta"></iron-meta>
 
     <h1 class="page-title" tabindex="-1">Dashboard</h1>
+    <div class="row">
+      <div class="dashboard-box">
+        <div class="col-sm-3">Users：[[status.logged]] / [[status.total]] ([[percentageFormat(status.logged, status.total)]])</div>
+        <div class="col-sm-9">
+          <paper-progress value="[[status.logged]]" min="0" max="[[status.total]]"></paper-progress>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="dashboard-box">
         <h3>Day1</h3>
@@ -55,6 +66,10 @@
             observer: 'statusChanged'
           },
           charts: Object
+        },
+
+        percentageFormat: function(val, max) {
+          return `${Math.floor(val / max * 10000) / 100}%`;
         },
 
         statusChanged: function(newStatus, oldStatus) {
