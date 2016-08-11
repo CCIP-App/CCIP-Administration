@@ -155,7 +155,7 @@ gulp.task('copy', function() {
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
-    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,bootstrap,semantic,html5-qrcode,moment}/**/*'
+    'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill,bootstrap,semantic,html5-qrcode,moment}/**/*.{js,css,html,json,svg,eot,ttf,woff,woff2,map,png,jpg,gif}'
   ]).pipe(gulp.dest(dist('bower_components')));
 
   return merge(app, bower)
@@ -232,6 +232,10 @@ gulp.task('clean', function() {
   return del(['.tmp', dist()]);
 });
 
+gulp.task('cleantmp', function() {
+  return del(['.tmp']);
+})
+
 // Watch files for changes & reload
 gulp.task('serve', ['styles', 'js'], function() {
   browserSync({
@@ -294,6 +298,7 @@ gulp.task('default', ['clean'], function(cb) {
     'js',
     ['images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
+    'cleantmp',
     cb);
 });
 

@@ -2,6 +2,17 @@
 @license
 
 -->
+<link rel="import" href="ccip-dashboard.html">
+<link rel="import" href="ccip-check-in.html">
+<link rel="import" href="ccip-devices-info.html">
+<link rel="import" href="ccip-announcement.html">
+<link rel="import" href="ccip-push-notification.html">
+
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../../bower_components/highcharts/highcharts.js"></script>
+<script src="../../bower_components/moment/min/moment-with-locales.min.js"></script>
+
 <style>
   @import url(../../bower_components/bootstrap/dist/css/bootstrap.min.css);
   @import url(../../bower_components/semantic/dist/semantic.min.css);
@@ -28,16 +39,6 @@
 <iron-meta key="api.announcement.username" value="ccip"></iron-meta>
 <iron-meta key="api.announcement.password" value="alwaysconnectme"></iron-meta>
 
-<link rel="import" href="ccip-dashboard.html">
-<link rel="import" href="ccip-check-in.html">
-<link rel="import" href="ccip-devices-info.html">
-<link rel="import" href="ccip-announcement.html">
-<link rel="import" href="ccip-push-notification.html">
-
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../../bower_components/highcharts/highcharts.js"></script>
-<script src="../../bower_components/moment/min/moment-with-locales.min.js"></script>
 <script>
   (function() {
     const parameters = location.hash.split('?').pop().split('&').map(p => {
