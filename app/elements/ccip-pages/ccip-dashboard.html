@@ -21,6 +21,7 @@
         <h3>Day1</h3>
         <div x-title="報到狀態\n共 %total% 名會眾" x-used-text="已報到" x-unused-text="未報到" id="day1checkin_used" class="col-sm-4 chart-box"></div>
         <div x-title="迎賓袋\n" x-used-text="已領取" x-unused-text="未領取" id="kit_used" class="col-sm-4 chart-box"></div>
+        <div x-title="個人贊助獨家紀念品\n" x-used-text="已領取" x-unused-text="未領取" id="vipkit" class="col-sm-4 chart-box"></div>
         <div x-title="午餐(葷)\n" x-used-text="已領取" x-unused-text="未領取" id="day1lunch-meat" class="col-sm-4 chart-box"></div>
         <div x-title="午餐(素)\n" x-used-text="已領取" x-unused-text="未領取" id="day1lunch-vegetarian" class="col-sm-4 chart-box"></div>
       </div>
@@ -77,6 +78,21 @@
                 {
                   name: `${dietMapping[subkey]} ${unusedText}`,
                   y: newStatus[key][subkey] - newStatus[key][`${subkey}_used`],
+                  sliced: true,
+                  selected: true
+                }
+              ];
+            } else if (k.match(/vipkit/i) != null && !!newStatus[k]) {
+              data = [
+                {
+                  name: usedText,
+                  y: newStatus[k].used,
+                  sliced: true,
+                  selected: true
+                },
+                {
+                  name: unusedText,
+                  y: newStatus[k].total - newStatus[k].used,
                   sliced: true,
                   selected: true
                 }
