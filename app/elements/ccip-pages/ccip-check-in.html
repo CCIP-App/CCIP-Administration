@@ -247,6 +247,7 @@
         },
 
         qrDecode: function() {
+          var self = this;
           var file = document.getElementById("capture").files[0];
           if (file) {
             this.status = 'QR Decoding...';
@@ -275,7 +276,7 @@
                 canvas.height = height;
                 canvas.getContext('2d').drawImage(image, 0, 0, width, height);
                 var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
-                qrcode.callback = this.qrDecodeCallback;
+                qrcode.callback = self.qrDecodeCallback;
                 qrcode.decode(dataUrl);
               }
               image.src = readerEvent.target.result;
