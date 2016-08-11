@@ -69,13 +69,13 @@
               var subkey = k.match(/lunch-(.*)$/).pop();
               data = [
                 {
-                  name: `${dietMapping.meat} ${usedText}`,
+                  name: `${dietMapping[subkey]} ${usedText}`,
                   y: newStatus[key][`${subkey}_used`],
                   sliced: true,
                   selected: true
                 },
                 {
-                  name: `${dietMapping.meat} ${unusedText}`,
+                  name: `${dietMapping[subkey]} ${unusedText}`,
                   y: newStatus[key][subkey] - newStatus[key][`${subkey}_used`],
                   sliced: true,
                   selected: true
