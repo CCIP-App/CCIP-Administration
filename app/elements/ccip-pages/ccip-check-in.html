@@ -191,11 +191,7 @@
             }
           }
           if (oldToken != undefined) {
-            if (oldToken.length > 0) {
-              location.hash = location.hash.replace(oldToken, newToken);
-            } else {
-              location.hash = `${location.hash}${location.hash.match(/\/$/) == null ? '/' : ''}${newToken}`;
-            }
+            location.hash = `#!/${app.route}/${newToken}`.replace(/\/$/i, '');
             $(this.$.token).focus();
           }
         },
