@@ -13,7 +13,8 @@
     "bootstrap": "^3.3.7",
     "semantic": "semantic-ui#^2.2.2",
     "html5-qrcode": "dwa012/html5-qrcode#master",
-    "moment": "^2.14.1"
+    "moment": "^2.14.1",
+    "jsqrcode": "LazarSoft/jsqrcode"
   },
   "devDependencies": {},
   "ignore": []
