@@ -46,13 +46,6 @@
     const beforeSend = (request) => {
       request.setRequestHeader("Authorization", "Basic YTkzYzMyZTktZTc2OS00NzE2LWJiNTYtOTBjM2NjYzQ0NWYw");
     }
-    const oneSignalUrl = {
-      get debugToken() { return 'aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d'; },
-      get releaseToken() { return 'a429ff30-5c0e-4584-a32f-b866ba88c947'; },
-      get base() { return 'https://onesignal.com/api'; },
-      get players() { return `${this.base}/v1/players`; },
-      get notification() { return `${this.base}/v1/notifications`; }
-    }
     const modelList = ['iOS', 'Android', 'Amazon', 'WindowsPhone(MPNS)', 'ChromeApp', 'ChromeWebsite', 'WindowsPhone(WNS)', 'Safari', 'Firefox', 'Mac OS X'];
     const scenarioMapping = {
       day1checkin: { icon: 'day1checkin', title: 'Day1 報到', text: 'Checkin!' },
@@ -70,7 +63,6 @@
     window.parameters = parameters;
     window.isMobile = isMobile;
     window.beforeSend = beforeSend;
-    window.oneSignalUrl = oneSignalUrl;
     window.modelList = modelList;
     window.scenarioMapping = scenarioMapping;
     window.dietMapping = dietMapping;
@@ -89,8 +81,11 @@
       // mutations.forEach(function(mutation) {
       //   console.log(mutation);
       // });
+      console.log('doing reflow for charts');
       setTimeout(() => {
-        Array.from(document.querySelectorAll('.highcharts-container')).map(hc => $(hc).parent().highcharts().reflow());
+        var charts = Array.from(document.querySelectorAll('.highcharts-container'));
+        charts.map(hc => $(hc).parent().highcharts().reflow());
+        console.log(`charts reflowed: ${charts.length}`);
       }, 50);
     });
      
@@ -104,6 +99,16 @@
     // observer.disconnect();
   })();
 </script>
+<iron-meta key="oneSignalUrl.debugToken" value="aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d"></iron-meta>
+<iron-meta key="oneSignalUrl.releaseToken" value="a429ff30-5c0e-4584-a32f-b866ba88c947"></iron-meta>
+<iron-meta key="oneSignalUrl.players" value="https://onesignal.com/api/v1/players"></iron-meta>
+<iron-meta key="oneSignalUrl.notification" value="https://onesignal.com/api/v1/notifications"></iron-meta>
+<iron-meta key="api.status" value="https://coscup.cprteam.org/status"></iron-meta>
+<iron-meta key="api.use" value="https://coscup.cprteam.org/use/"></iron-meta>
+<iron-meta key="api.dashboard" value="https://coscup.cprteam.org/dashboard"></iron-meta>
+<iron-meta key="api.announcement" value="https://coscup.cprteam.org/announcement"></iron-meta>
+<iron-meta key="api.announcement.username" value="ccip"></iron-meta>
+<iron-meta key="api.announcement.password" value="alwaysconnectme"></iron-meta>
 
 <link rel="import" href="ccip-dashboard.html">
 <link rel="import" href="ccip-check-in.html">

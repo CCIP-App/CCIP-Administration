@@ -20,6 +20,8 @@
       }
     </style>
 
+    <iron-meta id="meta"></iron-meta>
+
     <h1 class="page-title" tabindex="-1">Announcement</h1>
     <div class="container-fluid">
       <div class="dashboard-box">
@@ -78,9 +80,9 @@
             uri: contents['uri']
           };
           $.ajax({
-            url: 'https://coscup.cprteam.org/announcement',
-            beforeSend: function (request) {
-              request.setRequestHeader("ccip", "alwaysconnectme");
+            url: this.$.meta.byKey('api.announcement'),
+            beforeSend: request => {
+              request.setRequestHeader(this.$.meta.byKey('api.announcement.username'), this.$.meta.byKey('api.announcement.password'));
             },
             type: 'post',
             dataType: "json",

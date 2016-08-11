@@ -13,6 +13,8 @@
       }
     </style>
 
+    <iron-meta id="meta"></iron-meta>
+
     <h1 class="page-title" tabindex="-1">Dashboard</h1>
     <div class="row">
       <div class="dashboard-box">
@@ -149,7 +151,7 @@
             setTimeout(() => resolve(), 0);
           }).then(() => {
             $.ajax({
-              url: 'https://coscup.cprteam.org/dashboard',
+              url: this.$.meta.byKey('api.dashboard'),
               type: 'get',
               dataType: 'json',
               success: json => {

@@ -20,6 +20,8 @@
       }
     </style>
 
+    <iron-meta id="meta"></iron-meta>
+
     <h1 class="page-title" tabindex="-1">Push Notification</h1>
     <div class="container-fluid">
       <div class="dashboard-box">
@@ -65,13 +67,13 @@
             contents['en'] = this.content_en;
           }
           var message = {
-            app_id: oneSignalUrl.debugToken,
+            app_id: this.$.meta.byKey('oneSignalUrl.debugToken'),
             contents: contents,
             included_segments: ["All"]
           };
           if (!$.isEmptyObject(contents)) {
             $.ajax({
-              url: oneSignalUrl.notifications,
+              url: this.$.meta.byKey('oneSignalUrl.notifications'),
               beforeSend: beforeSend,
               type: 'post',
               dataType: "json",

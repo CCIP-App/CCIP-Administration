@@ -19,8 +19,9 @@
       }
     </style>
 
-    <h1 class="page-title" tabindex="-1">App Devices Info</h1>
+    <iron-meta id="meta"></iron-meta>
 
+    <h1 class="page-title" tabindex="-1">App Devices Info</h1>
     <paper-progress indeterminate class="" hidden$="{{!prepareProgress}}"></paper-progress>
     <paper-progress indeterminate class="detail" hidden$="{{!detailedProgress}}"></paper-progress>
     <div class="row">
@@ -147,14 +148,14 @@
 
         reload: function() {
           let message = {
-            app_id: oneSignalUrl.releaseToken,
+            app_id: this.$.meta.byKey('oneSignalUrl.releaseToken'),
             limit: 0,
             offset: 0
           };
           this.prepareProgress = true;
           this.detailedProgress = false;
           $.ajax({
-            url: oneSignalUrl.players,
+            url: this.$.meta.byKey('oneSignalUrl.players'),
             beforeSend: beforeSend,
             type: 'get',
             dataType: "json",
@@ -172,7 +173,7 @@
                   // console.log(`i: ${message.offset / message.limit} offset: ${message.offset}`);
 
                   $.ajax({
-                    url: oneSignalUrl.players,
+                    url: this.$.meta.byKey('oneSignalUrl.players'),
                     beforeSend: beforeSend,
                     type: 'get',
                     dataType: "json",
