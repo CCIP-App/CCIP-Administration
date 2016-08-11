@@ -80,6 +80,28 @@
         enabled: false
       }
     });
+    // select the target node
+    var target = document.body;
+     
+    // create an observer instance
+    var observer = new MutationObserver(function(mutations) {
+      // console.log(mutations);
+      // mutations.forEach(function(mutation) {
+      //   console.log(mutation);
+      // });
+      setTimeout(() => {
+        Array.from(document.querySelectorAll('.highcharts-container')).map(hc => $(hc).parent().highcharts().reflow());
+      }, 50);
+    });
+     
+    // configuration of the observer:
+    var config = { attributes: true, childList: false, characterData: true, subtree: true, attributeFilter: [ 'aria-selected', 'tabindex' ] };
+     
+    // pass in the target node, as well as the observer options
+    observer.observe(target, config);
+     
+    // later, you can stop observing
+    // observer.disconnect();
   })();
 </script>
 
