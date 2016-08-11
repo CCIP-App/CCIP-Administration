@@ -86,7 +86,7 @@
               <i class="qrcode link icon" on-click="qrStart"></i>
               <input type="file" accept="image/*" capture="camera" id="capture" style="display: none;" on-change="qrDecode">
             </div>
-            <paper-input type="search" name="token" placeholder="type Token here" char-counter maxlength="32" value="{{token::input}}"></paper-input>
+            <paper-input type="search" id="token" name="token" placeholder="type Token here" char-counter maxlength="32" value="{{token::input}}"></paper-input>
             <div id="remove-token" class="ui right icon input" hidden$="{{!token}}">
               <i class="remove link icon" on-click="clear"></i>
             </div>
@@ -189,6 +189,14 @@
                 }
               });
             }
+          }
+          if (oldToken != undefined) {
+            if (oldToken.length > 0) {
+              location.hash = location.hash.replace(oldToken, newToken);
+            } else {
+              location.hash = `${location.hash}${location.hash.match(/\/$/) == null ? '/' : ''}${newToken}`;
+            }
+            $(this.$.token).focus();
           }
         },
 

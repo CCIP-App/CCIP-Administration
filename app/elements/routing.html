@@ -51,6 +51,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setFocus(app.route);
     });
 
+    page('/check-in/:token', function(data) {
+      app.route = 'check-in';
+      app.params = data.params;
+      setFocus(app.route);
+    });
+
+    // for hashbang hack
+    page('//check-in/:token', function(data) {
+      app.route = 'check-in';
+      app.params = data.params;
+      setFocus(app.route);
+    });
+
     page('/check-in', function() {
       app.route = 'check-in';
       setFocus(app.route);
@@ -72,10 +85,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     // 404
-    page('*', function() {
-      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
-      app.$.toast.show();
-      page.redirect(app.baseUrl);
+    page('*', function(data) {
+      var message = `Cannot find: ${window.location.href}. Redirected you to Home Page`;
+      app.$.toast.text = message;
+      // app.$.toast.show();
+      // page.redirect(app.baseUrl);
+      console.log(message, data);
     });
 
     // add #! before urls

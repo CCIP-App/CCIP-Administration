@@ -34,18 +34,21 @@
 
 <script>
   (function() {
-    const parameters = location.hash.split('?').pop().split('&').map(p => {
-      var ps = p.split('=');
-      var o = {};
-      o[ps.shift()] = ps.join('=');
-      return o;
-    }).reduce((a, b) => {
-      var o = a;
-      for(var k in b) {
-        o[k] = b[k];
-      }
-      return o;
-    });
+    $(window).on('hashchange', () => {
+      const parameters = location.hash.split('?').pop().split('&').map(p => {
+        var ps = p.split('=');
+        var o = {};
+        o[ps.shift()] = ps.join('=');
+        return o;
+      }).reduce((a, b) => {
+        var o = a;
+        for(var k in b) {
+          o[k] = b[k];
+        }
+        return o;
+      });
+      window.parameters = parameters;
+    }).trigger('hashchange');
 
     const isMobile = {
       get iOS() {
@@ -69,7 +72,6 @@
       vegetarian: '素食'
     };
 
-    window.parameters = parameters;
     window.isMobile = isMobile;
     window.modelList = modelList;
     window.scenarioMapping = scenarioMapping;
