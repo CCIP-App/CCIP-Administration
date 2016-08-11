@@ -276,18 +276,16 @@
                 canvas.height = height;
                 canvas.getContext('2d').drawImage(image, 0, 0, width, height);
                 var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
-                qrcode.callback = self.qrDecodeCallback;
+                qrcode.callback = function(result) {
+                  self.status = '';
+                  self.token = result;
+                };
                 qrcode.decode(dataUrl);
               }
               image.src = readerEvent.target.result;
             }
             reader.readAsDataURL(file);
           }
-        },
-
-        qrDecodeCallback: function(result) {
-          this.status = '';
-          this.token = result;
         },
 
         clear: function() {

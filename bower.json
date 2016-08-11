@@ -14,7 +14,7 @@
     "semantic": "semantic-ui#^2.2.2",
     "html5-qrcode": "dwa012/html5-qrcode#master",
     "moment": "^2.14.1",
-    "jsqrcode": "LazarSoft/jsqrcode"
+    "jsqrcode": "Haraguroicha/jsqrcode"
   },
   "devDependencies": {},
   "ignore": []
