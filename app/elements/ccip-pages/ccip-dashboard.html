@@ -61,13 +61,15 @@
           // console.log(newStatus, oldStatus);
           Array.from(this.querySelectorAll('.chart-box')).map(n => {
             var k = n.id;
+            var title = n.getAttribute('x-title').replace(/\\n/g, '<br />');
+            var total = '';
             var usedText = n.getAttribute('x-used-text');
             var unusedText = n.getAttribute('x-unused-text');
             var data = [];
             var key = k.match(/-/) != null ? k.split('-').shift() : k;
             if (k.match(/lunch/i) != null && !!newStatus[key]) {
               var subkey = k.match(/lunch-(.*)$/).pop();
-              var title = n.getAttribute('x-title').replace(/\\n/g, '<br />').replace(/%total%/g, newStatus[key][subkey]);
+              total = newStatus[key][subkey];
               data = [
                 {
                   name: `${dietMapping[subkey]} ${usedText}`,
@@ -83,7 +85,7 @@
                 }
               ];
             } else if (k.match(/vipkit/i) != null && !!newStatus[k]) {
-              var title = n.getAttribute('x-title').replace(/\\n/g, '<br />').replace(/%total%/g, newStatus[k].total);
+              total = newStatus[k].total;
               data = [
                 {
                   name: usedText,
@@ -99,7 +101,7 @@
                 }
               ];
             } else {
-              var title = n.getAttribute('x-title').replace(/\\n/g, '<br />').replace(/%total%/g, newStatus.total);
+              total = newStatus.total;
               data = [
                 {
                   name: usedText,
@@ -123,7 +125,7 @@
                   plotShadow: false
                 },
                 title: {
-                  text: title
+                  text: title.replace(/%total%/g, total)
                 },
                 tooltip: {
                   pointFormat: '{series.name}: <b>{point.percentage: .1f}%</b>'
