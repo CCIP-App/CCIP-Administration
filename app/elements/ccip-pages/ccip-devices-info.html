@@ -76,6 +76,21 @@
           }
         },
 
+        behaviors: [
+          Polymer.IronResizableBehavior,
+          Polymer.IronSelectableBehavior
+        ],
+
+        listeners: {
+          'iron-resize': '_resize'
+        },
+
+        _resize: function() {
+          var charts = Array.from(this.querySelectorAll('.highcharts-container'));
+          charts.map(hc => $(hc).parent().highcharts().reflow());
+          console.log('%c%s%c of charts reflowed: %c%s', 'color: purple', this.is, '', 'color: orange', charts.length);
+        },
+
         modelsChanged: function(newModels, oldModels) {
           [
             {
