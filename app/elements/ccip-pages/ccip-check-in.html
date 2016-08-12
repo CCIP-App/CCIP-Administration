@@ -108,8 +108,7 @@
                       <div class="meta">{{item.meta}}&nbsp;</div>
                       <div class="description"><span hidden$="{{!item.disabled}}">無法使用原因：</span>{{item.description}}</div>
                       <div class="extra">
-                        <button type="button" disabled$="{{item.disabled}}" class$="{{item.btnClass}} ui right floated button" style="min-width: 100px;" on-click="used" data-args$="{{item}}">{{item.text}}</button>
-                        <button class="ui right floated button" on-click="used" data-args$="{{item}}" style="display:none;"><i class="repeat icon"></i> Retry</button>
+                        <paper-button raised disabled$="{{item.disabled}}" class$="{{item.btnClass}} ui right floated button" style="min-width: 100px;" on-click="used" data-args$="{{item}}">{{item.text}}</paper-button>
                       </div>
                     </div>
                   </div>
@@ -221,9 +220,10 @@
         used: function(e) {
           var self = this;
           var scenario = e.model;
+          var description = scenario.get('item.description')
           scenario.set('item.btnClass', 'loading');
           scenario.set('item.disabled', true);
-          scenario.set('item.description', `於 ${moment().format('YYYY-MM-DD HH:mm:ss')} 已使用`);
+          scenario.set('item.description', '正在送出使用需求...');
           $.ajax({
             url: `${this.$.meta.byKey('api.use')}${scenario.get('item.id')}`,
             type: 'get',
@@ -234,13 +234,16 @@
                 self.data = json;
                 scenario.set('item.text', 'Succeed!');
                 scenario.set('item.btnClass', 'positive');
+                scenario.set('item.description', `於 ${moment().format('YYYY-MM-DD HH:mm:ss')} 已使用`);
               }, 1000);
             },
             error: function(request, status, errorThrown) {
               setTimeout(function() {
                 console.log('Error: ', request.responseText);
-                scenario.set('item.text', `${request.responseJSON.message}!`);
+                scenario.set('item.text', 'Retry!');
+                scenario.set('item.disabled', false);
                 scenario.set('item.btnClass', 'negative');
+                scenario.set('item.description', description);
               }, 1000);
             }
           });
