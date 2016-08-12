@@ -178,7 +178,7 @@
                 try {
                   self.searching = '';
                   self.status = request.responseJSON.message;
-                } catch() {}
+                } catch(e) {}
               }, 500);
             }
           });
