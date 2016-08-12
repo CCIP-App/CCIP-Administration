@@ -7,7 +7,7 @@
 
 <dom-module id="ccip-dashboard">
   <template>
-    <style>
+    <style include="ccip-pages">
       :host {
         display: block;
       }
@@ -128,13 +128,13 @@
               var subkey = k.match(/lunch-(.*)$/).pop();
               data = [
                 {
-                  name: `${dietMapping[subkey]} ${usedText} ${usedValue}`,
+                  name: `${ccipPages.dietMapping[subkey]} ${usedText} ${usedValue}`,
                   y: usedValue,
                   sliced: true,
                   selected: true
                 },
                 {
-                  name: `${dietMapping[subkey]} ${unusedText} ${unusedValue}`,
+                  name: `${ccipPages.dietMapping[subkey]} ${unusedText} ${unusedValue}`,
                   y: unusedValue,
                   sliced: true,
                   selected: true

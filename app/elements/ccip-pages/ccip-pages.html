@@ -2,110 +2,105 @@
 @license
 
 -->
+<dom-module id="ccip-pages">
+  <template>
+    <style>
+      .dashboard-box {
+        padding: 40px 15px;
+        text-align: center;
+      }
+      .chart-box {
+        min-width: 200px;
+        height: 400px;
+      }
+    </style>
+
+    <iron-meta key="oneSignalUrl.debugToken" value="aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d"></iron-meta>
+    <iron-meta key="oneSignalUrl.debugAuthToken" value="87e31319-701d-4ee5-a57e-7da788af768d"></iron-meta>
+    <iron-meta key="oneSignalUrl.releaseToken" value="a429ff30-5c0e-4584-a32f-b866ba88c947"></iron-meta>
+    <iron-meta key="oneSignalUrl.releaseAuthToken" value="a93c32e9-e769-4716-bb56-90c3ccc445f0"></iron-meta>
+    <iron-meta key="oneSignalUrl.players" value="https://onesignal.com/api/v1/players"></iron-meta>
+    <iron-meta key="oneSignalUrl.notification" value="https://onesignal.com/api/v1/notifications"></iron-meta>
+    <iron-meta key="api.status" value="https://coscup.cprteam.org/status"></iron-meta>
+    <iron-meta key="api.use" value="https://coscup.cprteam.org/use/"></iron-meta>
+    <iron-meta key="api.dashboard" value="https://coscup.cprteam.org/dashboard"></iron-meta>
+    <iron-meta key="api.announcement" value="https://coscup.cprteam.org/announcement"></iron-meta>
+    <iron-meta key="api.announcement.username" value="ccip"></iron-meta>
+    <iron-meta key="api.announcement.password" value="alwaysconnectme"></iron-meta>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ccip-pages',
+
+        properties: {
+          isMobile: Object,
+          modelList: Object,
+          scenarioMapping: Object,
+          dietMapping: Object
+        },
+
+        ready: function() {
+          const parameters = location.hash.split('?').pop().split('&').map(p => {
+            var ps = p.split('=');
+            var o = {};
+            o[ps.shift()] = ps.join('=');
+            return o;
+          }).reduce((a, b) => {
+            var o = a;
+            for(var k in b) {
+              o[k] = b[k];
+            }
+            return o;
+          });
+          const isMobile = {
+            get iOS() {
+              return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+            },
+            get Android() {
+              return navigator.userAgent.match(/Android/i) ? true : false;
+            },
+          };
+          const modelList = ['iOS', 'Android', 'Amazon', 'WindowsPhone(MPNS)', 'ChromeApp', 'ChromeWebsite', 'WindowsPhone(WNS)', 'Safari', 'Firefox', 'Mac OS X'];
+          const scenarioMapping = {
+            day1checkin: { icon: 'day1checkin', title: 'Day1 報到', text: 'Checkin!' },
+            kit: { icon: 'kit', title: '迎賓袋', text: 'Action!' },
+            vipkit: { icon: 'vipkit', title: '獨家紀念品', text: 'Action!', meta: '僅限個人贊助方案' },
+            day1lunch: { icon: 'lunch', title: 'Day1 午餐', text: 'Action!' },
+            day2checkin: { icon: 'day2checkin', title: 'Day2 報到', text: 'Checkin!' },
+            day2lunch: { icon: 'lunch', title: 'Day2 午餐', text: 'Action!' }
+          };
+          const dietMapping = {
+            meat: '葷食',
+            vegetarian: '素食'
+          };
+
+          this.parameters = parameters;
+          this.isMobile = isMobile;
+          this.modelList = modelList;
+          this.scenarioMapping = scenarioMapping;
+          this.dietMapping = dietMapping;
+
+          Highcharts.setOptions({
+            credits: {
+              enabled: false
+            }
+          });
+
+          window.ccipPages = this;
+        }
+      });
+    })();
+  </script>
+</dom-module>
+
+<ccip-pages id="ccip-pages" />
+
 <link rel="import" href="ccip-dashboard.html">
 <link rel="import" href="ccip-check-in.html">
 <link rel="import" href="ccip-devices-info.html">
 <link rel="import" href="ccip-announcement.html">
 <link rel="import" href="ccip-push-notification.html">
-
-<style>
-  .dashboard-box {
-    padding: 40px 15px;
-    text-align: center;
-  }
-  .chart-box {
-    min-width: 200px;
-    height: 400px;
-  }
-</style>
-
-<iron-meta key="oneSignalUrl.debugToken" value="aef99f72-9ee3-4dfa-ac5b-ddf79f16be7d"></iron-meta>
-<iron-meta key="oneSignalUrl.debugAuthToken" value="87e31319-701d-4ee5-a57e-7da788af768d"></iron-meta>
-<iron-meta key="oneSignalUrl.releaseToken" value="a429ff30-5c0e-4584-a32f-b866ba88c947"></iron-meta>
-<iron-meta key="oneSignalUrl.releaseAuthToken" value="a93c32e9-e769-4716-bb56-90c3ccc445f0"></iron-meta>
-<iron-meta key="oneSignalUrl.players" value="https://onesignal.com/api/v1/players"></iron-meta>
-<iron-meta key="oneSignalUrl.notification" value="https://onesignal.com/api/v1/notifications"></iron-meta>
-<iron-meta key="api.status" value="https://coscup.cprteam.org/status"></iron-meta>
-<iron-meta key="api.use" value="https://coscup.cprteam.org/use/"></iron-meta>
-<iron-meta key="api.dashboard" value="https://coscup.cprteam.org/dashboard"></iron-meta>
-<iron-meta key="api.announcement" value="https://coscup.cprteam.org/announcement"></iron-meta>
-<iron-meta key="api.announcement.username" value="ccip"></iron-meta>
-<iron-meta key="api.announcement.password" value="alwaysconnectme"></iron-meta>
-
-<script>
-  (function() {
-    $(window).on('hashchange', () => {
-      const parameters = location.hash.split('?').pop().split('&').map(p => {
-        var ps = p.split('=');
-        var o = {};
-        o[ps.shift()] = ps.join('=');
-        return o;
-      }).reduce((a, b) => {
-        var o = a;
-        for(var k in b) {
-          o[k] = b[k];
-        }
-        return o;
-      });
-      window.parameters = parameters;
-    }).trigger('hashchange');
-
-    const isMobile = {
-      get iOS() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
-      },
-      get Android() {
-        return navigator.userAgent.match(/Android/i) ? true : false;
-      },
-    };
-    const modelList = ['iOS', 'Android', 'Amazon', 'WindowsPhone(MPNS)', 'ChromeApp', 'ChromeWebsite', 'WindowsPhone(WNS)', 'Safari', 'Firefox', 'Mac OS X'];
-    const scenarioMapping = {
-      day1checkin: { icon: 'day1checkin', title: 'Day1 報到', text: 'Checkin!' },
-      kit: { icon: 'kit', title: '迎賓袋', text: 'Action!' },
-      vipkit: { icon: 'vipkit', title: '獨家紀念品', text: 'Action!', meta: '僅限個人贊助方案' },
-      day1lunch: { icon: 'lunch', title: 'Day1 午餐', text: 'Action!' },
-      day2checkin: { icon: 'day2checkin', title: 'Day2 報到', text: 'Checkin!' },
-      day2lunch: { icon: 'lunch', title: 'Day2 午餐', text: 'Action!' }
-    };
-    const dietMapping = {
-      meat: '葷食',
-      vegetarian: '素食'
-    };
-
-    window.isMobile = isMobile;
-    window.modelList = modelList;
-    window.scenarioMapping = scenarioMapping;
-    window.dietMapping = dietMapping;
-
-    Highcharts.setOptions({
-      credits: {
-        enabled: false
-      }
-    });
-    // select the target node
-    var target = document.body;
-     
-    // create an observer instance
-    var observer = new MutationObserver(function(mutations) {
-      // console.log(mutations);
-      // mutations.forEach(function(mutation) {
-      //   console.log(mutation);
-      // });
-      console.log('doing reflow for charts');
-      setTimeout(() => {
-        var charts = Array.from(document.querySelectorAll('.highcharts-container'));
-        charts.map(hc => $(hc).parent().highcharts().reflow());
-        console.log(`charts reflowed: ${charts.length}`);
-      }, 50);
-    });
-     
-    // configuration of the observer:
-    var config = { attributes: true, childList: false, characterData: true, subtree: true, attributeFilter: [ 'aria-selected', 'tabindex' ] };
-     
-    // pass in the target node, as well as the observer options
-    observer.observe(target, config);
-     
-    // later, you can stop observing
-    // observer.disconnect();
-  })();
-</script>

@@ -7,7 +7,7 @@
 
 <dom-module id="ccip-devices-info">
   <template>
-    <style>
+    <style include="ccip-pages">
       :host {
         display: block;
       }
@@ -219,13 +219,13 @@
                   }).always(() => {
                     if (run_time * message.limit >= this.total_count) {
                       // console.log(this.players);
-                      this.models = modelList.map((m, i) => {
+                      this.models = ccipPages.modelList.map((m, i) => {
                         var devices = this.players.filter(p => p.device_type == i);
                         if (devices.length > 0) {
                           var os = devices.map(p => p.device_os).filter((e, p, a) => a.indexOf(e) == p).sort();
                           var model = devices.map(p => p.device_model).filter((e, p, a) => a.indexOf(e) == p).sort();
                           return {
-                            platform_name : modelList[i],
+                            platform_name : ccipPages.modelList[i],
                             count : devices.length,
                             model_list : model.map(m => {
                               return {

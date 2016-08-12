@@ -7,7 +7,7 @@
 
 <dom-module id="ccip-check-in">
   <template>
-    <style>
+    <style include="ccip-pages">
       :host {
         display: block;
       }
@@ -198,12 +198,12 @@
           var self = this;
           this.user_id = newData.user_id;
           this.scenarios = newData.scenarios.map(s => {
-            var m = scenarioMapping[s.id];
+            var m = ccipPages.scenarioMapping[s.id];
             var scenario = s;
             scenario.title = m.title;
             scenario.text = (!!s.used && 'Used!') || m.text;
             scenario.icon = m.icon;
-            scenario.meta = dietMapping[s.attr.diet || ''] || m.meta;
+            scenario.meta = ccipPages.dietMapping[s.attr.diet || ''] || m.meta;
             scenario.description = !!s.used ? ((!!s.used && `於 ${moment(s.used * 1000).format('YYYY-MM-DD HH:mm:ss')} 已使用`) || s.disabled || '') : (s.disabled || '尚未使用');
             scenario.disabled = (s.disabled || '').length > 0 || !!s.used;
             scenario.btnClass = !s.used && !s.disabled ? 'teal' : '';
@@ -251,7 +251,7 @@
 
         qrStart: function() {
           var self = this;
-          if (isMobile.iOS || isMobile.Android) {
+          if (ccipPages.isMobile.iOS || ccipPages.isMobile.Android) {
             $("#capture").click();
           } else {
             if ($('#qrcode_reader:empty').length == 1) {
@@ -331,7 +331,7 @@
         attached: function() {},
 
         ready: function() {
-          this.token = parameters.token || '';
+          this.token = (ccipPages.parameters || {}).token || '';
           this.status = '';
         }
       });
