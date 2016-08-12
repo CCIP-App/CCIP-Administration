@@ -24,88 +24,105 @@
         </div>
       </div>
     </div>
-    <h3 class="ui center aligned header">Day1</h3>
-    <div class="ui two column stackable grid">
-      <div class="column">
-        <div class="ui segment">
-          <div id="day1checkin_used" class="col-sm-4 chart-box"
-            x-title$="報到狀態\n共 [[status.day1checkin_used]] 名會眾"
-            x-used-value$="[[status.day1checkin_used]]"
-            x-unused-value$="[[subtract(status.total, status.day1checkin_used)]]"
-            x-used-text="已報到" x-unused-text="未報到"></div>
+    
+    <h4 class="ui horizontal divider header">
+      <i class="bar chart icon"></i>
+      Day1
+    </h4>
+    <div class="ui two column stackable centered grid">
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="day1checkin_used" class="col-sm-4 chart-box"
+              x-title$="報到狀態\n共 [[status.day1checkin_used]] 名會眾"
+              x-used-value$="[[status.day1checkin_used]]"
+              x-unused-value$="[[subtract(status.total, status.day1checkin_used)]]"
+              x-used-text="已報到" x-unused-text="未報到"></div>
+          </div>
         </div>
       </div>
 
-      <div class="column">
-        <div class="ui segment">
-          <div id="kit_used" class="col-sm-4 chart-box"
-            x-title$="迎賓袋\n共 [[status.kit_used]] 名已領取"
-            x-used-value$="[[status.kit_used]]"
-            x-unused-value$="[[subtract(status.total, status.kit_used)]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="kit_used" class="col-sm-4 chart-box"
+              x-title$="迎賓袋\n共 [[status.kit_used]] 名已領取"
+              x-used-value$="[[status.kit_used]]"
+              x-unused-value$="[[subtract(status.total, status.kit_used)]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="ui segment">
+            <div id="vipkit" class="col-sm-4 chart-box"
+              x-title$="個人贊助獨家紀念品\n共 [[status.vipkit.total]] 名"
+              x-used-value$="[[status.vipkit.used]]"
+              x-unused-value$="[[status.vipkit.total]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
         </div>
       </div>
 
-      <div class="column">
-        <div class="ui segment">
-          <div id="vipkit" class="col-sm-4 chart-box"
-            x-title$="個人贊助獨家紀念品\n共 [[status.vipkit.total]] 名"
-            x-used-value$="[[status.vipkit.used]]"
-            x-unused-value$="[[status.vipkit.total]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="day1lunch-meat" class="col-sm-4 chart-box"
+              x-title$="午餐(葷)\n共 [[status.day1lunch.meat_used]] 名已領取"
+              x-used-value$="[[status.day1lunch.meat_used]]"
+              x-unused-value$="[[status.day1lunch.meat]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
         </div>
-      </div>
 
-      <div class="column">
-        <div class="ui segment">
-          <div id="day1lunch-meat" class="col-sm-4 chart-box"
-            x-title$="午餐(葷)\n共 [[status.day1lunch.meat_used]] 名已領取"
-            x-used-value$="[[status.day1lunch.meat_used]]"
-            x-unused-value$="[[status.day1lunch.meat]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
+        <div class="column">
+          <div class="ui segment">
+            <div id="day1lunch-vegetarian" class="col-sm-4 chart-box"
+              x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian_used]] 名已領取"
+              x-used-value$="[[status.day1lunch.vegetarian_used]]"
+              x-unused-value$="[[status.day1lunch.vegetarian]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
         </div>
       </div>
-
-      <div class="column">
-        <div class="ui segment">
-          <div id="day1lunch-vegetarian" class="col-sm-4 chart-box"
-            x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian_used]] 名已領取"
-            x-used-value$="[[status.day1lunch.vegetarian_used]]"
-            x-unused-value$="[[status.day1lunch.vegetarian]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
-        </div>
-      </div>
+        
     </div>
-    <hr>
-    <h3 class="ui center aligned header">Day2</h3>
-    <div class="ui two column stackable grid">
-      <div class="column">
-        <div class="ui segment">
-          <div id="day2checkin_used" class="col-sm-4 chart-box"
-            x-title$="報到狀態\n共 [[status.day2checkin_used]] 名會眾"
-            x-used-value$="[[status.day2checkin_used]]"
-            x-unused-value$="[[subtract(status.total, status.day2checkin_used)]]"
-            x-used-text="已報到" x-unused-text="未報到"></div>
+    <h4 class="ui horizontal divider header">
+      <i class="bar chart icon"></i>
+      Day2
+    </h4>
+    <div class="ui two column stackable centered grid">
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="day2checkin_used" class="col-sm-4 chart-box"
+              x-title$="報到狀態\n共 [[status.day2checkin_used]] 名會眾"
+              x-used-value$="[[status.day2checkin_used]]"
+              x-unused-value$="[[subtract(status.total, status.day2checkin_used)]]"
+              x-used-text="已報到" x-unused-text="未報到"></div>
+          </div>
         </div>
       </div>
 
-      <div class="column">
-        <div class="ui segment">
-          <div id="day2lunch-meat" class="col-sm-4 chart-box"
-            x-title$="午餐(葷)\n共 [[status.day2lunch.meat_used]] 名已領取"
-            x-used-value$="[[status.day2lunch.meat_used]]"
-            x-unused-value$="[[status.day2lunch.meat]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="day2lunch-meat" class="col-sm-4 chart-box"
+              x-title$="午餐(葷)\n共 [[status.day2lunch.meat_used]] 名已領取"
+              x-used-value$="[[status.day2lunch.meat_used]]"
+              x-unused-value$="[[status.day2lunch.meat]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
         </div>
-      </div>
 
-      <div class="column">
-        <div class="ui segment">
-          <div id="day2lunch-vegetarian" class="col-sm-4 chart-box"
-            x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian_used]] 名已領取"
-            x-used-value$="[[status.day2lunch.vegetarian_used]]"
-            x-unused-value$="[[status.day2lunch.vegetarian]]"
-            x-used-text="已領取" x-unused-text="未領取"></div>
+        <div class="column">
+          <div class="ui segment">
+            <div id="day2lunch-vegetarian" class="col-sm-4 chart-box"
+              x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian_used]] 名已領取"
+              x-used-value$="[[status.day2lunch.vegetarian_used]]"
+              x-unused-value$="[[status.day2lunch.vegetarian]]"
+              x-used-text="已領取" x-unused-text="未領取"></div>
+          </div>
         </div>
       </div>
     </div>
