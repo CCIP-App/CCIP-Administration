@@ -16,11 +16,13 @@
     <iron-meta id="meta"></iron-meta>
 
     <h1 class="page-title" tabindex="-1">Dashboard</h1>
-    <div class="row">
-      <div class="dashboard-box">
-        <div class="label">App Users：[[status.logged]] / [[status.total]] ([[percentageFormat(status.logged, status.total)]])</div>
-        <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(status.logged, status.total)]]">
-          <div class="bar"><!-- <div class="progress"></div> --></div>
+    <div class="ui centered grid">
+      <div class="row">
+        <div class="column">
+          <div class="label">App Users：[[status.logged]] / [[status.total]] ([[percentageFormat(status.logged, status.total)]])</div>
+          <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(status.logged, status.total)]]">
+            <div class="bar"><!-- <div class="progress"></div> --></div>
+          </div>
         </div>
       </div>
     </div>
