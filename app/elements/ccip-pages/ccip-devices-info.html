@@ -24,21 +24,38 @@
     <h1 class="page-title" tabindex="-1">App Devices Info</h1>
     <paper-progress indeterminate class="" hidden$="{{!prepareProgress}}"></paper-progress>
     <paper-progress indeterminate class="detail" hidden$="{{!detailedProgress}}"></paper-progress>
-    <div class="row">
-      <div class="dashboard-box">
-        <div id="deviceType_chart" class="col-sm-6 col-sm-offset-3 chart-box"></div>
+    
+    <div class="ui two column stackable centered grid">
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="deviceType_chart" class="col-sm-6 col-sm-offset-3 chart-box"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="dashboard-box">
-        <div id="iOS_Device_version_chart" class="col-sm-6 chart-box"></div>
-        <div id="iOS_Device_model_chart" class="col-sm-6 chart-box"></div>
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="iOS_Device_version_chart" class="col-sm-6 chart-box"></div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment">
+            <div id="iOS_Device_model_chart" class="col-sm-6 chart-box"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="dashboard-box">
-        <div id="Android_Device_version_chart" class="col-sm-6 chart-box"></div>
-        <div id="Android_Device_model_chart" class="col-sm-6 chart-box"></div>
+      <div class="row">
+        <div class="column">
+          <div class="ui segment">
+            <div id="Android_Device_version_chart" class="col-sm-6 chart-box"></div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="ui segment">
+            <div id="Android_Device_model_chart" class="col-sm-6 chart-box"></div>
+          </div>
+        </div>
       </div>
     </div>
   </template>

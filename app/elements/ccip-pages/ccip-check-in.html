@@ -77,8 +77,8 @@
         <p class="lead">請在下方輸入會眾的 Token 並查詢結果</p>
         <div class="row">
           <div id="qrcode_area" class="row" style="margin-bottom: 30px; max-height: 400px; display: none;">
-            <div class="col-sm-3"></div>
-            <div id="qrcode_reader" class="ui segment col-sm-6" style="height: 400px;"></div>
+            <div class="three column"></div>
+            <div id="qrcode_reader" class="ui segment six" style="height: 400px;"></div>
           </div>
           <div id="search" class="fluid ui transparent input" style="font-size: 50px;">
             <div id="icon_search" class$="{{searching}} ui left icon input">
@@ -91,10 +91,9 @@
             </div>
           </div>
           <hr>
-          <div style="font-size: 60px; font-style: italic; color: gray;">{{status}}</div>
+          <div style="font-size: 40px; font-style: italic; color: gray;">{{status}}</div>
           <div id="result" class="row" style="text-align: left;" hidden$="{{!token}}">
-            <div class="col-sm-1"></div>
-            <div class="ui segment col-sm-10" style="margin-bottom: 60px;">
+            <div class="ui segment ten" style="margin-bottom: 60px;">
               <p class="ui left floated header" style="font-size: 36px;">暱稱：{{user_id}}</p>
               <div class="ui left clearing divider"></div>
               <div class="ui divided items">

@@ -42,15 +42,12 @@
         last-response="{{announcementResponse}}"></iron-ajax>
 
       <template is="dom-repeat" items="[[announcementResponse]]">
-        <paper-material elevation="2">
-          <div class="horizontal-section">
-            <h2>公告時間：[[dateFormat(item.datetime)]]</h2>
-            <p>中文訊息內容：[[item.msg_zh]]</p>
-            <p>英文訊息內容：[[item.msg_en]]</p>
-            <p>網址訊息內容：[[item.uri]]</p>
-          </div>
-        </paper-material>
-        <br />
+        <div class="ui segment">
+          <h2>公告時間：[[dateFormat(item.datetime)]]</h2>
+          <p>中文訊息內容：[[item.msg_zh]]</p>
+          <p>英文訊息內容：[[item.msg_en]]</p>
+          <p>網址訊息內容：[[item.uri]]</p>
+        </div>
       </template>
     </div>
   </template>
