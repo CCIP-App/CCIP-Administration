@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    
+
     <h4 class="ui horizontal divider header">
       <i class="bar chart icon"></i>
       Day1
@@ -70,9 +70,9 @@
         <div class="column">
           <div class="ui segment">
             <div id="day1lunch-meat" class="col-sm-4 chart-box"
-              x-title$="午餐(葷)\n共 [[status.day1lunch.meat_used]] 名已領取"
+              x-title$="午餐(葷)\n共 [[status.day1lunch.meat]] 名已報到"
               x-used-value$="[[status.day1lunch.meat_used]]"
-              x-unused-value$="[[status.day1lunch.meat]]"
+              x-unused-value$="[[subtract(status.day1lunch.meat, status.day1lunch.used)]]"
               x-used-text="已領取" x-unused-text="未領取"></div>
           </div>
         </div>
@@ -80,14 +80,14 @@
         <div class="column">
           <div class="ui segment">
             <div id="day1lunch-vegetarian" class="col-sm-4 chart-box"
-              x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian_used]] 名已領取"
+              x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian]] 名已報到"
               x-used-value$="[[status.day1lunch.vegetarian_used]]"
-              x-unused-value$="[[status.day1lunch.vegetarian]]"
+              x-unused-value$="[[subtract(status.day1lunch.vegetarian, status.day1lunch.vegetarian_used)]]"
               x-used-text="已領取" x-unused-text="未領取"></div>
           </div>
         </div>
       </div>
-        
+
     </div>
     <h4 class="ui horizontal divider header">
       <i class="bar chart icon"></i>
@@ -110,9 +110,9 @@
         <div class="column">
           <div class="ui segment">
             <div id="day2lunch-meat" class="col-sm-4 chart-box"
-              x-title$="午餐(葷)\n共 [[status.day2lunch.meat_used]] 名已領取"
+              x-title$="午餐(葷)\n共 [[status.day2lunch.meat]] 名已報到"
               x-used-value$="[[status.day2lunch.meat_used]]"
-              x-unused-value$="[[status.day2lunch.meat]]"
+              x-unused-value$="[[subtract(status.day2lunch.meat, status.day2lunch.meat_used)]]"
               x-used-text="已領取" x-unused-text="未領取"></div>
           </div>
         </div>
@@ -120,9 +120,9 @@
         <div class="column">
           <div class="ui segment">
             <div id="day2lunch-vegetarian" class="col-sm-4 chart-box"
-              x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian_used]] 名已領取"
+              x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian]] 名已報到"
               x-used-value$="[[status.day2lunch.vegetarian_used]]"
-              x-unused-value$="[[status.day2lunch.vegetarian]]"
+              x-unused-value$="[[subtract(status.day2lunch.vegetarian, status.day2lunch.vegetarian_used)]]"
               x-used-text="已領取" x-unused-text="未領取"></div>
           </div>
         </div>
