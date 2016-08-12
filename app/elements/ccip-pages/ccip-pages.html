@@ -44,6 +44,27 @@
         },
 
         ready: function() {
+          $(this).on('reload-clicked', () => {
+            app.$.refresh.ccip.map(c => {
+              if (!!c.reload && typeof(c.reload) === 'function') {
+                console.log('Trigger %s reload event -> %s', c.is, c.reload())
+              }
+            });
+          });
+          window.addEventListener('WebComponentsReady', function() {
+            // imports are loaded and elements have been registered
+            $('#pages-content').on('iron-resize', function() {
+              var route = this.selected;
+              var page = this.selectedItem;
+              var ccipObjects = Array.from(this.selectedItem.querySelectorAll('*'))
+                .map(n => n.tagName.toLowerCase().match(/^ccip-/i) != null && n || null)
+                .filter(n => n);
+              app.$.refresh.ccip = ccipObjects;
+              ccipObjects.map(c => {
+                app.$.refresh.hidden = !!!c.reload;
+              });
+            });
+          });
           const parameters = location.hash.split('?').pop().split('&').map(p => {
             var ps = p.split('=');
             var o = {};
