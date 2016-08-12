@@ -117,27 +117,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="app-menu" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="dashboard" href="{{baseUrl}}">
+          <a style="position: relative;" data-route="dashboard" href="{{baseUrl}}">
+            <paper-ripple></paper-ripple>
             <iron-icon icon="icons:dashboard"></iron-icon>
             <span>Dashboard</span>
           </a>
 
-          <a data-route="check-in" href="{{baseUrl}}check-in">
+          <a style="position: relative;" data-route="check-in" href="{{baseUrl}}check-in">
+            <paper-ripple></paper-ripple>
             <iron-icon icon="icons:check-circle"></iron-icon>
             <span>CheckIn</span>
           </a>
 
-          <a data-route="devices-info" href="{{baseUrl}}devices-info">
+          <a style="position: relative;" data-route="devices-info" href="{{baseUrl}}devices-info">
+            <paper-ripple></paper-ripple>
             <iron-icon icon="hardware:devices-other"></iron-icon>
             <span>DevicesInfo</span>
           </a>
 
-          <a data-route="announcement" href="{{baseUrl}}announcement">
+          <a style="position: relative;" data-route="announcement" href="{{baseUrl}}announcement">
+            <paper-ripple></paper-ripple>
             <iron-icon icon="icons:announcement"></iron-icon>
             <span>Announcement</span>
           </a>
 
-          <a data-route="push-notification" href="{{baseUrl}}push-notification">
+          <a style="position: relative;" data-route="push-notification" href="{{baseUrl}}push-notification">
+            <paper-ripple></paper-ripple>
             <iron-icon icon="social:notifications"></iron-icon>
             <span>PushNotification</span>
           </a>
@@ -153,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span class="space"></span>
 
           <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh"></paper-icon-button>
+          <!-- <paper-icon-button icon="refresh"></paper-icon-button> -->
           <!-- <paper-icon-button icon="search"></paper-icon-button> -->
 
           <!-- Application name -->
