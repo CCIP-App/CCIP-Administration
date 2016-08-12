@@ -175,8 +175,10 @@
             error: function(request, status, errorThrown) {
               console.log('Error: ', request.responseText);
               setTimeout(function() {
-                self.searching = '';
-                self.status = request.responseJSON.message;
+                try {
+                  self.searching = '';
+                  self.status = request.responseJSON.message;
+                } catch() {}
               }, 500);
             }
           });
@@ -344,9 +346,9 @@
 
         attached: function() {
           var self = this;
-          window.addEventListener('WebComponentsReady', function() {
+          $(window).on('WebComponentsReady hashchange', function() {
             // imports are loaded and elements have been registered
-            if (self.token.length > 0) {
+            if ((self.token || '').length > 0) {
               self.doSearch();
             }
           });
@@ -354,6 +356,8 @@
 
         ready: function() {
           this.status = '';
+          this.user_id = '';
+          this.token = '';
         }
       });
     })();
