@@ -15,13 +15,27 @@
 
     <iron-meta id="meta"></iron-meta>
 
-    <h1 class="page-title" tabindex="-1">Dashboard</h1>
-    <div class="ui centered grid">
-      <div class="row">
-        <div class="column">
-          <div class="label">App Users：[[status.logged]] / [[status.total]] ([[percentageFormat(status.logged, status.total)]])</div>
-          <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(status.logged, status.total)]]">
-            <div class="bar"><!-- <div class="progress"></div> --></div>
+    <div class="page-title" tabindex="-1">
+      <div class="ui clearing">
+        <div class="ui right floated header">
+          <div id="column-selector" class="ui buttons" on-click="columnSelected">
+            <button id="column-3" class="ui positive button active">三</button>
+            <div class="or" data-text="欄"></div>
+            <button id="column-2" class="ui button">二</button>
+          </div>
+        </div>
+        <h1 class="ui left floated header">
+          Dashboard
+        </h1>
+        <div class="ui center aligned header">&nbsp;</div>
+        <div class="ui center aligned header">
+          <div class="sub header">
+            <div class="ui centered">
+              <div class="label">App Users：[[status.logged]] / [[status.total]] ([[percentageFormat(status.logged, status.total)]])</div>
+              <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(status.logged, status.total)]]">
+                <div class="bar"><!-- <div class="progress"></div> --></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -31,100 +45,90 @@
       <i class="bar chart icon"></i>
       Day1
     </h4>
-    <div class="ui two column stackable centered grid">
-      <div class="row">
-        <div class="column">
-          <div class="ui segment">
-            <div id="day1checkin_used" class="col-sm-4 chart-box"
-              x-title$="報到狀態\n共 [[status.day1checkin_used]] 名會眾"
-              x-used-value$="[[status.day1checkin_used]]"
-              x-unused-value$="[[subtract(status.total, status.day1checkin_used)]]"
-              x-used-text="已報到" x-unused-text="未報到"></div>
-          </div>
+    <div id="day1" class="ui three column stackable centered grid">
+      <div class="wide column">
+        <div class="ui segment">
+          <div id="day1checkin_used" class="chart-box"
+            x-title$="報到狀態\n共 [[status.day1checkin_used]] 名會眾"
+            x-used-value$="[[status.day1checkin_used]]"
+            x-unused-value$="[[subtract(status.total, status.day1checkin_used)]]"
+            x-used-text="已報到" x-unused-text="未報到"></div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="column">
-          <div class="ui segment">
-            <div id="kit_used" class="col-sm-4 chart-box"
-              x-title$="迎賓袋\n共 [[status.kit_used]] 名已領取"
-              x-used-value$="[[status.kit_used]]"
-              x-unused-value$="[[subtract(status.total, status.kit_used)]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
-        </div>
-
-        <div class="column">
-          <div class="ui segment">
-            <div id="vipkit" class="col-sm-4 chart-box"
-              x-title$="個人贊助獨家紀念品\n共 [[status.vipkit.total]] 名"
-              x-used-value$="[[status.vipkit.used]]"
-              x-unused-value$="[[status.vipkit.total]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
+      <div class="column">
+        <div class="ui segment">
+          <div id="kit_used" class="chart-box"
+            x-title$="迎賓袋\n共 [[status.kit_used]] 名已領取"
+            x-used-value$="[[status.kit_used]]"
+            x-unused-value$="[[subtract(status.total, status.kit_used)]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="column">
-          <div class="ui segment">
-            <div id="day1lunch-meat" class="col-sm-4 chart-box"
-              x-title$="午餐(葷)\n共 [[status.day1lunch.meat]] 名已報到"
-              x-used-value$="[[status.day1lunch.meat_used]]"
-              x-unused-value$="[[subtract(status.day1lunch.meat, status.day1lunch.used)]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
-        </div>
-
-        <div class="column">
-          <div class="ui segment">
-            <div id="day1lunch-vegetarian" class="col-sm-4 chart-box"
-              x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian]] 名已報到"
-              x-used-value$="[[status.day1lunch.vegetarian_used]]"
-              x-unused-value$="[[subtract(status.day1lunch.vegetarian, status.day1lunch.vegetarian_used)]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
+      <div class="column">
+        <div class="ui segment">
+          <div id="vipkit" class="chart-box"
+            x-title$="個人贊助獨家紀念品\n共 [[status.vipkit.total]] 名"
+            x-used-value$="[[status.vipkit.used]]"
+            x-unused-value$="[[status.vipkit.total]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
         </div>
       </div>
 
+      <div class="column">
+        <div class="ui segment">
+          <div id="day1lunch-meat" class="chart-box"
+            x-title$="午餐(葷)\n共 [[status.day1lunch.meat]] 名已報到"
+            x-used-value$="[[status.day1lunch.meat_used]]"
+            x-unused-value$="[[subtract(status.day1lunch.meat, status.day1lunch.used)]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="ui segment">
+          <div id="day1lunch-vegetarian" class="chart-box"
+            x-title$="午餐(素)\n共 [[status.day1lunch.vegetarian]] 名已報到"
+            x-used-value$="[[status.day1lunch.vegetarian_used]]"
+            x-unused-value$="[[subtract(status.day1lunch.vegetarian, status.day1lunch.vegetarian_used)]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
+        </div>
+      </div>
     </div>
+
     <h4 class="ui horizontal divider header">
       <i class="bar chart icon"></i>
       Day2
     </h4>
-    <div class="ui two column stackable centered grid">
-      <div class="row">
-        <div class="column">
-          <div class="ui segment">
-            <div id="day2checkin_used" class="col-sm-4 chart-box"
-              x-title$="報到狀態\n共 [[status.day2checkin_used]] 名會眾"
-              x-used-value$="[[status.day2checkin_used]]"
-              x-unused-value$="[[subtract(status.total, status.day2checkin_used)]]"
-              x-used-text="已報到" x-unused-text="未報到"></div>
-          </div>
+    <div id="day2" class="ui three column stackable centered grid">
+      <div class="wide column">
+        <div class="ui segment">
+          <div id="day2checkin_used" class="chart-box"
+            x-title$="報到狀態\n共 [[status.day2checkin_used]] 名會眾"
+            x-used-value$="[[status.day2checkin_used]]"
+            x-unused-value$="[[subtract(status.total, status.day2checkin_used)]]"
+            x-used-text="已報到" x-unused-text="未報到"></div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="column">
-          <div class="ui segment">
-            <div id="day2lunch-meat" class="col-sm-4 chart-box"
-              x-title$="午餐(葷)\n共 [[status.day2lunch.meat]] 名已報到"
-              x-used-value$="[[status.day2lunch.meat_used]]"
-              x-unused-value$="[[subtract(status.day2lunch.meat, status.day2lunch.meat_used)]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
+      <div class="column">
+        <div class="ui segment">
+          <div id="day2lunch-meat" class="chart-box"
+            x-title$="午餐(葷)\n共 [[status.day2lunch.meat]] 名已報到"
+            x-used-value$="[[status.day2lunch.meat_used]]"
+            x-unused-value$="[[subtract(status.day2lunch.meat, status.day2lunch.meat_used)]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
         </div>
+      </div>
 
-        <div class="column">
-          <div class="ui segment">
-            <div id="day2lunch-vegetarian" class="col-sm-4 chart-box"
-              x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian]] 名已報到"
-              x-used-value$="[[status.day2lunch.vegetarian_used]]"
-              x-unused-value$="[[subtract(status.day2lunch.vegetarian, status.day2lunch.vegetarian_used)]]"
-              x-used-text="已領取" x-unused-text="未領取"></div>
-          </div>
+      <div class="column">
+        <div class="ui segment">
+          <div id="day2lunch-vegetarian" class="chart-box"
+            x-title$="午餐(素)\n共 [[status.day2lunch.vegetarian]] 名已報到"
+            x-used-value$="[[status.day2lunch.vegetarian_used]]"
+            x-unused-value$="[[subtract(status.day2lunch.vegetarian, status.day2lunch.vegetarian_used)]]"
+            x-used-text="已領取" x-unused-text="未領取"></div>
         </div>
       </div>
     </div>
@@ -172,9 +176,36 @@
           return total - value;
         },
 
+        columnSelected: function(e) {
+          var target = e.target;
+          var id = target.id.match(/^column-(\d+)$/i);
+          if (id != null) {
+            $(this.$['column-selector']).find('[id^="column-"]').removeClass('positive');
+            $(target).addClass('positive');
+            var col = id.pop();
+            id.push(col);
+            switch(parseInt(col)) {
+              case 2:
+                $([this.$.day1, this.$.day2])
+                  .removeClass('ui two three column').addClass('ui two column')
+                  .find('.wide').removeClass('sixteen wide column').addClass('sixteen wide column');
+                this.fire('resize');
+                break;
+              case 3:
+                $([this.$.day1, this.$.day2])
+                  .removeClass('ui two three column').addClass('ui three column')
+                  .find('.wide').removeClass('sixteen wide column').addClass('wide column');
+                this.fire('resize');
+                break;
+            }
+          }
+        },
+
         statusChanged: function(newStatus, oldStatus) {
           // console.log(newStatus, oldStatus);
           $(this.$.progress).progress();
+          var days = $([this.$.day1, this.$.day2]);
+          days.dimmer('show');
           Array.from(this.querySelectorAll('.chart-box')).map(n => {
             var k = n.id;
             var title = (n.getAttribute('x-title') || '').replace(/\\n/g, '<br />');
@@ -265,6 +296,7 @@
               });
             }
           });
+          days.dimmer('hide');
           this.fire('reloaded');
         },
 
