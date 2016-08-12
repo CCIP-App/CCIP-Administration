@@ -27,6 +27,10 @@ var historyApiFallback = require('connect-history-api-fallback');
 var packageJson = require('./package.json');
 var crypto = require('crypto');
 var ensureFiles = require('./tasks/ensure-files.js');
+var preprocess = require('gulp-preprocess');
+var moment = require('moment');
+var committers = require('gulp-git-committers');
+var git = require('git-rev');
 
 // var ghPages = require('gulp-gh-pages');
 
@@ -99,6 +103,19 @@ var optimizeHtmlTask = function(src, dest) {
     }));
 };
 
+var sVer;
+gulp.task('rev', function(cb) {
+  git['short'](function (ver) {
+    sVer = ver;
+    cb();
+  });
+});
+
+gulp.task('authors', function () {
+  return committers({ email: true })
+    .pipe(gulp.dest(dist() + '/AUTHORS.txt'));
+});
+
 // Copy all bower_components over to help js task and vulcanize work together
 gulp.task('bowertotmp', function() {
 return gulp.src(['app/bower_components/**/*'])
@@ -106,9 +123,10 @@ return gulp.src(['app/bower_components/**/*'])
 });
 
 // Transpile all JS to ES5.
-gulp.task('js', function() {
+gulp.task('js', ['rev', 'authors'], function() {
   return gulp.src(['app/**/*.{js,html}', '!app/bower_components/**/*'])
    .pipe($.sourcemaps.init())
+   .pipe(preprocess({context: { BUILD_TIME: moment().toISOString(), VERSION: sVer }}))
    .pipe($.if('*.html', $.crisper({scriptInHead: false}))) // Extract JS from .html files
    .pipe($.if('*.js', $.babel({
      presets: ['es2015']
