@@ -85,6 +85,7 @@
               <i class="qrcode link icon" on-click="qrStart"></i>
               <input type="file" accept="image/*" capture="camera" id="capture" style="display: none;" on-change="qrDecode">
             </div>
+            <iron-a11y-keys id="a11y" target="[[tokenInput]]" keys="enter" on-keys-pressed="doSearch"></iron-a11y-keys>
             <paper-input type="search" id="token" name="token" placeholder="type Token here" char-counter maxlength="32" value="{{token::input}}"></paper-input>
             <div id="remove-token" class="ui right icon input" hidden$="{{!token}}">
               <i class="remove link icon" on-click="clear"></i>
@@ -92,7 +93,7 @@
           </div>
           <hr>
           <div style="font-size: 40px; font-style: italic; color: gray;">{{status}}</div>
-          <div id="result" class="row" style="text-align: left;" hidden$="{{!token}}">
+          <div id="result" class="row" style="text-align: left;" hidden$="{{!user_id}}">
             <div class="ui segment ten" style="margin-bottom: 60px;">
               <p class="ui left floated header" style="font-size: 36px;">暱稱：{{user_id}}</p>
               <div class="ui left clearing divider"></div>
@@ -130,6 +131,7 @@
           token: {
             type: String,
             notify: true,
+            reflectToAttribute: true,
             observer: 'tokenChanged'
           },
           data: {
@@ -148,11 +150,42 @@
           },
           scenarios: {
             type: Array
+          },
+          tokenInput: {
+            type: Object,
+            value: function() {
+              return this.$.token;
+            }
           }
+        },
+
+        doSearch: function() {
+          var self = this;
+          $('#result').fadeOut(100);
+          this.searching = 'loading';
+          this.status = 'Searching...';
+          $.ajax({
+            url: this.$.meta.byKey('api.status'),
+            type: 'get',
+            dataType: "json",
+            data: {token: this.token, StaffQuery: "true"},
+            success: function (json) {
+              self.data = json;
+            },
+            error: function(request, status, errorThrown) {
+              console.log('Error: ', request.responseText);
+              setTimeout(function() {
+                self.searching = '';
+                self.status = request.responseJSON.message;
+              }, 500);
+            }
+          });
         },
 
         tokenChanged: function(newToken, oldToken) {
           var self = this;
+          this.user_id = null;
+          this.scenarios = [];
           if (newToken.length == 0) {
             // clean up
             this.status = '';
@@ -160,31 +193,13 @@
           } else {
             // do search
             if (this.token.length != 32) {
-              if (this.token.length > 32) {
-                this.status = 'Token too long';
-              } else {
-                this.statis = 'Token too short';
-              }
+              // if (this.token.length > 32) {
+              //   this.status = 'Token too long';
+              // } else {
+              //   this.status = 'Token too short';
+              // }
             } else {
-              $('#result').fadeOut(100);
-              this.searching = 'loading';
-              this.status = 'Searching...';
-              $.ajax({
-                url: this.$.meta.byKey('api.status'),
-                type: 'get',
-                dataType: "json",
-                data: {token: this.token, StaffQuery: "true"},
-                success: function (json) {
-                  self.data = json;
-                },
-                error: function(request, status, errorThrown) {
-                  console.log('Error: ', request.responseText);
-                  setTimeout(function() {
-                    self.searching = '';
-                    self.status = request.responseJSON.message;
-                  }, 500);
-                }
-              });
+              this.doSearch();
             }
           }
           if (oldToken != undefined) {
@@ -327,10 +342,17 @@
           this.token = '';
         },
 
-        attached: function() {},
+        attached: function() {
+          var self = this;
+          window.addEventListener('WebComponentsReady', function() {
+            // imports are loaded and elements have been registered
+            if (self.token.length > 0) {
+              self.doSearch();
+            }
+          });
+        },
 
         ready: function() {
-          this.token = (ccipPages.parameters || {}).token || '';
           this.status = '';
         }
       });
