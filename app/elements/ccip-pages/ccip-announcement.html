@@ -31,7 +31,7 @@
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
           <paper-input name="content-uri" label="URI (Option)" value="{{content_uri::input}}"></paper-input>
-          <paper-button raised on-click="send">Send!</paper-button>
+          <paper-button raised on-click="send" disabled$="{{btn.disabled}}" >{{btn_text}}</paper-button>
         </form>
       </div>
       <h3>大會公告歷程</h3>
@@ -110,7 +110,8 @@
             success: json => {
               this.sending = false;
               console.log(`Response: ${JSON.stringify(json, null, 2)}`);
-              alert('Success');
+              this.btn.disabled = true;
+              this.btn_text = 'Sent successfully!';
             },
             error: e => {
               this.sending = false;
@@ -127,6 +128,7 @@
           this.content_uri = '';
           this.content_zhHant = '';
           this.content_en = '';
+          this.btn_text = 'Send!';
           this.announcementUrl = this.$.meta.byKey('api.announcement');
         }
       });
