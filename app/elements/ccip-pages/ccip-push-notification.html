@@ -83,6 +83,7 @@
               success: json => {
                 this.sending = false;
                 console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+                alert('Success');
               },
               error: e => {
                 this.sending = false;
