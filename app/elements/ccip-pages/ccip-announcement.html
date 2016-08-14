@@ -27,28 +27,30 @@
       <div class="dashboard-box">
         <h3>新增大會公告</h3>
         <paper-progress indeterminate hidden$="{{!sending}}"></paper-progress>
-        <form is="iron-form">
+        <form id="announcementForm" is="iron-form">
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
           <paper-input name="content-uri" label="URI (Option)" value="{{content_uri::input}}"></paper-input>
-          <paper-button raised on-click="send" disabled="{{btn_disabled}}" >{{btn_text}}</paper-button>
+          <paper-button raised on-click="send" class$="{{btn_class}} ui button" disabled$="{{btn_disabled}}" >{{btn_text}}</paper-button>
         </form>
       </div>
       <h3>大會公告歷程</h3>
-      <iron-ajax auto verbose="true"
+      <div id="announcementList" class="container-fluid">
+        <iron-ajax id="announcementAjax" auto verbose="true"
         url="{{announcementUrl}}"
         contentType="application/json"
         handle-as="json"
         last-response="{{announcementResponse}}"></iron-ajax>
 
-      <template is="dom-repeat" items="[[announcementResponse]]">
-        <div class="ui segment">
-          <h2>公告時間：[[dateFormat(item.datetime)]]</h2>
-          <p>中文訊息內容：[[item.msg_zh]]</p>
-          <p>英文訊息內容：[[item.msg_en]]</p>
-          <p>網址訊息內容：[[item.uri]]</p>
-        </div>
-      </template>
+        <template is="dom-repeat" items="[[announcementResponse]]">
+          <div class="ui segment">
+            <h2>公告時間：[[dateFormat(item.datetime)]]</h2>
+            <p>中文訊息內容：[[item.msg_zh]]</p>
+            <p>英文訊息內容：[[item.msg_en]]</p>
+            <p>網址訊息內容：[[item.uri]]</p>
+          </div>
+        </template>
+      </div>
     </div>
   </template>
 
@@ -77,7 +79,15 @@
           content_en: {
             type: String,
             notify: true
-          },
+          }
+        },
+
+        listeners: {
+          'announcementAjax.response': '__handleResponse'
+        },
+
+        __handleResponse: function() {
+          $(this.$.announcementList).dimmer('hide');
         },
 
         dateFormat: function(unixDate) {
@@ -85,7 +95,10 @@
         },
 
         send: function() {
+          var self = this;
           this.sending = true;
+          this.btn_class = 'loading disabled';
+          this.btn_disabled = true;
           var contents = {};
           if (this.content_uri.length > 0) {
             contents['uri'] = this.content_uri;
@@ -101,8 +114,9 @@
             msg_en: contents['en'],
             uri: contents['uri']
           };
+          $([this.$.announcementForm, this.$.announcementList]).dimmer('show');
           $.ajax({
-            url: this.$.meta.byKey('api.announcement'),
+            url: this.announcementUrl,
             beforeSend: request => {
               request.setRequestHeader(this.$.meta.byKey('api.announcement.username'), this.$.meta.byKey('api.announcement.password'));
             },
@@ -111,10 +125,19 @@
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             data: message,
             success: json => {
+              $(this.$.announcementForm).dimmer('hide');
               this.sending = false;
               console.log(`Response: ${JSON.stringify(json, null, 2)}`);
-              this.btn_disabled = true;
+              this.btn_class = 'positive';
               this.btn_text = 'Sent successfully!';
+              setTimeout(() => {
+                self.$.announcementAjax.generateRequest();
+              }, 250);
+              setTimeout(() => {
+                self.btn_disabled = false;
+                self.btn_class = 'primary';
+                self.btn_text = this.default_text;
+              }, 5000);
             },
             error: e => {
               this.sending = false;
@@ -124,14 +147,14 @@
           });
         },
 
-        attached: function() {},
-
         ready: function() {
           this.sending = false;
           this.content_uri = '';
           this.content_zhHant = '';
           this.content_en = '';
-          this.btn_text = 'Send!';
+          this.btn_class = 'primary';
+          this.default_text = 'Send!';
+          this.btn_text = this.default_text;
           this.announcementUrl = this.$.meta.byKey('api.announcement');
         }
       });
