@@ -142,6 +142,9 @@
         is: 'ccip-dashboard',
 
         properties: {
+          isActive: {
+            type: Boolean
+          },
           status: {
             type: Object,
             observer: 'statusChanged'
@@ -329,11 +332,12 @@
         },
 
         attached: function() {
-          this.reload();
           var self = this;
-          setInterval(function() {
-            self.reload();
-          }, 30 * 1000);
+          var doReload = () => {
+            console.log('%c%s%c reload interval execution action => %cDo %s%c', 'color: purple', self.is, '', 'color: orange', (self.isActive && (self.reload() || 'reload')) || 'ignore', '');
+          };
+          setInterval(doReload, 30 * 1000);
+          this.reload();
         },
 
         ready: function() {

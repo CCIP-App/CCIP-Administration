@@ -48,31 +48,55 @@
           });
           window.addEventListener('WebComponentsReady', function() {
             // imports are loaded and elements have been registered
+            ((self) => {
+              var route = self.selected;
+              var page = self.selectedItem;
+              Array.from($(self).find('*')).filter(n => n.tagName.match(/^ccip-/i)).map(c => {
+                c.isActive = false;
+                c.active = () => {
+                  c.isActive = true;
+                };
+                c.deactive = () => {
+                  c.isActive = false;
+                };
+              });
+              var ccipSelected = Array.from(self.selectedItem.querySelectorAll('*'))
+                .map(n => n.tagName.toLowerCase().match(/^ccip-/i) != null && n || null)
+                .filter(n => n);
+              ccipSelected.map(c => !!c.active && c.active());
+            })(document.querySelector('#pages-content'));
+            var previousRoute = '';
             $('#pages-content').on('iron-resize', function() {
               var route = this.selected;
               var page = this.selectedItem;
-              var ccipObjects = Array.from(this.selectedItem.querySelectorAll('*'))
-                .map(n => n.tagName.toLowerCase().match(/^ccip-/i) != null && n || null)
-                .filter(n => n);
-              app.$.refresh.ccip = ccipObjects;
-              ccipObjects.map(c => {
-                var haveReload = !!c.reload;
-                app.$.refresh.hidden = !haveReload;
-                app.$.spinner.active = false;
-                if (haveReload) {
-                  c.__reloaded = () => {
-                    new Promise((resolve, reject) => {
-                      app.$.spinner.active = false;
-                      c.unlisten(c, 'reloaded', '__reloaded');
-                      setTimeout(() => resolve(), 250);
-                    }).then(() => app.$.refresh.hidden = false);
-                  };
-                } else {
-                  if (!!c.__reloaded) {
-                    delete c.__reloaded;
+              if (route != previousRoute) {
+                previousRoute = route;
+                var ccips = Array.from($(this).find('*')).filter(n => n.tagName.match(/^ccip-/i));
+                var ccipSelected = Array.from(this.selectedItem.querySelectorAll('*'))
+                  .map(n => n.tagName.toLowerCase().match(/^ccip-/i) != null && n || null)
+                  .filter(n => n);
+                ccips.filter(c => c.isActive).map(c => !!c.deactive && c.deactive());
+                ccipSelected.map(c => !!c.active && c.active());
+                app.$.refresh.ccip = ccipSelected;
+                ccipSelected.map(c => {
+                  var haveReload = !!c.reload;
+                  app.$.refresh.hidden = !haveReload;
+                  app.$.spinner.active = false;
+                  if (haveReload) {
+                    c.__reloaded = () => {
+                      new Promise((resolve, reject) => {
+                        app.$.spinner.active = false;
+                        c.unlisten(c, 'reloaded', '__reloaded');
+                        setTimeout(() => resolve(), 250);
+                      }).then(() => app.$.refresh.hidden = false);
+                    };
+                  } else {
+                    if (!!c.__reloaded) {
+                      delete c.__reloaded;
+                    }
                   }
-                }
-              });
+                });
+              }
             });
           });
           const parameters = location.hash.split('?').pop().split('&').map(p => {
