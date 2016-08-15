@@ -17,6 +17,6 @@ body {
   outline: none;
 }
 
-#headerContainer {
+#headerContainer, #drawer {
   z-index: 99;
 }
