@@ -27,10 +27,10 @@
       <div class="dashboard-box">
         <h3>發送推播訊息</h3>
         <paper-progress indeterminate hidden$="{{!sending}}"></paper-progress>
-        <form is="iron-form">
+        <form id="pushForm" is="iron-form">
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
-          <paper-button raised on-click="send" disabled$="{{btn_disabled}}" >{{btn_text}}</paper-button>
+          <paper-button raised on-click="send" class$="{{btn_class}} ui button" disabled$="{{btn_disabled}}">{{btn_text}}</paper-button>
         </form>
       </div>
     </div>
@@ -61,7 +61,7 @@
         },
 
         send: function() {
-          this.sending = true;
+          var self = this;
           var contents = {};
           if (this.content_zhHant.length > 0) {
             contents['zh-Hant'] = this.content_zhHant;
@@ -75,6 +75,10 @@
             included_segments: ["All"]
           };
           if (!$.isEmptyObject(contents)) {
+            this.sending = true;
+            this.btn_class = 'loading disabled';
+            this.btn_disabled = true;
+            $(this.$.pushForm).dimmer('show');
             $.ajax({
               url: this.$.meta.byKey('oneSignalUrl.notifications'),
               beforeSend: request => {
@@ -84,13 +88,27 @@
               dataType: "json",
               data: message,
               success: json => {
+                $(this.$.pushForm).dimmer('hide');
                 this.sending = false;
                 console.log(`Response: ${JSON.stringify(json, null, 2)}`);
-                tihs.btn_disabled = true;
+                this.btn_class = 'positive';
                 this.btn_text = 'Sent successfully!';
+                setTimeout(() => {
+                  self.btn_disabled = false;
+                  self.btn_class = 'primary';
+                  self.btn_text = this.default_text;
+                }, 5000);
               },
               error: e => {
+                $(this.$.pushForm).dimmer('hide');
                 this.sending = false;
+                this.btn_class = 'negative';
+                this.btn_text = 'Error!';
+                setTimeout(() => {
+                  self.btn_disabled = false;
+                  self.btn_class = 'primary';
+                  self.btn_text = this.default_text;
+                }, 5000);
                 console.log('Error: ', e);
                 alert(e.responseJSON.errors);
               }
@@ -104,7 +122,9 @@
           this.sending = false;
           this.content_zhHant = '';
           this.content_en = '';
-          this.btn_text = 'Send!';
+          this.btn_class = 'primary';
+          this.default_text = 'Send!';
+          this.btn_text = this.default_text;
         }
       });
     })();

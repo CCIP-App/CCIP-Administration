@@ -31,7 +31,7 @@
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
           <paper-input name="content-uri" label="URI (Option)" value="{{content_uri::input}}"></paper-input>
-          <paper-button raised on-click="send" class$="{{btn_class}} ui button" disabled$="{{btn_disabled}}" >{{btn_text}}</paper-button>
+          <paper-button raised on-click="send" class$="{{btn_class}} ui button" disabled$="{{btn_disabled}}">{{btn_text}}</paper-button>
         </form>
       </div>
       <h3>大會公告歷程</h3>
@@ -140,7 +140,15 @@
               }, 5000);
             },
             error: e => {
+              $(this.$.announcementForm).dimmer('hide');
               this.sending = false;
+              this.btn_class = 'negative';
+              this.btn_text = 'Error!';
+              setTimeout(() => {
+                self.btn_disabled = false;
+                self.btn_class = 'primary';
+                self.btn_text = this.default_text;
+              }, 5000);
               console.log('Error: ', e);
               alert(e.responseJSON.errors);
             }
