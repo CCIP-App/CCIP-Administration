@@ -208,6 +208,7 @@
             }
           }
           if (oldToken != undefined) {
+            this.ignore = true;
             location.hash = `#!/${app.route}/${newToken}`.replace(/\/$/i, '');
             $(this.$.token).focus();
           }
@@ -351,13 +352,15 @@
           var self = this;
           $(window).on('WebComponentsReady hashchange', function() {
             // imports are loaded and elements have been registered
-            if ((self.token || '').length > 0) {
+            if ((self.token || '').length > 0 && !self.ignore) {
               self.doSearch();
             }
+
           });
         },
 
         ready: function() {
+          this.ignore = false;
           this.status = '';
           this.user_id = '';
           this.token = '';
