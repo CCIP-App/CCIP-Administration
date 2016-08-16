@@ -19,7 +19,7 @@
     <iron-meta id="meta"></iron-meta>
 
     <iron-ajax id="contributors" auto verbose="true"
-        url="contributors.json"
+        url="{{app.baseUrl}}contributors.json"
         contentType="application/json"
         handle-as="json"
         last-response="{{contributor}}"></iron-ajax>
