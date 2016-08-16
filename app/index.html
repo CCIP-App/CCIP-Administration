@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://*.googleapis.com http://*.googleapis.com https://googleapis.com http://googleapis.com https://*.gstatic.com http://*.gstatic.com https://gstatic.com http://gstatic.com https://*.onesignal.com http://*.onesignal.com https://onesignal.com http://onesignal.com https://*.cprteam.org http://*.cprteam.org https://cprteam.org http://cprteam.org ws: wss: data: blob: filesystem: mediastream: ;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://*.googleapis.com http://*.googleapis.com https://googleapis.com http://googleapis.com https://*.gstatic.com http://*.gstatic.com https://gstatic.com http://gstatic.com https://*.onesignal.com http://*.onesignal.com https://onesignal.com http://onesignal.com https://*.cprteam.org http://*.cprteam.org https://cprteam.org http://cprteam.org https://*.github.com http://*.github.com https://github.com http://github.com https://*.githubusercontent.com http://*.githubusercontent.com https://githubusercontent.com http://githubusercontent.com ws: wss: data: blob: filesystem: mediastream: ;">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -151,6 +151,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="social:notifications"></iron-icon>
             <span>PushNotification</span>
           </a>
+
+          <a style="position: relative;" data-route="contributors" href="{{baseUrl}}contributors">
+            <paper-ripple></paper-ripple>
+            <i class="github icon"></i>
+            <span>Contributors</span>
+          </a>
         </paper-menu>
         <h6 class="ui bottom right attached label"><a target="ccip-github" href="https://github.com/Haraguroicha/CCIP-Administration/tree/<!-- @echo VERSION -->"><i class="code icon"></i><!-- @echo BUILD_TIME -->#<!-- @echo VERSION --></a></h6>
       </paper-scroll-header-panel>
@@ -209,6 +215,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="push-notification" tabindex="-1">
               <paper-material elevation="1">
                 <ccip-push-notification />
+              </paper-material>
+            </section>
+
+            <section data-route="contributors" tabindex="-1">
+              <paper-material elevation="1">
+                <ccip-contributors />
               </paper-material>
             </section>
           </iron-pages>

@@ -113,6 +113,7 @@ gulp.task('rev', function(cb) {
 
 gulp.task('authors', function () {
   return committers({ email: true })
+    .pipe(gulp.dest('.tmp/AUTHORS.txt'))
     .pipe(gulp.dest(dist() + '/AUTHORS.txt'));
 });
 

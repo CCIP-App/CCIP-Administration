@@ -20,3 +20,15 @@ body {
 #headerContainer, #drawer {
   z-index: 99;
 }
+
+paper-menu > div > a > i.icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  margin-right: 33px;
+  color: #11111187;
+}
+
+paper-menu > div > a.iron-selected > i.icon {
+  color: #fff;
+}

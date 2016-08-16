@@ -1,0 +1,65 @@
+<!--
+@license
+
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="ccip-contributors">
+  <template>
+    <style include="ccip-page-style">
+      :host {
+        display: block;
+      }
+      img {
+        border-radius: 6px;
+      }
+    </style>
+
+    <iron-meta id="meta"></iron-meta>
+
+    <iron-ajax id="contributors" auto verbose="true"
+        url="contributors.json"
+        contentType="application/json"
+        handle-as="json"
+        last-response="{{contributor}}"></iron-ajax>
+    <h1 class="page-title" tabindex="-1">Contributors</h1>
+    <div class="ui three column grid">
+      <template is="dom-repeat" items="[[contributor]]">
+        <div class="column">
+          <div class="ui fluid card">
+            <a class="image" href="https://github.com/[[item.login]]" target="ccip-github">
+              <img src="https://avatars3.githubusercontent.com/u/[[item.id]]?v=3&s=460" />
+            </a>
+            <div class="content">
+              <a class="header" href="https://github.com/[[item.login]]" target="ccip-github">
+                <i class="github icon"></i>
+                [[item.name]]
+              </a>
+              <div class="meta">
+                <a href="https://github.com/[[item.login]]" target="ccip-github">[[item.login]]</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ccip-contributors',
+
+        properties: {
+        },
+
+        attached: function() {},
+
+        ready: function() {}
+      });
+    })();
+  </script>
+</dom-module>
