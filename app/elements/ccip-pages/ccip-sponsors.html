@@ -1,0 +1,552 @@
+<!--
+@license
+
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="ccip-sponsors">
+  <template>
+    <style include="ccip-page-style">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-meta id="meta"></iron-meta>
+
+    <h1 class="page-title" tabindex="-1">Sponsors</h1>
+    
+    <div class="ui segment">
+      <h6 class="ui top attached center aligned header label">Day1 Sponsors Users：[[all.day1logged]] / [[all.total]] ([[percentageFormat(all.day1logged, all.total)]])</h6>
+      <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(all.day1logged, all.total)]]">
+        <div class="bar"><!-- <div class="progress"></div> --></div>
+      </div>
+    </div>
+    <div class="ui segment">
+      <h6 class="ui top attached center aligned header label">Day2 Sponsors Users：[[all.day2logged]] / [[all.total]] ([[percentageFormat(all.day2logged, all.total)]])</h6>
+      <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(all.day2logged, all.total)]]">
+        <div class="bar"><!-- <div class="progress"></div> --></div>
+      </div>
+    </div>
+    <div class="ui top attached tabular menu">
+      <a class="active item" data-tab="day1">Day1</a>
+      <a class="item" data-tab="day2">Day2</a>
+    </div>
+    <div class="ui bottom attached active tab segment" data-tab="day1">
+      <h4 class="ui horizontal divider header">
+        <i class="bar chart icon"></i>
+        Day1
+      </h4>
+      <div id="day1" class="ui three column stackable centered grid">
+        <div class="row">
+          <div class="sixteen wide column">
+            <div class="ui segment">
+              <div id="total_day1" class="chart-box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="day2">
+      <h4 class="ui horizontal divider header">
+        <i class="bar chart icon"></i>
+        Day2
+      </h4>
+      <div id="day2" class="ui three column stackable centered grid">
+        <div class="row">
+          <div class="sixteen wide column">
+            <div class="ui segment">
+              <div id="total_day2" class="chart-box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ccip-sponsors',
+
+        properties: {
+          all: Object,
+          charts: Object,
+          status: {
+            type: Object,
+            observer: 'statusChanged'
+          }
+        },
+
+        behaviors: [
+          Polymer.IronResizableBehavior,
+          Polymer.IronSelectableBehavior
+        ],
+
+        listeners: {
+          'iron-resize': '_resize'
+        },
+
+        _resize: function() {
+          var charts = Array.from(this.querySelectorAll('.highcharts-container'));
+          charts.map(hc => $(hc).parent().highcharts().reflow());
+          console.log('%c%s%c of charts reflowed: %c%s', 'color: purple', this.is, '', 'color: orange', charts.length);
+        },
+
+        percentageFormat: function(val, max) {
+          return `${this.percentageString(val, max)}%`;
+        },
+
+        percentageString: function(val, max) {
+          return Math.floor(val / max * 10000) / 100;
+        },
+
+        subtract: function(total, value) {
+          return total - value;
+        },
+
+        statusChanged: function(newStatus, oldStatus) {
+          // console.log(newStatus, oldStatus);
+          var self = this;
+          $(this.$.progress).progress();
+          var days = $([this.$.day1, this.$.day2]);
+          days.dimmer('show');
+          var usedText = '已報到';
+          var unusedText = '未報到';
+          var charts = this.charts;
+          if (!!newStatus) {
+            var sopnsorsTotal = 0;
+            var totalDay1 = 0;
+            var totalDay2 = 0;
+            newStatus.map(s => {
+              var k = s.user_id.replace(/Sponsor - /i, '');
+              var title = `${k}<br />(Total: ${s.total})`;
+              k = k.replace(/([ \.#@]+)/g, '_');
+              var day1Key = `${k}_day1`;
+              var day2Key = `${k}_day2`;
+              var data1 = [
+                {
+                  name: `${usedText} ${s.day1checkin_used}`,
+                  y: s.day1checkin_used,
+                  sliced: true,
+                  selected: true
+                },
+                [`${unusedText} ${s.total}`, s.total]
+              ];
+              var data2 = [
+                {
+                  name: `${usedText} ${s.day2checkin_used}`,
+                  y: s.day2checkin_used,
+                  sliced: true,
+                  selected: true
+                },
+                [`${unusedText} ${s.total}`, s.total]
+              ];
+              sopnsorsTotal += s.total;
+              totalDay1 += s.day1checkin_used;
+              totalDay2 += s.day2checkin_used;
+              // day1
+              if (self.querySelector(`#${day1Key}`) == null) {
+                $(self.$.day1).append(`<div class="column"><div class="ui segment"><div id="${day1Key}" class="chart-box"></div></div></div>`);
+              }
+              if (!!charts.day1[k]) {
+                charts.day1[k].series[0].setData(data1, true);
+                charts.day1[k].setTitle({ text: title });
+              } else {
+                charts.day1[k] = new Highcharts.Chart({
+                  colors: ['#3D983C', '#CCCCCC'],
+                  chart: {
+                    renderTo: day1Key,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                  },
+                  title: {
+                    text: title
+                  },
+                  tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                  },
+                  plotOptions: {
+                    pie: {
+                      allowPointSelect: false,
+                      cursor: 'pointer',
+                      dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                          return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                        },
+                        distance: -50
+                      },
+                      showInLegend: true
+                    }
+                  },
+                  series: [{
+                    type: 'pie',
+                    name: 'Percentage',
+                    data: data1
+                  }]
+                });
+              }
+              // day2
+              if (self.querySelector(`#${day2Key}`) == null) {
+                $(self.$.day2).append(`<div class="column"><div class="ui segment"><div id="${day2Key}" class="chart-box"></div></div></div>`);
+              }
+              if (!!charts.day2[k]) {
+                charts.day2[k].series[0].setData(data2, true);
+                charts.day2[k].setTitle({ text: title });
+              } else {
+                charts.day2[k] = new Highcharts.Chart({
+                  colors: ['#3D983C', '#CCCCCC'],
+                  chart: {
+                    renderTo: day2Key,
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                  },
+                  title: {
+                    text: title
+                  },
+                  tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                  },
+                  plotOptions: {
+                    pie: {
+                      allowPointSelect: false,
+                      cursor: 'pointer',
+                      dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                          return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                        },
+                        distance: -50
+                      },
+                      showInLegend: true
+                    }
+                  },
+                  series: [{
+                    type: 'pie',
+                    name: 'Percentage',
+                    data: data2
+                  }]
+                });
+              }
+            });
+            // total
+            var totalKey = '__total';
+            var titleTotal1 = `總計 ${totalDay1} / ${sopnsorsTotal}<br />已報到`;
+            var titleTotal2 = `總計 ${totalDay2} / ${sopnsorsTotal}<br />已報到`;
+            var dataTotal1 = [
+              {
+                name: `${usedText} ${totalDay1}`,
+                y: totalDay1,
+                sliced: true,
+                selected: true
+              },
+              [`${unusedText} ${sopnsorsTotal}`, sopnsorsTotal]
+            ];
+            var dataTotal2 = [
+              {
+                name: `${usedText} ${totalDay2}`,
+                y: totalDay2,
+                sliced: true,
+                selected: true
+              },
+              [`${unusedText} ${sopnsorsTotal}`, sopnsorsTotal]
+            ];
+            if (!!charts.day1[totalKey]) {
+              charts.day1[totalKey].series[0].setData(dataTotal1, true);
+              charts.day1[totalKey].setTitle({ text: titleTotal1 });
+            } else {
+              charts.day1[totalKey] = new Highcharts.Chart({
+                colors: ['#3D983C', '#CCCCCC'],
+                chart: {
+                  renderTo: 'total_day1',
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: titleTotal1
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                },
+                plotOptions: {
+                  pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function() {
+                        return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                      },
+                      distance: -50
+                    },
+                    showInLegend: true
+                  }
+                },
+                series: [{
+                  type: 'pie',
+                  name: 'Percentage',
+                  data: dataTotal1
+                }]
+              });
+            }
+            if (!!charts.day2[totalKey]) {
+              charts.day2[totalKey].series[0].setData(dataTotal2, true);
+              charts.day2[totalKey].setTitle({ text: titleTotal2 });
+            } else {
+              charts.day2[totalKey] = new Highcharts.Chart({
+                colors: ['#3D983C', '#CCCCCC'],
+                chart: {
+                  renderTo: 'total_day2',
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: titleTotal2
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                },
+                plotOptions: {
+                  pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function() {
+                        return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                      },
+                      distance: -50
+                    },
+                    showInLegend: true
+                  }
+                },
+                series: [{
+                  type: 'pie',
+                  name: 'Percentage',
+                  data: dataTotal2
+                }]
+              });
+              this.all = {
+                day1logged: totalDay1,
+                day2logged: totalDay2,
+                total: sopnsorsTotal
+              };
+            }
+          }
+          days.dimmer('hide');
+          this.fire('reloaded');
+        },
+
+        reload: function() {
+          this.status = [
+  {
+    "user_id": "Sponsor - Gandi",
+    "total": 16,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - Automattic",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - Top Career",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 東森信息",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - HDE",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - LINE",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - LIVEhouse.in",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 雙子星",
+    "total": 6,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - Skymizer",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 捕夢網",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - Appier",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - KKBOX",
+    "total": 8,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - MySQL",
+    "total": 6,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 天鏡科技",
+    "total": 4,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 線路組",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 悠夏爾",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 慧邦科技",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 巴哈姆特",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 祐生研究基金會",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - intel",
+    "total": 2,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - ",
+    "total": 1,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - QNAP",
+    "total": 16,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - Yahoo",
+    "total": 16,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 和沛科技",
+    "total": 16,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  },
+  {
+    "user_id": "Sponsor - 何先生",
+    "total": 11,
+    "day1checkin_used": 0,
+    "day2checkin_used": 0
+  }
+];
+return;
+          var charts = this.charts;
+          new Promise((resolve, reject) => {
+            this.status = {
+              total: '--'
+            };
+            setTimeout(() => resolve(), 0);
+          }).then(() => {
+            $.ajax({
+              url: this.$.meta.byKey('api.sponsors'),
+              type: 'get',
+              dataType: 'json',
+              success: json => {
+                // console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+                this.status = json;
+                setTimeout(function() {
+                  charts.map(c => {
+                    for(var k in c) {
+                      c[k].reflow();
+                    }
+                  });
+                }, 250);
+              },
+              error: e => {
+                console.log('Error: ', e);
+              }
+            });
+          });
+        },
+
+        attached: function() {
+          var self = this;
+          var doReload = () => {
+            console.log('%c%s%c reload interval execution action => %cDo %s%c', 'color: purple', self.is, '', 'color: orange', (self.isActive && (self.reload() || 'reload')) || 'ignore', '');
+          };
+          setInterval(doReload, 30 * 1000);
+          this.reload();
+          $(this).find('.menu .item').tab({
+            onVisible: () => { self._resize(); }
+          });
+        },
+
+        ready: function() {
+          this.charts = {
+            day1: {},
+            day2: {}
+          };
+        }
+      });
+    })();
+  </script>
+</dom-module>

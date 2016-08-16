@@ -128,6 +128,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Dashboard</span>
           </a>
 
+          <a style="position: relative;" data-route="sponsors" href="{{baseUrl}}sponsors">
+            <paper-ripple></paper-ripple>
+            <iron-icon icon="icons:dashboard"></iron-icon>
+            <span>Sponsors</span>
+          </a>
+
           <a style="position: relative;" data-route="check-in" href="{{baseUrl}}check-in">
             <paper-ripple></paper-ripple>
             <iron-icon icon="icons:check-circle"></iron-icon>
@@ -191,6 +197,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="dashboard" tabindex="-1">
               <paper-material elevation="1">
                 <ccip-dashboard />
+              </paper-material>
+            </section>
+
+            <section data-route="sponsors" tabindex="-1">
+              <paper-material elevation="1">
+                <ccip-sponsors />
               </paper-material>
             </section>
 

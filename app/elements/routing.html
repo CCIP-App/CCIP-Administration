@@ -53,6 +53,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setFocus(app.route);
     });
 
+    page('/sponsors', function() {
+      app.route = 'sponsors';
+      setFocus(app.route);
+    });
+
     page('/check-in/:token', function(data) {
       app.route = 'check-in';
       app.params = data.params;
