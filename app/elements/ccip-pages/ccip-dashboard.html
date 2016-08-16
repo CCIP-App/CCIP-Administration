@@ -15,7 +15,7 @@
 
     <iron-meta id="meta"></iron-meta>
 
-    <div class="page-title" tabindex="-1">
+    <div tabindex="-1">
       <div class="ui clearing">
         <div class="ui right floated header">
           <div id="column-selector" class="ui buttons" on-click="columnSelected">
@@ -24,7 +24,7 @@
             <button id="column-2" class="ui button">二</button>
           </div>
         </div>
-        <h1 class="ui left floated header">
+        <h1 class="ui left floated header page-title">
           Dashboard
         </h1>
         <div class="ui center aligned header">&nbsp;</div>
@@ -165,6 +165,12 @@
           var charts = Array.from(this.querySelectorAll('.highcharts-container'));
           charts.map(hc => $(hc).parent().highcharts().reflow());
           console.log('%c%s%c of charts reflowed: %c%s', 'color: purple', this.is, '', 'color: orange', charts.length);
+          if (document.body.clientWidth <= 1210) {
+            var c2 = this.$['column-2'];
+            if (!$(c2).hasClass('active')) {
+              c2.click();
+            }
+          }
         },
 
         percentageFormat: function(val, max) {

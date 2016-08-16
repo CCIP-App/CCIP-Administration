@@ -46,6 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // The appName is moved to top and shrunk on condensing. The bottom sub title
   // is shrunk to nothing on condensing.
   window.addEventListener('paper-header-transform', function(e) {
+    var routeTitle = Polymer.dom(document).querySelector('#mainToolbar .route-title');
     var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
     var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
     var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
@@ -58,6 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var auxScale = heightDiff / (1 - maxMiddleScale);
     var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
     var scaleBottom = 1 - yRatio;
+    var routeOpacity = 1 - (scaleMiddle - 0.5) * 2;
 
     // Move/translate middleContainer
     Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
@@ -67,6 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Scale middleContainer appName
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
+    routeTitle.style.opacity = routeOpacity;
   });
 
   // Scroll page to top and expand header
