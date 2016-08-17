@@ -348,9 +348,7 @@
         reload: function() {
           var charts = this.charts;
           new Promise((resolve, reject) => {
-            this.status = {
-              total: '--'
-            };
+            this.status = null;
             setTimeout(() => resolve(), 0);
           }).then(() => {
             $.ajax({
