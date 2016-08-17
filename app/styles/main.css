@@ -21,6 +21,10 @@ body {
   z-index: 99;
 }
 
+.route-title:before {
+  content: ' - ';
+}
+
 paper-menu > div > a > i.icon {
   width: 24px;
   height: 24px;
