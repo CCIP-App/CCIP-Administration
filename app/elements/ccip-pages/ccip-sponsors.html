@@ -359,11 +359,12 @@
                 // console.log(`Response: ${JSON.stringify(json, null, 2)}`);
                 this.status = json;
                 setTimeout(function() {
-                  charts.map(c => {
-                    for(var k in c) {
+                  for (var d in charts) {
+                    var c = charts[d];
+                    for (var k in c) {
                       c[k].reflow();
                     }
-                  });
+                  }
                 }, 250);
               },
               error: e => {
