@@ -319,6 +319,9 @@
           }).then(() => {
             $.ajax({
               url: this.$.meta.byKey('api.dashboard'),
+              beforeSend: request => {
+                request.setRequestHeader(this.$.meta.byKey('api.auth.username'), this.$.meta.byKey('api.auth.password'));
+              },
               type: 'get',
               dataType: 'json',
               success: json => {

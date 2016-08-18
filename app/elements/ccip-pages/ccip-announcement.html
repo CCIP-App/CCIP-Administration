@@ -118,7 +118,7 @@
           $.ajax({
             url: this.announcementUrl,
             beforeSend: request => {
-              request.setRequestHeader(this.$.meta.byKey('api.announcement.username'), this.$.meta.byKey('api.announcement.password'));
+              request.setRequestHeader(this.$.meta.byKey('api.auth.username'), this.$.meta.byKey('api.auth.password'));
             },
             type: 'post',
             dataType: "json",
