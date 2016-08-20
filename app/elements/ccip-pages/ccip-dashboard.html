@@ -81,7 +81,7 @@
           <div id="day1lunch-meat" class="chart-box"
             x-title$="午餐(葷)\n共 [[status.day1lunch.meat]] 名已報到"
             x-used-value$="[[status.day1lunch.meat_used]]"
-            x-unused-value$="[[subtract(status.day1lunch.meat, status.day1lunch.used)]]"
+            x-unused-value$="[[subtract(status.day1lunch.meat, status.day1lunch.meat_used)]]"
             x-used-text="已領取" x-unused-text="未領取"></div>
         </div>
       </div>
