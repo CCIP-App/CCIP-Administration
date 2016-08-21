@@ -19,13 +19,13 @@
 
     <div class="ui segment">
       <h6 class="ui top attached center aligned header label">Day1 Sponsors Users：[[all.day1logged]] / [[all.total]] ([[percentageFormat(all.day1logged, all.total)]])</h6>
-      <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(all.day1logged, all.total)]]">
+      <div id="progress_day1" class="ui indicating small progress" data-percent$="[[percentageString(all.day1logged, all.total)]]">
         <div class="bar"><!-- <div class="progress"></div> --></div>
       </div>
     </div>
     <div class="ui segment">
       <h6 class="ui top attached center aligned header label">Day2 Sponsors Users：[[all.day2logged]] / [[all.total]] ([[percentageFormat(all.day2logged, all.total)]])</h6>
-      <div id="progress" class="ui indicating small progress" data-percent$="[[percentageString(all.day2logged, all.total)]]">
+      <div id="progress_day2" class="ui indicating small progress" data-percent$="[[percentageString(all.day2logged, all.total)]]">
         <div class="bar"><!-- <div class="progress"></div> --></div>
       </div>
     </div>
@@ -111,7 +111,7 @@
         statusChanged: function(newStatus, oldStatus) {
           // console.log(newStatus, oldStatus);
           var self = this;
-          $(this.$.progress).progress();
+          var progress = $([this.$.progress_day1, this.$.progress_day2]);
           var days = $([this.$.day1, this.$.day2]);
           days.dimmer('show');
           var usedText = '已報到';
@@ -334,12 +334,13 @@
                   data: dataTotal2
                 }]
               });
-              this.all = {
-                day1logged: totalDay1,
-                day2logged: totalDay2,
-                total: sopnsorsTotal
-              };
             }
+            this.all = {
+              day1logged: totalDay1,
+              day2logged: totalDay2,
+              total: sopnsorsTotal
+            };
+            progress.progress();
           }
           days.dimmer('hide');
           this.fire('reloaded');
