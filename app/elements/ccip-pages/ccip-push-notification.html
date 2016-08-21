@@ -30,6 +30,7 @@
         <form id="pushForm" is="iron-form">
           <paper-input name="content-zh-hant" label="Chinese (Traditional)" value="{{content_zhHant::input}}"></paper-input>
           <paper-input name="content-en" label="English" value="{{content_en::input}}"></paper-input>
+          <paper-input name="content-uri" label="URI (Option)" value="{{content_uri::input}}"></paper-input>
           <paper-button raised on-click="send" class$="{{btn_class}} ui button" disabled$="{{btn_disabled}}">{{btn_text}}</paper-button>
         </form>
       </div>
@@ -63,6 +64,9 @@
         send: function() {
           var self = this;
           var contents = {};
+          if (this.content_url.length > 0) {
+            contents['url'] = this.content_uri;
+          }
           if (this.content_zhHant.length > 0) {
             contents['zh-Hant'] = this.content_zhHant;
             contents['zh-Hans'] = this.content_zhHant;
