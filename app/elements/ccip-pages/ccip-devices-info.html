@@ -18,6 +18,11 @@
         --paper-progress-active-color: var(--paper-pink-500);
       }
     </style>
+    <style>
+      .devices-count:before {
+        content: ' - ';
+      }
+    </style>
 
     <iron-meta id="meta"></iron-meta>
 
@@ -41,7 +46,7 @@
       </div>
       <h4 class="ui horizontal divider header">
         <i class="bar chart icon"></i>
-        iOS
+        iOS <span class="devices-count" hidden$="[[detailedProgress]]">[[platforms.iOS.count]]</span>
       </h4>
       <div class="ui two column stackable centered grid">
         <div class="row">
@@ -59,7 +64,7 @@
       </div>
       <h4 class="ui horizontal divider header">
         <i class="bar chart icon"></i>
-        Android
+        Android <span class="devices-count" hidden$="[[detailedProgress]]">[[platforms.Android.count]]</span>
       </h4>
       <div class="ui two column stackable centered grid">
         <div class="row">
@@ -107,6 +112,9 @@
           },
           charts: {
             type: Object
+          },
+          platforms: {
+            type: Object
           }
         },
 
@@ -126,6 +134,10 @@
         },
 
         modelsChanged: function(newModels, oldModels) {
+          this.platforms = {
+            iOS: newModels.filter(m => m.platform_name == 'iOS')[0],
+            Android: newModels.filter(m => m.platform_name == 'Android')[0]
+          };
           [
             {
               id: 'deviceType',
@@ -140,7 +152,7 @@
             }, {
               id: 'iOS_version',
               to: 'iOS_Device_version_chart',
-              title: `Version (Total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count})`,
+              title: `Version<br />(Total: ${this.platforms.iOS.os_list.filter(l => l).length})`,
               data: newModels.filter(m => m.platform_name == 'iOS')[0].os_list.map(m => {
                 return {
                   y: m.count,
@@ -150,7 +162,7 @@
             }, {
               id: 'iOS_model',
               to: 'iOS_Device_model_chart',
-              title: `Model (Total: ${newModels.filter(m => m.platform_name == 'iOS')[0].count})`,
+              title: `Model<br />(Total: ${this.platforms.iOS.model_list.filter(l => l).length})`,
               data: newModels.filter(m => m.platform_name == 'iOS')[0].model_list.map(m => {
                 return {
                   y: m.count,
@@ -160,7 +172,7 @@
             }, {
               id: 'Android_version',
               to: 'Android_Device_version_chart',
-              title: `Version (Total: ${newModels.filter(m => m.platform_name == 'Android')[0].count})`,
+              title: `Version<br />(Total: ${this.platforms.Android.os_list.filter(l => l).length})`,
               data: newModels.filter(m => m.platform_name == 'Android')[0].os_list.map(m => {
                 return {
                   y: m.count,
@@ -170,7 +182,7 @@
             }, {
               id: 'Android_model',
               to: 'Android_Device_model_chart',
-              title: `Model (Total: ${newModels.filter(m => m.platform_name == 'Android')[0].count})`,
+              title: `Model<br />(Total: ${this.platforms.Android.model_list.filter(l => l).length})`,
               data: newModels.filter(m => m.platform_name == 'Android')[0].model_list.map(m => {
                 return {
                   y: m.count,
@@ -242,6 +254,7 @@
             success: json => {
               // console.log(`Response: ${JSON.stringify(json, null, 2)}`);
               this.total_count = json.total_count;
+              this.players = [];
               if (this.total_count > 0) {
                 var run_time = 0;
                 message.limit = 25;
