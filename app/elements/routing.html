@@ -96,6 +96,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setFocus(app.route);
     });
 
+    page('/punch-area', function() {
+      app.route = 'punch-area';
+      setFocus(app.route);
+    })
+
     // 404
     page('*', function(data) {
       var message = `Cannot find: ${window.location.href}. Redirected you to Home Page`;

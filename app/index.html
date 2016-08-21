@@ -163,6 +163,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <i class="github icon"></i>
             <span>Contributors</span>
           </a>
+
+          <a style="position: relative;" data-route="punch-area" href="{{baseUrl}}punch-area">
+            <paper-ripple></paper-ripple>
+            <i class="github icon"></i>
+            <span>Punch Area</span>
+          </a>
         </paper-menu>
         <h6 class="ui bottom right attached label"><a target="ccip-github" href="https://github.com/Haraguroicha/CCIP-Administration/tree/<!-- @echo VERSION -->"><i class="code icon"></i><!-- @echo BUILD_TIME -->#<!-- @echo VERSION --></a></h6>
       </paper-scroll-header-panel>
@@ -233,6 +239,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="contributors" tabindex="-1">
               <paper-material elevation="1">
                 <ccip-contributors />
+              </paper-material>
+            </section>
+
+            <section data-route="punch-area" tabindex="-1">
+              <paper-material elevation="1">
+                <ccip-punch-area />
               </paper-material>
             </section>
           </iron-pages>

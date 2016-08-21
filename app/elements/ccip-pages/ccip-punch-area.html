@@ -1,0 +1,230 @@
+<!--
+@license
+
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="ccip-punch-area">
+  <template>
+    <style include="ccip-page-style">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-meta id="meta"></iron-meta>
+
+    <h1 class="page-title" tabindex="-1">Punch Area</h1>
+
+    <div id="day1" class="ui column stackable centered grid">
+      <div class="sixteen wide column">
+        <div class="ui segment">
+          <div id="day1checkin" class="chart-box"></div>
+        </div>
+      </div>
+    </div>
+    <div id="day2" class="ui column stackable centered grid">
+      <div class="sixteen wide column">
+        <div class="ui segment">
+          <div id="day2checkin" class="chart-box"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'ccip-punch-area',
+
+        properties: {
+          status: {
+            type: Object,
+            observer: 'statusChanged'
+          }
+        },
+
+        behaviors: [
+          Polymer.IronResizableBehavior,
+          Polymer.IronSelectableBehavior
+        ],
+
+        listeners: {
+          'iron-resize': '_resize'
+        },
+
+        _resize: function() {
+          var charts = Array.from(this.querySelectorAll('.highcharts-container'));
+          charts.map(hc => $(hc).parent().highcharts().reflow());
+          console.log('%c%s%c of charts reflowed: %c%s', 'color: purple', this.is, '', 'color: orange', charts.length);
+        },
+
+        statusChanged: function(newStatus, oldStatus) {
+          // console.log(newStatus, oldStatus);
+          var self = this;
+          var days = $(this.$.days);
+          var charts = this.charts;
+          days.dimmer('show');
+          if (!!newStatus) {
+            var title1 = `Day 1 報到曲線圖 (Max: ${newStatus.day1.length})`;
+            var title2 = `Day 2 報到曲線圖 (Max: ${newStatus.day2.length})`;
+            var total1 = newStatus.day1.map(d => [ d, newStatus.day1.filter(f => f <= d).length ]);
+            var total2 = newStatus.day2.map(d => [ d, newStatus.day2.filter(f => f <= d).length ]);
+            if (!!charts[0]) {
+              charts[0].series[0].setData(total1, true);
+              charts[1].series[0].setData(total2, true);
+              charts[0].setTitle({ text: title1 });
+              charts[1].setTitle({ text: title2 });
+            } else {
+              charts[0] = new Highcharts.Chart({
+                chart: {
+                    type: 'areaspline'
+                },
+                colors: ['#3D983C', '#CCCCCC'],
+                chart: {
+                  renderTo: 'day1checkin',
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: title1
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                },
+                xAxis: {
+                  type: 'datetime'
+                },
+                plotOptions: {
+                  // pie: {
+                  //   allowPointSelect: false,
+                  //   cursor: 'pointer',
+                  //   dataLabels: {
+                  //     enabled: true,
+                  //     formatter: function() {
+                  //       return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                  //     },
+                  //     distance: -50
+                  //   },
+                  //   showInLegend: true
+                  // }
+                },
+                series: [{
+                  name: 'Day1',
+                  data: total1
+                }]
+              });
+            charts[1] = new Highcharts.Chart({
+                chart: {
+                    type: 'areaspline'
+                },
+                colors: ['#3D983C', '#CCCCCC'],
+                chart: {
+                  renderTo: 'day2checkin',
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+                },
+                title: {
+                  text: title2
+                },
+                tooltip: {
+                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                },
+                xAxis: {
+                  type: 'datetime'
+                },
+                plotOptions: {
+                  // pie: {
+                  //   allowPointSelect: false,
+                  //   cursor: 'pointer',
+                  //   dataLabels: {
+                  //     enabled: true,
+                  //     formatter: function() {
+                  //       return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
+                  //     },
+                  //     distance: -50
+                  //   },
+                  //   showInLegend: true
+                  // }
+                },
+                series: [{
+                  name: 'Day2',
+                  data: total2
+                }]
+              });
+            }
+          }
+          days.dimmer('hide');
+          this.fire('reloaded');
+        },
+
+        reload: function() {
+          var charts = this.charts;
+          new Promise((resolve, reject) => {
+            this.status = null;
+            setTimeout(() => resolve(), 0);
+          }).then(() => {
+            new Promise((resolve, reject) => {
+              $.ajax({
+                url: this.$.meta.byKey('api.res1'),
+                beforeSend: request => {
+                  request.setRequestHeader(this.$.meta.byKey('api.auth.username'), this.$.meta.byKey('api.auth.password'));
+                },
+                type: 'get',
+                dataType: 'text',
+                success: d1 => {
+                  // console.log(`Response: ${JSON.stringify(json, null, 2)}`);
+                  resolve(d1);
+                },
+                error: e => {
+                  console.log('Error: ', e);
+                }
+              });
+            }).then(d1 => {
+              $.ajax({
+                url: this.$.meta.byKey('api.res2'),
+                beforeSend: request => {
+                  request.setRequestHeader(this.$.meta.byKey('api.auth.username'), this.$.meta.byKey('api.auth.password'));
+                },
+                type: 'get',
+                dataType: 'text',
+                success: d2 => {
+                  this.status = { day1: d1.trim().split('\n').sort().map(d => d * 1000), day2: d2.trim().split('\n').sort().map(d => d * 1000) };
+                  setTimeout(function() {
+                    for (var d in charts) {
+                      var c = charts[d];
+                      for (var k in c) {
+                        c[k].reflow();
+                      }
+                    }
+                  }, 250);
+                },
+                error: e => {
+                  console.log('Error: ', e);
+                }
+              });
+            });
+          });
+        },
+
+        attached: function() {
+          var self = this;
+          var doReload = () => {
+            console.log('%c%s%c reload interval execution action => %cDo %s%c', 'color: purple', self.is, '', 'color: orange', (self.isActive && (self.reload() || 'reload')) || 'ignore', '');
+          };
+          setInterval(doReload, 30 * 1000);
+          this.reload();
+        },
+
+        ready: function() {
+          this.charts = {};
+        }
+      });
+    })();
+  </script>
+</dom-module>
