@@ -166,7 +166,7 @@
               data: newModels.filter(m => m.platform_name == 'iOS')[0].model_list.map(m => {
                 return {
                   y: m.count,
-                  name: m.model
+                  name: ccipPages.iOS_Model[m.model]
                 };
               })
             }, {
