@@ -2,7 +2,7 @@
   
   {
     "name": "Denny Huang",
-    "projects": [ "https://github.com/CPRTeam/CCIP-Server", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-Android" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-Android", "https://github.com/CPRTeam/CCIP-Server", "https://github.com/Haraguroicha/CCIP-Administration" ],
     "id": "963044",
     "login": "denny0223"
   },
@@ -14,13 +14,13 @@
   },
   {
     "name": "Frank Wu",
-    "projects": [ "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Android" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-Android" ],
     "id": "3677704",
     "login": "FrankWu100"
   },
   {
     "name": "腹黒い茶",
-    "projects": [ "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Server" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-Server" ],
     "id": "1715541",
     "login": "Haraguroicha"
   },
