@@ -27,21 +27,25 @@
         handle-as="json"
         last-response="{{contributor}}"></iron-ajax>
     <h1 class="page-title" tabindex="-1">Contributors</h1>
-    <div class="ui stackable grid">
+    <h6>Sorted by User ID</h6>
+    <div class="ui cards four grid">
       <template is="dom-repeat" items="[[contributor]]">
-        <div class="eight wide tablet five wide computer column left aligned ">
-          <div class="ui card centered">
-            <a class="image" href="https://github.com/[[item.login]]" target="ccip-github">
-              <img class="github-avatar" src="https://avatars3.githubusercontent.com/u/[[item.id]]?v=3&amp;s=460" />
+        <div class="ui card centered">
+          <a class="image" href="https://github.com/[[item.login]]" target="ccip-github">
+            <img class="github-avatar" src="https://avatars3.githubusercontent.com/u/[[item.id]]?v=3&amp;s=460" />
+          </a>
+          <div class="content">
+            <a class="header" href="https://github.com/[[item.login]]" target="ccip-github">
+              <i class="github icon"></i>
+              [[item.name]]
             </a>
-            <div class="content">
-              <a class="header" href="https://github.com/[[item.login]]" target="ccip-github">
-                <i class="github icon"></i>
-                [[item.name]]
-              </a>
-              <div class="meta">
-                <a href="https://github.com/[[item.login]]" target="ccip-github">[[item.login]]</a>
-              </div>
+            <div class="meta">
+              <a href="https://github.com/[[item.login]]" target="ccip-github">[[item.login]]</a>
+              <ul>
+                <template is="dom-repeat" items="[[item.projects]]">
+                  <li>[[item]]</li>
+                </template>
+              </ul>
             </div>
           </div>
         </div>

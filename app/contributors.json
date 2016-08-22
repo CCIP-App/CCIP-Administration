@@ -1,22 +1,45 @@
 [
+  
   {
-    "name": "腹黒い茶 (Haraguroicha)",
-    "id": "1715541",
-    "login": "Haraguroicha"
+    "name": "Denny Huang",
+    "projects": [ "Server", "Administration", "Android" ],
+    "id": "963044",
+    "login": "denny0223"
+  },
+  {
+    "name": "Estelle Chen",
+    "projects": [ "Interface Design" ],
+    "id": "3964081",
+    "login": "moomyiting"
   },
   {
     "name": "Frank Wu",
+    "projects": [ "Landing", "Administration", "iOS", "Android" ],
     "id": "3677704",
     "login": "FrankWu100"
   },
   {
-    "name": "TigerHuang (Tiger)",
-    "id": "1662405",
-    "login": "TigerHuang"
+    "name": "腹黒い茶",
+    "projects": [ "Landing", "Administration", "iOS", "Server" ],
+    "id": "1715541",
+    "login": "Haraguroicha"
   },
   {
-    "name": "Denny Huang",
-    "id": "963044",
-    "login": "denny0223"
+    "name": "Philip Chou",
+    "projects": [ "Server" ],
+    "id": "5615415",
+    "login": "pcchou"
+  },
+  {
+    "name": "Sars",
+    "projects": [ "iOS" ],
+    "id": "104716",
+    "login": "SarsTW"
+  },
+  {
+    "name": "Tiger",
+    "projects": [ "Project Manager" ],
+    "id": "1662405",
+    "login": "TigerHuang"
   }
 ]
