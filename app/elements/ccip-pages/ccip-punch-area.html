@@ -17,17 +17,10 @@
 
     <h1 class="page-title" tabindex="-1">Punch Area</h1>
 
-    <div id="day1" class="ui column stackable centered grid">
+    <div id="days" class="ui column stackable centered grid">
       <div class="sixteen wide column">
         <div class="ui segment">
-          <div id="day1checkin" class="chart-box"></div>
-        </div>
-      </div>
-    </div>
-    <div id="day2" class="ui column stackable centered grid">
-      <div class="sixteen wide column">
-        <div class="ui segment">
-          <div id="day2checkin" class="chart-box"></div>
+          <div id="dayscheckin" class="chart-box"></div>
         </div>
       </div>
     </div>
@@ -69,92 +62,99 @@
           var charts = this.charts;
           days.dimmer('show');
           if (!!newStatus) {
-            var title1 = `Day 1 報到曲線圖 (Max: ${newStatus.day1.length})`;
-            var title2 = `Day 2 報到曲線圖 (Max: ${newStatus.day2.length})`;
+            var title = `報到曲線圖<br />(D1 Max: ${newStatus.day1.length} / D2 Max: ${newStatus.day2.length})`;
             var total1 = newStatus.day1.map(d => [ d, newStatus.day1.filter(f => f <= d).length ]);
             var total2 = newStatus.day2.map(d => [ d, newStatus.day2.filter(f => f <= d).length ]);
             if (!!charts[0]) {
               charts[0].series[0].setData(total1, true);
-              charts[1].series[0].setData(total2, true);
-              charts[0].setTitle({ text: title1 });
-              charts[1].setTitle({ text: title2 });
+              charts[0].series[1].setData(total2, true);
+              charts[0].setTitle({ text: title });
             } else {
               charts[0] = new Highcharts.Chart({
                 chart: {
-                    type: 'areaspline'
+                    type: 'spline'
                 },
                 colors: ['#3D983C', '#CCCCCC'],
                 chart: {
-                  renderTo: 'day1checkin',
+                  renderTo: 'dayscheckin',
                   plotBackgroundColor: null,
                   plotBorderWidth: null,
                   plotShadow: false
                 },
                 title: {
-                  text: title1
+                  text: title
                 },
                 tooltip: {
-                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
+                  pointFormat: '{series.name}: <b>{point.y}</b>'
                 },
-                xAxis: {
-                  type: 'datetime'
+                xAxis: [{
+                  crosshair: true,
+                  opposite: true,
+                  showEmpty: false,
+                  labels: {
+                      formatter: function() {
+                          return moment(this.value * 500 * 1000).format('HH:mm');
+                      }
+                  },
+                }, {
+                  linkedTo: 0,
+                  showEmpty: false,
+                  labels: {
+                      formatter: function() {
+                          return moment(this.value * 500 * 1000).format('HH:mm');
+                      }
+                  },
+                }],
+                tooltip: {
+                  pointFormat: '{point.y}',
+                  headerFormat: '',
+                  shadow: false,
+                  shared: true,
+                  useHTML: true,
+                  formatter: function () {
+                    var tooltip = this;
+                    // Create the header with reference to the time interval
+                    var index = tooltip.points[0].point.index;
+                    var ret = '<small>' + moment(tooltip.x * 500 * 1000).format('HH:mm') + '</small><br>';
+                    // Symbol text
+                    // ret += '<b>' + this.symbolNames[index] + '</b>';
+                    ret += '<table>';
+                    // Add all series
+                    Highcharts.each(tooltip.points, function (point) {
+                      var series = point.series;
+                      ret += '<tr><td><span style="color:' + series.color + '">\u25CF</span> ' + series.name + ': </td><td style="white-space:nowrap">' + Highcharts.pick(point.point.value, point.y) + '</td></tr>';
+                    });
+                    // Close
+                    ret += '</table>';
+                    return ret;
+                  }
                 },
                 plotOptions: {
-                  // pie: {
-                  //   allowPointSelect: false,
-                  //   cursor: 'pointer',
-                  //   dataLabels: {
-                  //     enabled: true,
-                  //     formatter: function() {
-                  //       return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
-                  //     },
-                  //     distance: -50
-                  //   },
-                  //   showInLegend: true
-                  // }
                 },
                 series: [{
                   name: 'Day1',
-                  data: total1
-                }]
-              });
-            charts[1] = new Highcharts.Chart({
-                chart: {
-                    type: 'areaspline'
-                },
-                colors: ['#3D983C', '#CCCCCC'],
-                chart: {
-                  renderTo: 'day2checkin',
-                  plotBackgroundColor: null,
-                  plotBorderWidth: null,
-                  plotShadow: false
-                },
-                title: {
-                  text: title2
-                },
-                tooltip: {
-                  pointFormat: '{series.name}: <b>{point.y} ({point.percentage: .1f}%)</b>'
-                },
-                xAxis: {
-                  type: 'datetime'
-                },
-                plotOptions: {
-                  // pie: {
-                  //   allowPointSelect: false,
-                  //   cursor: 'pointer',
-                  //   dataLabels: {
-                  //     enabled: true,
-                  //     formatter: function() {
-                  //       return `${this.y} ( ${Math.round(this.percentage * 100) / 100}% )`;
-                  //     },
-                  //     distance: -50
-                  //   },
-                  //   showInLegend: true
-                  // }
-                },
-                series: [{
+                  data: total1,
+                  zones: [{
+                     value: 50,
+                     color: '#f7a35c'
+                  }, {
+                     value: 800,
+                     color: '#7cb5ec'
+                  }, {
+                     color: '#90ed7d'
+                  }]
+                }, {
                   name: 'Day2',
-                  data: total2
+                  data: total2,
+                  zones: [{
+                     value: 50,
+                     color: '#f7a35c'
+                  }, {
+                     value: 800,
+                     color: '#7cb5ec'
+                  }, {
+                     color: '#90ed7d'
+                  }]
                 }]
               });
             }
@@ -194,7 +194,10 @@
                 type: 'get',
                 dataType: 'text',
                 success: d2 => {
-                  this.status = { day1: d1.trim().split('\n').sort().map(d => d * 1000), day2: d2.trim().split('\n').sort().map(d => d * 1000) };
+                  this.status = {
+                    day1: d1.trim().split('\n').map(d => Math.floor((d * 1) / 500)).sort(),
+                    day2: d2.trim().split('\n').map(d => Math.floor(((d * 1) - 86400) / 500)).sort()
+                  };
                   setTimeout(function() {
                     for (var d in charts) {
                       charts[d].reflow();
