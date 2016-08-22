@@ -41,11 +41,18 @@
             </a>
             <div class="meta">
               <a href="https://github.com/[[item.login]]" target="ccip-github">[[item.login]]</a>
-              <ul>
+              <div class="ui relaxed divided list">
                 <template is="dom-repeat" items="[[item.projects]]">
-                  <li>[[item]]</li>
+                  <div class="item">
+                    <i class="large github middle aligned icon" hidden$="[[!isLink(item)]]"></i>
+                    <div class="content">
+                      <span class="header" hidden$="[[isLink(item)]]">[[projectName(item)]]</span>
+                      <a class="header" hidden$="[[!isLink(item)]]" href="[[item]]">[[projectName(item)]]</a>
+                      <div class="description"></div>
+                    </div>
+                  </div>
                 </template>
-              </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -61,6 +68,18 @@
         is: 'ccip-contributors',
 
         properties: {
+        },
+
+        isLink: function(item) {
+          return (item.match(/^https?:\/\//gi) != null);
+        },
+
+        projectName: function(item) {
+          if (this.isLink(item)) {
+            return item.split('/').pop();
+          } else {
+            return item;
+          }
         },
 
         attached: function() {},

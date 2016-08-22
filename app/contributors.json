@@ -2,7 +2,7 @@
   
   {
     "name": "Denny Huang",
-    "projects": [ "Server", "Administration", "Android" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-Server", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-Android" ],
     "id": "963044",
     "login": "denny0223"
   },
@@ -14,25 +14,25 @@
   },
   {
     "name": "Frank Wu",
-    "projects": [ "Landing", "Administration", "iOS", "Android" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Android" ],
     "id": "3677704",
     "login": "FrankWu100"
   },
   {
     "name": "腹黒い茶",
-    "projects": [ "Landing", "Administration", "iOS", "Server" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-Landing", "https://github.com/Haraguroicha/CCIP-Administration", "https://github.com/CPRTeam/CCIP-iOS", "https://github.com/CPRTeam/CCIP-Server" ],
     "id": "1715541",
     "login": "Haraguroicha"
   },
   {
     "name": "Philip Chou",
-    "projects": [ "Server" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-Server" ],
     "id": "5615415",
     "login": "pcchou"
   },
   {
     "name": "Sars",
-    "projects": [ "iOS" ],
+    "projects": [ "https://github.com/CPRTeam/CCIP-iOS" ],
     "id": "104716",
     "login": "SarsTW"
   },
