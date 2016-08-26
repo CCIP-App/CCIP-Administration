@@ -258,7 +258,7 @@ gulp.task('cleantmp', function() {
 // Watch files for changes & reload
 gulp.task('serve', ['styles', 'js'], function() {
   browserSync({
-    port: 5000,
+    port: 5600,
     notify: false,
     logPrefix: 'PSK',
     snippetOptions: {
@@ -288,7 +288,7 @@ gulp.task('serve', ['styles', 'js'], function() {
 // Build and serve the output from the dist build
 gulp.task('serve:dist', ['default'], function() {
   browserSync({
-    port: 5001,
+    port: 5601,
     notify: false,
     logPrefix: 'PSK',
     snippetOptions: {
