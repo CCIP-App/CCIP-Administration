@@ -237,7 +237,7 @@
         reload: function() {
           $(this.$.charts).dimmer('show');
           let message = {
-            app_id: this.$.meta.byKey('oneSignalUrl.releaseToken'),
+            app_id: this.$.meta.byKey('oneSignalUrl.appId'),
             limit: 0,
             offset: 0
           };
@@ -246,7 +246,7 @@
           $.ajax({
             url: this.$.meta.byKey('oneSignalUrl.players'),
             beforeSend: request => {
-              request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.releaseAuthToken'))}`);
+              request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.restfulToken'))}`);
             },
             type: 'get',
             dataType: "json",
@@ -267,7 +267,7 @@
                   $.ajax({
                     url: this.$.meta.byKey('oneSignalUrl.players'),
                     beforeSend: request => {
-                      request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.releaseAuthToken'))}`);
+                      request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.restfulToken'))}`);
                     },
                     type: 'get',
                     dataType: "json",

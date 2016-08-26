@@ -75,7 +75,7 @@
             contents['en'] = this.content_en;
           }
           var message = {
-            app_id: this.$.meta.byKey('oneSignalUrl.releaseToken'),
+            app_id: this.$.meta.byKey('oneSignalUrl.appId'),
             contents: contents,
             included_segments: ["All"]
           };
@@ -87,7 +87,7 @@
             $.ajax({
               url: this.$.meta.byKey('oneSignalUrl.notifications'),
               beforeSend: request => {
-                request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.releaseAuthToken'))}`);
+                request.setRequestHeader("Authorization", `Basic ${btoa(this.$.meta.byKey('oneSignalUrl.restfulToken'))}`);
               },
               type: 'post',
               dataType: "json",
